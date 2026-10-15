@@ -2,14 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#173c37" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#111b31" />
     <meta
       name="description"
-      content="Turn PDFs and scans into traceable, validated Excel workbooks. Private, local document intelligence."
+      content="LedgerLens AI document extraction agent. Extract tables, inspect source evidence, reconcile findings and export reviewed Excel workbooks."
     />
-    <title>LedgerLens — Document intelligence</title>
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>LedgerLens | Document AI workspace</title>
+    <link rel="icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/styles.css" />
     <script src="/app.js" defer></script>
   </head>
@@ -24,408 +24,542 @@
         </symbol>
         <symbol id="i-file" viewBox="0 0 24 24">
           <path
-            d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"
+            d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z M14 3v6h6 M8 13h8 M8 17h5"
           />
-          <path d="M14 3v6h6M8 13h8M8 17h5" />
         </symbol>
         <symbol id="i-check" viewBox="0 0 24 24">
           <path d="m5 12 4 4L19 6" />
         </symbol>
         <symbol id="i-shield" viewBox="0 0 24 24">
-          <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" />
-          <path d="m8 12 3 3 5-6" />
+          <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z M8 12l3 3 5-6" />
         </symbol>
         <symbol id="i-chart" viewBox="0 0 24 24">
-          <path d="M4 3v17h17M8 15V9m5 6V5m5 10v-7" />
+          <path d="M4 3v17h17 M8 15V9 M13 15V5 M18 15V8" />
         </symbol>
         <symbol id="i-arrow" viewBox="0 0 24 24">
           <path d="M4 12h15m-6-6 6 6-6 6" />
         </symbol>
-        <symbol id="i-up" viewBox="0 0 24 24">
-          <path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4" />
+        <symbol id="i-upload" viewBox="0 0 24 24">
+          <path d="M12 16V4m-5 5 5-5 5 5 M4 16v4h16v-4" />
         </symbol>
-        <symbol id="i-down" viewBox="0 0 24 24">
-          <path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4" />
+        <symbol id="i-download" viewBox="0 0 24 24">
+          <path d="M12 3v13m-5-5 5 5 5-5 M4 17v4h16v-4" />
         </symbol>
         <symbol id="i-plus" viewBox="0 0 24 24">
-          <path d="M12 4v16M4 12h16" />
+          <path d="M12 4v16 M4 12h16" />
         </symbol>
         <symbol id="i-scan" viewBox="0 0 24 24">
-          <path d="M3 8V3h5m8 0h5v5m0 8v5h-5m-8 0H3v-5M2 12h20M7 7h10v10H7Z" />
+          <path
+            d="M3 8V3h5m8 0h5v5m0 8v5h-5m-8 0H3v-5 M2 12h20 M7 7h10v10H7Z"
+          />
         </symbol>
         <symbol id="i-clock" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="9" />
           <path d="M12 7v6l4 2" />
         </symbol>
-        <symbol id="i-x" viewBox="0 0 24 24">
-          <path d="m6 6 12 12M6 18 18 6" />
+        <symbol id="i-close" viewBox="0 0 24 24">
+          <path d="m6 6 12 12 M6 18 18 6" />
         </symbol>
         <symbol id="i-alert" viewBox="0 0 24 24">
           <path d="m12 3 10 18H2Z M12 9v5m0 3v1" />
         </symbol>
         <symbol id="i-link" viewBox="0 0 24 24">
           <path
-            d="m10 14 4-4M9 16l-2 2a4 4 0 0 1-5-5l4-4a4 4 0 0 1 6 0m0 6a4 4 0 0 0 6 0l4-4a4 4 0 0 0-5-5l-2 2"
+            d="m10 14 4-4 M9 16l-2 2a4 4 0 0 1-5-5l4-4a4 4 0 0 1 6 0m0 6a4 4 0 0 0 6 0l4-4a4 4 0 0 0-5-5l-2 2"
           />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+          <circle cx="10" cy="10" r="6" />
+          <path d="m15 15 6 6" />
+        </symbol>
+        <symbol id="i-agent" viewBox="0 0 24 24">
+          <rect x="4" y="6" width="16" height="14" rx="4" />
+          <path d="M12 2v4 M1 12h3 M20 12h3 M8 11v2 M16 11v2 M9 16h6" />
+        </symbol>
+        <symbol id="i-retry" viewBox="0 0 24 24">
+          <path
+            d="M20 7v5h-5 M4 17v-5h5 M5 8a8 8 0 0 1 13-3l2 3 M4 16l2 3a8 8 0 0 0 13-3"
+          />
+        </symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24">
+          <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" />
+          <circle cx="12" cy="12" r="3" />
         </symbol>
       </defs>
     </svg>
     <aside class="sidebar">
-      <a class="brand" href="/" aria-label="LedgerLens home"
-        ><span class="brand-mark"><i></i><i></i><i></i></span>LedgerLens<span
-          class="brand-dot"
-          >.</span
-        ></a
+      <a class="brand" href="/" aria-label="LedgerLens workspace"
+        ><span class="brand-icon"
+          ><svg><use href="#i-agent" /></svg></span
+        ><span>LedgerLens<small>Document AI</small></span></a
       >
-      <div class="workspace-label">PERSONAL WORKSPACE <span>LOCAL</span></div>
+      <div class="workspace-switch">
+        <span class="workspace-avatar">RK</span
+        ><span>Personal workspace<small>Local environment</small></span
+        ><span class="workspace-chevron">⌄</span>
+      </div>
       <button class="new-button" id="new-document">
-        <svg><use href="#i-plus" /></svg>New extraction <kbd>⌘ K</kbd>
+        <svg><use href="#i-plus" /></svg>New extraction<kbd>Ctrl K</kbd>
       </button>
+      <div class="nav-label">Workspace</div>
       <nav aria-label="Main navigation">
         <button class="nav-item active" data-view="workspace">
-          <svg><use href="#i-grid" /></svg>Workspace</button
+          <svg><use href="#i-grid" /></svg><span>Overview</span></button
         ><button class="nav-item" data-view="documents">
-          <svg><use href="#i-file" /></svg>All documents
-          <span id="doc-count">0</span></button
+          <svg><use href="#i-file" /></svg><span>Documents</span
+          ><b id="doc-count">0</b></button
         ><button class="nav-item" data-view="validation">
-          <svg><use href="#i-shield" /></svg>Review center
-          <span class="issue-count" id="issue-count">0</span>
+          <svg><use href="#i-shield" /></svg><span>Review queue</span
+          ><b id="issue-count">0</b>
         </button>
-        <div class="nav-separator"></div>
-        <div class="nav-label">EXPLORE</div>
+        <div class="nav-divider"></div>
+        <div class="nav-label">Evaluation</div>
         <button class="nav-item" data-view="benchmarks">
-          <svg><use href="#i-chart" /></svg>Accuracy report</button
+          <svg><use href="#i-chart" /></svg
+          ><span>Accuracy & coverage</span></button
         ><button class="nav-item" id="guide-button">
-          <svg><use href="#i-link" /></svg>Quick guide
+          <svg><use href="#i-link" /></svg><span>Workflow guide</span>
         </button>
       </nav>
       <div class="sidebar-bottom">
-        <div class="privacy-note">
-          <svg><use href="#i-shield" /></svg
-          ><strong>Your files stay yours.</strong>
-          <p>Processed on this computer.<br />No uploads to AI services.</p>
+        <div class="engine-card">
+          <div>
+            <span class="status-dot"></span><strong>Local inference</strong>
+          </div>
+          <p>Native PDF + English OCR<br />Documents remain on this device.</p>
+          <span class="engine-version">RapidOCR / ONNX · CPU</span>
         </div>
-        <div class="profile">
-          <span class="avatar">RK</span>
-          <div>Rayan Karthikeyan<small>Challenge edition · 2026</small></div>
-          <span class="online-dot"></span>
+        <div class="sidebar-footer">
+          <span class="mini-logo">LL</span>
+          <div>INCUXAI Challenge<small>Development edition · 2026</small></div>
         </div>
       </div>
     </aside>
     <div class="app-shell">
       <header class="topbar">
         <div class="breadcrumbs">
-          Workspace <span>/</span> <strong id="breadcrumb">Overview</strong>
+          Workspace <span>/</span><strong id="breadcrumb">Overview</strong>
         </div>
         <div class="top-actions">
-          <span class="engine-status"
-            ><i></i><span id="engine-status">Connecting to engine</span></span
-          ><span class="edition">INCUXAI CHALLENGE ’26</span>
+          <span class="local-badge"
+            ><i></i><span id="engine-status">Connecting</span></span
+          ><button
+            class="icon-button"
+            id="header-guide"
+            aria-label="Open workflow guide"
+          >
+            <svg><use href="#i-link" /></svg>
+          </button>
         </div>
       </header>
       <main id="main">
         <section id="home-view">
-          <div class="page-intro">
+          <div class="page-heading">
             <div>
-              <div class="eyebrow">
-                <span></span>DOCUMENT INTELLIGENCE, WITHOUT THE BUSYWORK
-              </div>
-              <h1>Less paperwork.<br /><em>More possibility.</em></h1>
+              <div class="eyebrow">AI extraction agent</div>
+              <h1>Document extraction</h1>
               <p>
-                Turn complex documents into clean, usable spreadsheets.<br />Every
-                table connected. Every number traceable.
+                Extract structured tables. Reconcile exceptions. Export with
+                evidence.
               </p>
             </div>
-            <div class="intro-stamp">
-              <svg><use href="#i-scan" /></svg
-              ><span>READ. STRUCTURE.<br />VERIFY. EXPORT.</span><i>01 — 04</i>
-            </div>
+            <span class="version-badge">Workspace / 01</span>
           </div>
-          <div class="workspace-grid">
-            <section class="upload-card">
-              <div class="card-heading">
-                <span class="step-label">01 / START HERE</span
-                ><span class="badge neutral">PDF + IMAGES</span>
+          <div class="workspace-metrics" id="workspace-metrics"></div>
+          <div class="home-grid">
+            <section class="card upload-card">
+              <div class="card-header">
+                <div>
+                  <h2>Start an extraction</h2>
+                  <p>
+                    Choose a source document. The agent selects the extraction
+                    route.
+                  </p>
+                </div>
+                <span class="badge blue">Agent enabled</span>
               </div>
-              <h2>A fresh perspective<br />on your documents.</h2>
               <div
-                id="dropzone"
                 class="dropzone"
+                id="dropzone"
                 tabindex="0"
                 role="button"
                 aria-label="Choose a document to extract"
               >
-                <div class="upload-icon">
-                  <svg><use href="#i-up" /></svg><span>+</span>
-                </div>
-                <strong>Drop your document here</strong>
-                <p>or <span>browse files</span> to get started</p>
-                <small>PDF, PNG, JPG, TIFF, WebP, BMP · Up to 40 MB</small>
+                <span class="upload-glyph"
+                  ><svg><use href="#i-upload" /></svg
+                ></span>
+                <h3>Drop a PDF or scanned document</h3>
+                <p>
+                  or <span class="link-text">browse files</span> on this device
+                </p>
+                <small
+                  >PDF, PNG, JPG, TIFF, WebP, BMP · Up to 50 pages · 40
+                  MB</small
+                >
               </div>
-              <div class="upload-footer">
+              <div class="extraction-options">
+                <label for="extraction-mode"
+                  >Extraction mode
+                  <select id="extraction-mode">
+                    <option value="auto">Automatic routing</option>
+                    <option value="ocr">OCR only</option>
+                  </select></label
+                >
+                <div class="option-note">
+                  <svg><use href="#i-shield" /></svg>Validation and source
+                  evidence are always included.
+                </div>
+              </div>
+              <div class="upload-checks">
                 <span
-                  ><svg><use href="#i-file" /></svg>Up to 50 pages</span
+                  ><svg><use href="#i-check" /></svg>12+ column support</span
                 ><span
-                  ><svg><use href="#i-scan" /></svg>Scans welcome</span
-                ><label
-                  ><input type="checkbox" id="force-ocr" /> Force OCR</label
+                  ><svg><use href="#i-check" /></svg>Page continuation
+                  matching</span
+                ><span
+                  ><svg><use href="#i-check" /></svg>Local processing</span
                 >
               </div>
             </section>
-            <section class="preview-card">
-              <div class="card-heading">
-                <span class="step-label">THE OTHER SIDE OF THE PAPERWORK</span
-                ><span class="live-pill"><i></i>OUTPUT PREVIEW</span>
-              </div>
-              <h2>Clarity in every column.</h2>
-              <p>Structured data. With the context to trust it.</p>
-              <div class="paper-stack">
-                <div class="paper-shadow"></div>
-                <div class="spreadsheet-preview">
-                  <div class="sheet-toolbar">
-                    <span class="excel-icon">X</span>
-                    <div>
-                      invoice_register.xlsx<small>Illustrative output</small>
-                    </div>
-                    <svg><use href="#i-check" /></svg>
-                  </div>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>A</th>
-                        <th>B</th>
-                        <th>C</th>
-                        <th>D</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <th>Invoice ID</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>INV-001</td>
-                        <td>Acme Studio</td>
-                        <td>12,400.00</td>
-                        <td><span class="tiny-check">✓</span></td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>INV-002</td>
-                        <td>Northstar Co.</td>
-                        <td>8,650.00</td>
-                        <td><span class="tiny-check">✓</span></td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>INV-003</td>
-                        <td>Fieldwork Ltd.</td>
-                        <td>21,200.00</td>
-                        <td><span class="tiny-check">✓</span></td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>INV-004</td>
-                        <td>Good Things</td>
-                        <td>6,300.00</td>
-                        <td><span class="tiny-check">✓</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="sheet-bottom">
-                    <span>Table 1</span><span>Validation</span
-                    ><span>Evidence</span><i>+</i>
-                  </div>
+            <section class="card workflow-card">
+              <div class="card-header">
+                <div>
+                  <h2>Accuracy workflow</h2>
+                  <p>Every run follows the same reviewable process.</p>
                 </div>
-                <div class="proof-tag">
-                  <svg><use href="#i-shield" /></svg
-                  ><span>Source evidence, included.</span>
-                </div>
+                <svg><use href="#i-agent" /></svg>
               </div>
-              <div class="preview-note">
-                FROM FIRST PAGE TO FINAL CELL <svg><use href="#i-arrow" /></svg>
+              <ol class="workflow-list">
+                <li>
+                  <span>01</span>
+                  <div>
+                    <strong>Inspect & route</strong>
+                    <p>Identify native text, scanned pages and input limits.</p>
+                  </div>
+                </li>
+                <li>
+                  <span>02</span>
+                  <div>
+                    <strong>Extract & align</strong>
+                    <p>
+                      Detect tables and headers. Reconstruct column positions.
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <span>03</span>
+                  <div>
+                    <strong>Join & validate</strong>
+                    <p>Match continuation pages and check data integrity.</p>
+                  </div>
+                </li>
+                <li>
+                  <span>04</span>
+                  <div>
+                    <strong>Review & export</strong>
+                    <p>
+                      Resolve or acknowledge findings against source evidence.
+                    </p>
+                  </div>
+                </li>
+              </ol>
+              <div class="workflow-note">
+                <svg><use href="#i-eye" /></svg
+                ><span
+                  >Extraction completes as a draft. Review status is recorded
+                  separately from OCR confidence.</span
+                >
               </div>
             </section>
           </div>
-          <section class="capability-strip">
-            <div>
-              <span class="capability-icon"
-                ><svg><use href="#i-scan" /></svg
-              ></span>
+          <section class="card queue-card">
+            <div class="card-header">
               <div>
-                <strong>Reads between the lines</strong>
-                <p>Native PDFs & OCR for scans</p>
+                <h2>
+                  Extraction queue
+                  <span id="queue-total" class="count-label">0</span>
+                </h2>
+                <p>Recent runs, review status and outstanding exceptions.</p>
               </div>
-            </div>
-            <div>
-              <span class="capability-icon"
-                ><svg><use href="#i-link" /></svg
-              ></span>
-              <div>
-                <strong>Brings the pages together</strong>
-                <p>Multi-page table stitching</p>
-              </div>
-            </div>
-            <div>
-              <span class="capability-icon"
-                ><svg><use href="#i-shield" /></svg
-              ></span>
-              <div>
-                <strong>Checks the details</strong>
-                <p>Totals, gaps & column alignment</p>
-              </div>
-            </div>
-          </section>
-          <section class="sample-section">
-            <div class="section-title">
-              <div>
-                <span class="step-label">TAKE IT FOR A SPIN</span>
-                <h2>Meet your next spreadsheet.</h2>
-              </div>
-              <span class="muted">Public dummy data. Real extraction.</span>
-            </div>
-            <div id="sample-cards" class="sample-cards"></div>
-          </section>
-          <section class="recent-section">
-            <div class="section-title">
-              <h2>Recent documents</h2>
               <button class="text-button" data-view="documents">
-                View all <svg><use href="#i-arrow" /></svg>
+                All documents <svg><use href="#i-arrow" /></svg>
               </button>
+            </div>
+            <div class="queue-filters">
+              <div class="segmented" aria-label="Filter extraction queue">
+                <button class="active" data-job-filter="all">All runs</button
+                ><button data-job-filter="attention">Needs attention</button
+                ><button data-job-filter="reviewed">Reviewed</button>
+              </div>
+              <label class="search-box"
+                ><svg><use href="#i-search" /></svg
+                ><input
+                  id="job-search"
+                  placeholder="Find a document"
+                  aria-label="Find a document"
+              /></label>
             </div>
             <div id="recent-list"></div>
           </section>
+          <section class="fixtures-section">
+            <div class="section-heading">
+              <div>
+                <h2>Evaluation fixtures</h2>
+                <p>
+                  Run the agent on original dummy documents with known ground
+                  truth.
+                </p>
+              </div>
+              <button class="text-button" data-view="benchmarks">
+                View accuracy report <svg><use href="#i-arrow" /></svg>
+              </button>
+            </div>
+            <div id="sample-cards" class="sample-cards"></div>
+          </section>
         </section>
         <section id="list-view" hidden>
-          <div class="section-title">
+          <div class="page-heading">
             <div>
-              <div class="eyebrow">YOUR EXTRACTION HISTORY</div>
-              <h1>All documents<span class="accent">.</span></h1>
-              <p class="muted">Saved on this computer. Ready when you are.</p>
+              <div class="eyebrow">Run history</div>
+              <h1>Documents</h1>
+              <p>
+                Original sources, extracted results and review decisions stored
+                on this device.
+              </p>
             </div>
             <button class="primary" id="list-upload">
-              New extraction <svg><use href="#i-plus" /></svg>
+              <svg><use href="#i-plus" /></svg>New extraction
             </button>
           </div>
-          <div id="document-list"></div>
+          <div class="card">
+            <div class="card-header">
+              <h2>All extraction runs</h2>
+              <label class="search-box"
+                ><svg><use href="#i-search" /></svg
+                ><input
+                  id="document-search"
+                  aria-label="Search all documents"
+                  placeholder="Search documents"
+              /></label>
+            </div>
+            <div id="document-list"></div>
+          </div>
         </section>
         <section id="review-view" hidden>
-          <div class="eyebrow">A SECOND LOOK, WHERE IT MATTERS</div>
-          <h1>Review center<span class="accent">.</span></h1>
-          <p class="muted">
-            Open a document to inspect findings, compare the source and correct
-            cells.
-          </p>
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">Data quality</div>
+              <h1>Review queue</h1>
+              <p>
+                Investigate findings against the source. A completed run still
+                requires review.
+              </p>
+            </div>
+          </div>
+          <div id="review-metrics" class="workspace-metrics"></div>
+          <div class="card">
+            <div class="card-header">
+              <h2>Pending document reviews</h2>
+              <span class="muted"
+                >Includes runs with no automated findings</span
+              >
+            </div>
+            <div id="pending-list"></div>
+          </div>
+          <div class="section-heading review-heading">
+            <div>
+              <h2>Validation findings</h2>
+              <p>
+                Automated checks identify exceptions; they do not prove data
+                accuracy.
+              </p>
+            </div>
+            <label class="inline-label"
+              >Severity
+              <select id="inbox-severity">
+                <option value="all">All findings</option>
+                <option value="error">Errors</option>
+                <option value="warning">Warnings</option>
+              </select></label
+            >
+          </div>
           <div id="review-list"></div>
         </section>
         <section id="benchmark-view" hidden>
-          <div class="eyebrow">MEASURED, NOT ASSUMED</div>
-          <h1>The accuracy report<span class="accent">.</span></h1>
-          <p class="muted">
-            Reproducible comparisons against cell-level ground truth. These are
-            synthetic fixtures, not hidden-test guarantees.
-          </p>
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">Reproducible evaluation</div>
+              <h1>Accuracy & requirement coverage</h1>
+              <p>
+                Measured extraction results, integrity checks and the challenge
+                requirements.
+              </p>
+            </div>
+            <span class="badge neutral">Development fixtures</span>
+          </div>
           <div id="benchmark-content"></div>
         </section>
         <section id="result-view" hidden>
           <div class="result-heading">
             <div>
-              <button class="text-button" id="back-button">
-                ← Back to workspace
-              </button>
-              <h1 id="result-title">Document</h1>
+              <button class="text-button" id="back-button">← Documents</button>
+              <div class="result-title-row">
+                <h1 id="result-title">Document</h1>
+                <span id="result-status" class="badge neutral">Queued</span>
+              </div>
               <p id="result-subtitle" class="muted"></p>
             </div>
             <div class="result-actions">
-              <button class="secondary" id="retry-button">Retry with OCR</button
-              ><a class="primary" id="excel-download"
-                ><svg><use href="#i-down" /></svg>Export Excel</a
-              >
+              <button class="secondary" id="retry-button">
+                <svg><use href="#i-retry" /></svg>Retry OCR</button
+              ><button class="secondary" id="excel-download">
+                <svg><use href="#i-download" /></svg>Export draft</button
+              ><button class="primary" id="review-button">
+                <svg><use href="#i-check" /></svg>Complete review
+              </button>
             </div>
           </div>
-          <div id="processing" hidden>
-            <div class="processing-orb">
-              <svg><use href="#i-scan" /></svg>
+          <div id="agent-pipeline" class="agent-pipeline"></div>
+          <div id="processing" class="card processing-card" hidden>
+            <div class="processing-top">
+              <span class="processing-agent"
+                ><svg><use href="#i-agent" /></svg
+              ></span>
+              <div>
+                <h2 id="progress-label">Inspecting document</h2>
+                <p id="progress-detail">
+                  The agent records extraction decisions and exceptions for
+                  review.
+                </p>
+              </div>
+              <span id="progress-text">0%</span>
             </div>
-            <h2 id="progress-label">Reading your document</h2>
-            <p class="muted">
-              The agent is inspecting pages, extracting tables and checking the
-              details.
-            </p>
             <div class="progress-track"><div id="progress-bar"></div></div>
-            <span id="progress-text">0%</span>
+            <div class="processing-log" id="processing-log"></div>
           </div>
           <div id="result-content" hidden>
+            <div id="review-banner"></div>
             <div id="result-metrics" class="result-metrics"></div>
-            <div class="result-tabs" role="tablist">
-              <button class="active" data-tab="data" role="tab">
-                Extracted data</button
-              ><button data-tab="issues" role="tab">
-                Validation <span id="finding-count"></span></button
-              ><button data-tab="activity" role="tab">Agent activity</button>
-              <div class="tab-spacer"></div>
-              <a id="json-download" class="text-button"
-                >JSON <svg><use href="#i-down" /></svg></a
-              ><a id="csv-download" class="text-button"
-                >CSV <svg><use href="#i-down" /></svg
-              ></a>
-            </div>
-            <div id="data-panel">
-              <div class="table-controls">
-                <div id="table-selectors"></div>
-                <label class="source-toggle"
-                  ><input type="checkbox" id="show-source" checked /> Source
-                  evidence</label
-                >
+            <div class="review-workspace card">
+              <div
+                class="result-tabs"
+                role="tablist"
+                aria-label="Extraction views"
+              >
+                <button class="active" data-tab="data" role="tab">
+                  Data & source</button
+                ><button data-tab="issues" role="tab">
+                  Validation <span id="finding-count">0</span></button
+                ><button data-tab="coverage" role="tab">Page coverage</button
+                ><button data-tab="activity" role="tab">Agent run log</button
+                ><button data-tab="corrections" role="tab">
+                  Corrections <span id="edit-count">0</span>
+                </button>
+                <div class="tab-spacer"></div>
+                <a id="json-download" class="text-button"
+                  >JSON <svg><use href="#i-download" /></svg></a
+                ><a id="csv-download" class="text-button"
+                  >CSV <svg><use href="#i-download" /></svg
+                ></a>
               </div>
-              <div class="evidence-layout" id="evidence-layout">
-                <div class="data-wrap">
-                  <div class="data-hint">
-                    <span
-                      ><i class="online-dot"></i> Click a row to locate it in
-                      the source</span
-                    ><span>Double-click a cell to edit</span>
+              <div id="data-panel">
+                <div class="table-controls">
+                  <div id="table-selectors"></div>
+                  <div class="table-controls-right">
+                    <label class="inline-label"
+                      >Rows
+                      <select id="row-filter">
+                        <option value="all">All rows</option>
+                        <option value="flagged">Flagged rows</option>
+                      </select></label
+                    ><label class="source-toggle"
+                      ><input type="checkbox" id="show-source" checked /> Source
+                      evidence</label
+                    >
                   </div>
-                  <div class="table-scroll" id="data-table"></div>
                 </div>
-                <aside class="source-panel">
-                  <div class="source-toolbar">
-                    <strong>Source document</strong>
-                    <div>
+                <div class="evidence-layout" id="evidence-layout">
+                  <div class="data-wrap">
+                    <div class="data-hint">
+                      <span id="table-shape">Select a table</span
+                      ><span
+                        >Click row → source · Enter or double-click → edit</span
+                      >
+                    </div>
+                    <div class="table-scroll" id="data-table"></div>
+                    <div class="table-footer" id="table-footer"></div>
+                  </div>
+                  <aside class="source-panel">
+                    <div class="source-toolbar">
+                      <strong
+                        ><svg><use href="#i-file" /></svg>Source
+                        evidence</strong
+                      ><select id="source-zoom" aria-label="Source zoom">
+                        <option value="100">Fit width</option>
+                        <option value="150">150%</option>
+                        <option value="200">200%</option>
+                      </select>
+                    </div>
+                    <div class="source-page-toolbar">
                       <button id="prev-page" aria-label="Previous page">
                         ‹</button
-                      ><span id="source-page-label">Page 1</span
-                      ><button id="next-page" aria-label="Next page">›</button>
+                      ><label
+                        >Page
+                        <input
+                          type="number"
+                          id="page-number"
+                          min="1"
+                          value="1"
+                          aria-label="Source page number" /></label
+                      ><span id="source-page-label">/ 1</span
+                      ><button id="next-page" aria-label="Next page">›</button
+                      ><span id="source-method" class="badge neutral"></span>
                     </div>
-                  </div>
-                  <div class="source-scroll">
-                    <div class="source-image-wrap">
-                      <img id="source-image" alt="Original document page" />
-                      <div id="source-highlight" hidden></div>
+                    <div class="source-scroll">
+                      <div class="source-image-wrap">
+                        <img id="source-image" alt="Original document page" />
+                        <div id="source-highlight" hidden></div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="source-caption" id="source-caption">
-                    Select a row to see its source region.
-                  </div>
-                </aside>
+                    <div class="source-caption" id="source-caption">
+                      Select a row to inspect its source location.
+                    </div>
+                  </aside>
+                </div>
               </div>
-              <div class="export-footnote">
-                <svg><use href="#i-shield" /></svg>Excel includes typed data,
-                validation findings, row evidence and your correction history.
+              <div id="issues-panel" class="tab-panel" hidden>
+                <div class="panel-tools">
+                  <div>
+                    <h2>Validation findings</h2>
+                    <p id="issue-summary"></p>
+                  </div>
+                  <label class="inline-label"
+                    >Severity
+                    <select id="issue-severity">
+                      <option value="all">All findings</option>
+                      <option value="error">Errors</option>
+                      <option value="warning">Warnings</option>
+                    </select></label
+                  >
+                </div>
+                <div id="issue-list"></div>
               </div>
+              <div id="coverage-panel" class="tab-panel" hidden></div>
+              <div id="activity-panel" class="tab-panel" hidden></div>
+              <div id="corrections-panel" class="tab-panel" hidden></div>
             </div>
-            <div id="issues-panel" hidden></div>
-            <div id="activity-panel" hidden></div>
+            <div class="export-footnote">
+              <svg><use href="#i-shield" /></svg>Workbook includes data tables,
+              findings, source evidence, corrections, page coverage and the
+              agent run log.
+            </div>
           </div>
         </section>
         <footer>
-          <span>LedgerLens <i>·</i> A clearer view of your data.</span
-          ><span>LOCAL PROCESSING <i>·</i> BUILT FOR INCUXAI 2026</span>
+          <span
+            >LedgerLens <span class="footer-divider">/</span> AI document
+            extraction agent</span
+          ><span>Local processing · English OCR · v1.1</span>
         </footer>
       </main>
     </div>
@@ -438,51 +572,56 @@
     <div id="toast" role="status" hidden></div>
     <dialog id="guide-dialog">
       <button class="dialog-close" id="close-guide" aria-label="Close guide">
-        <svg><use href="#i-x" /></svg>
+        <svg><use href="#i-close" /></svg>
       </button>
-      <div class="eyebrow">FROM DOCUMENT TO DECISION</div>
-      <h2>Four steps. Full visibility.</h2>
-      <ol>
+      <div class="eyebrow">Agent workflow</div>
+      <h2>From source document to reviewed workbook</h2>
+      <ol class="guide-steps">
         <li>
-          <strong>Choose a document.</strong>
-          <p>Upload a PDF or image with tables. Maximum 50 pages and 40 MB.</p>
-        </li>
-        <li>
-          <strong>Let the agent read it.</strong>
+          <strong>Inspect & route.</strong>
           <p>
-            Native text is extracted directly. Scans use local OCR. Enable Force
-            OCR for a broken text layer.
+            Upload up to 50 pages / 40 MB. Automatic mode uses native text where
+            possible and local OCR for scans.
           </p>
         </li>
         <li>
-          <strong>Review the details.</strong>
+          <strong>Extract & validate.</strong>
           <p>
-            Click a row to see its source. Open validation findings.
-            Double-click a cell to correct it; edits are saved and checks rerun.
+            Tables, headers and continuation pages are detected. Arithmetic,
+            totals, balances and integrity checks create review findings.
           </p>
         </li>
         <li>
-          <strong>Export with context.</strong>
+          <strong>Review the evidence.</strong>
           <p>
-            Download Excel with typed values, validation, evidence and
-            correction history. JSON and CSV are available too.
+            Select a row to locate its source. Resolve cells or acknowledge
+            outstanding findings with a review note. OCR confidence is not
+            extraction accuracy.
+          </p>
+        </li>
+        <li>
+          <strong>Export a recorded decision.</strong>
+          <p>
+            Draft exports are labelled unreviewed. Completing review records the
+            current data snapshot; a later correction resets review. OCR retries
+            retain the previous run.
           </p>
         </li>
       </ol>
-      <div class="guide-note">
-        OCR can make mistakes. Recognition scores describe model confidence, not
-        independently measured accuracy. Always review critical figures.
+      <div class="notice">
+        Always check critical figures. The included synthetic benchmarks do not
+        establish accuracy on unseen documents.
       </div>
     </dialog>
     <dialog id="edit-dialog">
       <form id="edit-form">
-        <div class="eyebrow">REVIEW & CORRECT</div>
-        <h2>Edit cell</h2>
+        <div class="eyebrow">Source verification</div>
+        <h2>Correct extracted value</h2>
         <label id="edit-label" for="edit-value">Value</label
         ><textarea id="edit-value" maxlength="10000" rows="4"></textarea>
         <p class="muted">
-          The original value is kept in correction history. Validation reruns
-          when you save.
+          The original value is retained. Validation reruns and review status
+          returns to pending.
         </p>
         <div class="dialog-actions">
           <button type="button" class="secondary" id="cancel-edit">
@@ -490,6 +629,76 @@
           ><button type="submit" class="primary">Save correction</button>
         </div>
       </form>
+    </dialog>
+    <dialog id="review-dialog">
+      <form id="review-form">
+        <div class="eyebrow">Review checkpoint</div>
+        <h2>Complete document review</h2>
+        <p id="review-dialog-summary"></p>
+        <div id="review-open-findings" class="notice"></div>
+        <label class="checkbox-row"
+          ><input id="source-checked" type="checkbox" required /><span
+            >I checked the source values, page coverage and column
+            alignment.</span
+          ></label
+        ><label id="accept-findings-label" class="checkbox-row"
+          ><input id="accept-findings" type="checkbox" /><span
+            >I reviewed the outstanding findings and accept them for this
+            export.</span
+          ></label
+        ><label for="review-note"
+          >Review note
+          <span class="muted" id="review-note-hint"
+            >Optional when no findings remain</span
+          ></label
+        ><textarea
+          id="review-note"
+          rows="3"
+          maxlength="5000"
+          placeholder="Record the reason for accepting any unresolved findings."
+        ></textarea>
+        <p class="muted">
+          This records a human review decision, not a guarantee of accuracy. Any
+          later correction invalidates this review.
+        </p>
+        <div class="dialog-actions">
+          <button type="button" class="secondary" id="cancel-review">
+            Cancel</button
+          ><button type="submit" class="primary">Mark as reviewed</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="export-dialog">
+      <button class="dialog-close" id="close-export" aria-label="Close export">
+        <svg><use href="#i-close" /></svg>
+      </button>
+      <div class="eyebrow">Export workbook</div>
+      <h2 id="export-title">Export draft</h2>
+      <p id="export-description"></p>
+      <div id="export-facts" class="export-facts"></div>
+      <div class="dialog-actions">
+        <button class="secondary" id="export-review">Review first</button
+        ><a class="primary" id="export-confirm"
+          ><svg><use href="#i-download" /></svg>Download Excel</a
+        >
+      </div>
+    </dialog>
+    <dialog id="retry-dialog">
+      <div class="eyebrow">Agent recovery</div>
+      <h2>Retry using OCR</h2>
+      <p>
+        The agent will read the original document with OCR. The current run,
+        including corrections and review history, is retained as a downloadable
+        snapshot in the run log.
+      </p>
+      <div class="notice">
+        OCR may be slower and may perform differently from native PDF
+        extraction. The new run starts with review pending.
+      </div>
+      <div class="dialog-actions">
+        <button class="secondary" id="cancel-retry">Cancel</button
+        ><button class="primary" id="confirm-retry">Start OCR retry</button>
+      </div>
     </dialog>
   </body>
 </html>

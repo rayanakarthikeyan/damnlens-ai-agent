@@ -10,7 +10,11 @@
       "attempts": [
         "ocr"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 10,
+      "seconds": 8.19,
+      "width": 1120.0,
+      "height": 700.0
     },
     {
       "page": 2,
@@ -19,7 +23,11 @@
       "attempts": [
         "ocr"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 10,
+      "seconds": 5.61,
+      "width": 1120.0,
+      "height": 700.0
     }
   ],
   "tables": [
@@ -571,9 +579,100 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 24.02,
+  "elapsed_seconds": 13.82,
   "row_count": 20,
   "headers_removed": 1,
-  "engine": "LedgerLens 1.0 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
-  "edits": []
+  "engine": "LedgerLens 1.1 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:05:37.562230+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "02_scanned_inventory.pdf"
+    },
+    {
+      "at": "2026-10-15T06:05:37.564626+00:00",
+      "stage": "inspect",
+      "message": "Selected OCR extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:05:37.564626+00:00",
+      "stage": "extract",
+      "message": "Running local OCR and layout reconstruction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:05:45.755686+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "ocr"
+    },
+    {
+      "at": "2026-10-15T06:05:45.755686+00:00",
+      "stage": "inspect",
+      "message": "Selected OCR extraction",
+      "page": 2
+    },
+    {
+      "at": "2026-10-15T06:05:45.755686+00:00",
+      "stage": "extract",
+      "message": "Running local OCR and layout reconstruction",
+      "page": 2
+    },
+    {
+      "at": "2026-10-15T06:05:51.371613+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 2,
+      "tables": 1,
+      "method": "ocr"
+    },
+    {
+      "at": "2026-10-15T06:05:51.372615+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 2
+    },
+    {
+      "at": "2026-10-15T06:05:51.374615+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T06:05:51.377615+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 0,
+      "rows": 20
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 2,
+    "pages_total": 2,
+    "pages_needing_review": [],
+    "rows": 20,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 0,
+    "warnings": 0,
+    "findings": 0,
+    "flagged_rows": 0,
+    "rows_with_evidence": 20,
+    "ocr_rows": 20,
+    "ocr_recognition_mean": 0.9963,
+    "ocr_low_score_rows": 0,
+    "issue_types": {},
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
 }

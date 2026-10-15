@@ -7,9 +7,12 @@ import re
 import statistics
 import time
 from collections import Counter
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from pathlib import Path
 from threading import Lock
+
+from .quality import enrich
 
 import cv2
 import numpy as np
@@ -37,11 +40,25 @@ HEADER_WORDS = {
     "unit",
     "id",
     "region",
+    "name",
+    "city",
+    "country",
+    "status",
+    "category",
+    "code",
+    "count",
+    "sales",
+    "revenue",
+    "department",
+    "score",
+    "product",
+    "invoice",
+    "cost",
 }
 
 
 def clean(value):
-    return re.sub(r"\s+", " ", str(value or "")).strip()
+    return re.sub(r"\s+", " ", str("" if value is None else value)).strip()
 
 
 def norm(value):
@@ -65,7 +82,7 @@ def number(value):
     elif "," in text:
         text = (
             text.replace(",", "")
-            if re.fullmatch(r"-?\d{1,3}(,\d{3})+", text)
+            if re.fullmatch(r"-?\d{1,3}(?:,\d{3})+|-?\d{1,2}(?:,\d{2})*,\d{3}", text)
             else text.replace(",", ".")
         )
     if not re.fullmatch(r"[+-]?\d+(?:\.\d+)?", text):
@@ -454,26 +471,37 @@ def stitch(fragments):
             else [f"Column {i + 1}" for i in range(len(first))]
         )
         data = rows[1:] if has_header else rows
-        previous = tables[-1] if tables else None
-        same_schema = previous and len(previous["headers"]) == len(headers)
-        if same_schema and has_header:
-            matches = sum(
-                SequenceMatcher(None, norm(a), norm(b)).ratio() > 0.82
-                for a, b in zip(previous["headers"], headers)
-            )
-            same_schema = matches / len(headers) >= 0.8
-        elif same_schema:
-            # Headerless continuation requires adjacent pages and matching horizontal span.
-            same_schema = (
-                rows[0]["page"] == previous["pages"][-1] + 1
-                and abs(frag["bbox"][0] / frag["width"] - previous["_x"]) < 0.04
-                and abs(
-                    (frag["bbox"][2] - frag["bbox"][0]) / frag["width"] - previous["_w"]
+        previous = None
+        compatible = []
+        x = frag["bbox"][0] / frag["width"]
+        y = frag["bbox"][1] / frag["width"]
+        width = (frag["bbox"][2] - frag["bbox"][0]) / frag["width"]
+        # Match every eligible table from the preceding page, rather than only
+        # the last table. A table already extended onto this page is ineligible.
+        for candidate in reversed(tables):
+            if candidate["pages"][-1] + 1 != rows[0]["page"] or len(
+                candidate["headers"]
+            ) != len(headers):
+                continue
+            if abs(x - candidate["_x"]) >= 0.04 or abs(width - candidate["_w"]) >= 0.04:
+                continue
+            if has_header:
+                matches = sum(
+                    SequenceMatcher(None, norm(a), norm(b)).ratio() > 0.82
+                    for a, b in zip(candidate["headers"], headers)
                 )
-                < 0.04
-            )
-        adjacent = previous and rows[0]["page"] == previous["pages"][-1] + 1
-        if same_schema and adjacent:
+                if (
+                    matches / len(headers) < 0.9
+                    or SequenceMatcher(
+                        None, norm(candidate["headers"][0]), norm(headers[0])
+                    ).ratio()
+                    < 0.75
+                ):
+                    continue
+            compatible.append(candidate)
+        if compatible:
+            previous = min(compatible, key=lambda candidate: abs(y - candidate["_y"]))
+        if previous is not None:
             target = previous
             target["headers_removed"] += int(has_header)
         else:
@@ -486,6 +514,7 @@ def stitch(fragments):
                 "headers_removed": 0,
                 "inferred_headers": not has_header,
                 "_x": frag["bbox"][0] / frag["width"],
+                "_y": y,
                 "_w": (frag["bbox"][2] - frag["bbox"][0]) / frag["width"],
             }
             tables.append(target)
@@ -499,6 +528,7 @@ def stitch(fragments):
         target["pages"] = sorted(set(target["pages"] + [r["page"] for r in rows]))
     for t in tables:
         t.pop("_x")
+        t.pop("_y")
         t.pop("_w")
     return tables
 
@@ -724,8 +754,23 @@ def validate(tables):
     return issues
 
 
-def extract(path: Path, progress=lambda *a: None, force_ocr=False):
+def extract(
+    path: Path, progress=lambda *a: None, force_ocr=False, event=lambda *a: None
+):
     start = time.perf_counter()
+    events = []
+
+    def emit(stage, message, **details):
+        entry = {
+            "at": datetime.now(timezone.utc).isoformat(),
+            "stage": stage,
+            "message": message,
+            **details,
+        }
+        events.append(entry)
+        event(entry)
+
+    emit("inspect", "Opened source document", filename=path.name)
     doc = fitz.open(path)
     try:
         if doc.needs_pass:
@@ -741,8 +786,16 @@ def extract(path: Path, progress=lambda *a: None, force_ocr=False):
         fragments = []
         pages = []
         for i, page in enumerate(doc):
+            page_start = time.perf_counter()
             progress(i, len(doc), f"Inspecting page {i + 1}")
             native = len(page.get_text().strip()) >= 25 and not force_ocr
+            emit(
+                "inspect",
+                "Selected native text extraction"
+                if native
+                else "Selected OCR extraction",
+                page=i + 1,
+            )
             attempts = []
             found = []
             if native:
@@ -756,6 +809,9 @@ def extract(path: Path, progress=lambda *a: None, force_ocr=False):
             if not found:
                 progress(i, len(doc), f"OCR on page {i + 1}")
                 attempts.append("ocr")
+                emit(
+                    "extract", "Running local OCR and layout reconstruction", page=i + 1
+                )
                 try:
                     found = scan_tables(page, i + 1)
                 except Exception as exc:
@@ -763,6 +819,15 @@ def extract(path: Path, progress=lambda *a: None, force_ocr=False):
                         f"OCR failed: {type(exc).__name__}: {str(exc)[:160]}"
                     )
             fragments.extend(found)
+            emit(
+                "extract",
+                "Extracted table fragments"
+                if found
+                else "No tables found; page needs review",
+                page=i + 1,
+                tables=len(found),
+                method="ocr" if "ocr" in attempts else "native",
+            )
             pages.append(
                 {
                     "page": i + 1,
@@ -770,10 +835,27 @@ def extract(path: Path, progress=lambda *a: None, force_ocr=False):
                     "method": "ocr" if "ocr" in attempts else "native",
                     "attempts": attempts,
                     "status": "extracted" if found else "needs_review",
+                    "rows": sum(
+                        max(0, len(t["rows"]) - int(is_header(t["rows"][0]["cells"])))
+                        for t in found
+                    ),
+                    "seconds": round(time.perf_counter() - page_start, 2),
+                    "width": page.rect.width,
+                    "height": page.rect.height,
                 }
             )
             progress(i + 1, len(doc), f"Page {i + 1} complete")
+        emit(
+            "align",
+            "Matching table schemas and continuation pages",
+            fragments=len(fragments),
+        )
         tables = stitch(fragments)
+        emit(
+            "validate",
+            "Checking totals, arithmetic, balances and table integrity",
+            tables=len(tables),
+        )
         issues = validate(tables)
         for p in pages:
             if p["status"] == "needs_review":
@@ -784,22 +866,32 @@ def extract(path: Path, progress=lambda *a: None, force_ocr=False):
                         "row": None,
                         "column": None,
                         "kind": "page_review",
+                        "page": p["page"],
                         "severity": "error",
                         "message": f"Page {p['page']}: no table extracted. Inspect the page; output may be incomplete.",
                     }
                 )
-        return {
-            "filename": path.name,
-            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-            "page_count": len(doc),
-            "pages": pages,
-            "tables": tables,
-            "issues": issues,
-            "elapsed_seconds": round(time.perf_counter() - start, 2),
-            "row_count": sum(len(t["rows"]) for t in tables),
-            "headers_removed": sum(t["headers_removed"] for t in tables),
-            "engine": "LedgerLens 1.0 · PyMuPDF + RapidOCR (PP-OCR / ONNX)",
-            "edits": [],
-        }
+        emit(
+            "review",
+            "Extraction complete; human review is pending",
+            findings=len(issues),
+            rows=sum(len(t["rows"]) for t in tables),
+        )
+        return enrich(
+            {
+                "filename": path.name,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                "page_count": len(doc),
+                "pages": pages,
+                "tables": tables,
+                "issues": issues,
+                "elapsed_seconds": round(time.perf_counter() - start, 2),
+                "row_count": sum(len(t["rows"]) for t in tables),
+                "headers_removed": sum(t["headers_removed"] for t in tables),
+                "engine": "LedgerLens 1.1 · PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+                "edits": [],
+                "events": events,
+            }
+        )
     finally:
         doc.close()

@@ -1,14 +1,14 @@
 # Accuracy and validation report
 
-Generated: 2026-10-15T05:33:06.449270+00:00
+Generated: 2026-10-15T06:05:51.831148+00:00
 
 Compare normalized whitespace in every output cell to independently generated source ground truth in original row order. Cell accuracy divides matching cells by the larger of expected and actual cell counts, penalizing dropped and extra cells. Row recall and precision use exact full-row multiset matches, preserving duplicate multiplicity. Header equality is reported separately. Source errors count as correct only when faithfully preserved.
 
 | Fixture | Pages | Matching cells | Cell accuracy | Exact row recall | Headers | Seconds |
 |---|---:|---:|---:|---:|---|---:|
-| 01_invoice_register.pdf | 3 | 372/372 | 100.00% | 100.00% | True | 0.22 |
-| 02_scanned_inventory.pdf | 2 | 240/240 | 100.00% | 100.00% | True | 24.02 |
-| 03_bank_statement.pdf | 2 | 252/252 | 100.00% | 100.00% | True | 0.31 |
+| 01_invoice_register.pdf | 3 | 372/372 | 100.00% | 100.00% | True | 0.25 |
+| 02_scanned_inventory.pdf | 2 | 240/240 | 100.00% | 100.00% | True | 13.82 |
+| 03_bank_statement.pdf | 2 | 252/252 | 100.00% | 100.00% | True | 0.18 |
 
 ## Validation findings
 

@@ -17,13 +17,14 @@ from pydantic import BaseModel, Field
 
 from .engine import extract, validate
 from .exporter import xlsx, csv_bytes
+from .quality import enrich, approve, revoke
 
 ROOT = Path(__file__).resolve().parents[1]
 JOBS = Path(os.environ.get("LEDGERLENS_DATA", ROOT / ".jobs"))
 JOBS.mkdir(parents=True, exist_ok=True)
 POOL = ThreadPoolExecutor(max_workers=1)
 LOCK = threading.RLock()
-app = FastAPI(title="LedgerLens", version="1.0.0", docs_url="/api/docs")
+app = FastAPI(title="LedgerLens", version="1.1.0", docs_url="/api/docs")
 ALLOWED = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 MAX_BYTES = 40 * 1024 * 1024
 
@@ -93,17 +94,40 @@ def work(job):
     directory = job_dir(job)
     state = load(directory / "status.json")
     try:
-        state.update(status="processing", message="Inspecting document", progress=0)
+        state.update(
+            status="processing",
+            message="Inspecting document",
+            progress=0,
+            stage="inspect",
+            events=[],
+        )
         save(directory / "status.json", state)
 
         def progress(done, total, message):
             state.update(progress=round(done / total * 92), message=message)
             save(directory / "status.json", state)
 
+        def event(entry):
+            state["events"].append(entry)
+            state["stage"] = (
+                "extract"
+                if entry["stage"] == "inspect" and entry.get("page")
+                else entry["stage"]
+            )
+            state["message"] = entry["message"] + (
+                f" · page {entry['page']}" if entry.get("page") else ""
+            )
+            if state["stage"] in {"align", "validate", "review"}:
+                state["progress"] = {"align": 94, "validate": 97, "review": 99}[
+                    state["stage"]
+                ]
+            save(directory / "status.json", state)
+
         result = extract(
             directory / state["stored"],
             progress,
             force_ocr=state.get("force_ocr", False),
+            event=event,
         )
         result["filename"] = state["filename"]
         save(directory / "result.json", result)
@@ -114,6 +138,10 @@ def work(job):
             rows=result["row_count"],
             tables=len(result["tables"]),
             issues=len(result["issues"]),
+            page_count=result["page_count"],
+            quality=result["quality"],
+            review_status="pending",
+            stage="review",
         )
     except Exception as exc:
         state.update(status="failed", message=str(exc)[:500])
@@ -148,6 +176,10 @@ def create_job(data, name, force=False):
         "created": datetime.now(timezone.utc).isoformat(),
         "message": "Waiting for extraction",
         "force_ocr": force,
+        "stage": "queued",
+        "events": [],
+        "attempt": 1,
+        "review_status": "pending",
     }
     save(directory / "status.json", state)
     POOL.submit(work, job)
@@ -158,7 +190,7 @@ def create_job(data, name, force=False):
 def health():
     return {
         "status": "ok",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "max_pages": 50,
         "max_upload_mb": 40,
         "ocr": "RapidOCR / ONNX CPU",
@@ -167,11 +199,41 @@ def health():
 
 @app.get("/api/jobs")
 def jobs():
-    return sorted(
-        [load(p) for p in JOBS.glob("*/status.json")],
-        key=lambda d: d["created"],
-        reverse=True,
-    )
+    listing = []
+    for p in JOBS.glob("*/status.json"):
+        state = load(p)
+        if state["status"] == "complete" and (p.parent / "result.json").exists():
+            r = enrich(load(p.parent / "result.json"))
+            state.update(
+                quality=r["quality"],
+                review_status=r["quality"]["review_status"],
+                page_count=r["page_count"],
+            )
+        listing.append(state)
+    return sorted(listing, key=lambda d: d["created"], reverse=True)
+
+
+@app.get("/api/review")
+def review_inbox():
+    findings = []
+    for state in jobs():
+        if state["status"] != "complete":
+            continue
+        r = enrich(load(JOBS / state["id"] / "result.json"))
+        for issue in r["issues"]:
+            page = issue.get("page")
+            if not page and issue.get("table") and issue.get("row"):
+                page = r["tables"][issue["table"] - 1]["rows"][issue["row"] - 1]["page"]
+            findings.append(
+                {
+                    **issue,
+                    "page": page,
+                    "job": state["id"],
+                    "filename": state["filename"],
+                    "review_status": r["quality"]["review_status"],
+                }
+            )
+    return findings
 
 
 @app.post("/api/jobs", status_code=202)
@@ -209,10 +271,13 @@ def status(job: str):
 
 @app.get("/api/jobs/{job}/result")
 def result(job: str):
-    p = job_dir(job) / "result.json"
+    directory = job_dir(job)
+    if load(directory / "status.json")["status"] != "complete":
+        raise HTTPException(409, "Extraction is not complete")
+    p = directory / "result.json"
     if not p.exists():
         raise HTTPException(409, "Extraction is not complete")
-    return load(p)
+    return enrich(load(p))
 
 
 @app.post("/api/jobs/{job}/retry", status_code=202)
@@ -222,8 +287,22 @@ def retry(job: str, force_ocr: bool = False):
         state = load(directory / "status.json")
         if state["status"] in {"queued", "processing"}:
             raise HTTPException(409, "Already processing")
+        if (directory / "result.json").exists():
+            versions = directory / "versions"
+            versions.mkdir(exist_ok=True)
+            snapshot = enrich(load(directory / "result.json"))
+            snapshot["saved_at"] = datetime.now(timezone.utc).isoformat()
+            save(versions / f"{uuid.uuid4()}.json", snapshot)
+            (directory / "result.json").unlink()
         state.update(
-            status="queued", progress=0, message="Retry queued", force_ocr=force_ocr
+            status="queued",
+            progress=0,
+            message="Retry queued",
+            force_ocr=force_ocr,
+            stage="queued",
+            events=[],
+            attempt=state.get("attempt", 1) + 1,
+            review_status="pending",
         )
         save(directory / "status.json", state)
     POOL.submit(work, job)
@@ -268,6 +347,8 @@ def correct(job: str, edit: Correction):
             before = row["cells"][edit.column - 1]
         except IndexError:
             raise HTTPException(404, "Cell not found")
+        if before == edit.value:
+            return r
         row["cells"][edit.column - 1] = edit.value
         r["edits"].append(
             {
@@ -280,11 +361,100 @@ def correct(job: str, edit: Correction):
         r["issues"] = validate(r["tables"]) + [
             i for i in r["issues"] if i["kind"] == "page_review"
         ]
+        revoke(r, "Data changed; review must be completed again.")
+        r.setdefault("events", []).append(
+            {
+                "at": datetime.now(timezone.utc).isoformat(),
+                "stage": "review",
+                "message": f"Cell corrected; table {edit.table}, row {edit.row}, column {edit.column}. Validation refreshed.",
+                "page": row["page"],
+            }
+        )
         save(directory / "result.json", r)
         state = load(directory / "status.json")
         state["issues"] = len(r["issues"])
+        state.update(quality=r["quality"], review_status="pending")
         save(directory / "status.json", state)
         return r
+
+
+class Review(BaseModel):
+    note: str = Field(default="", max_length=5000)
+    accept_findings: bool = False
+    source_checked: bool = False
+
+
+@app.post("/api/jobs/{job}/review")
+def complete_review(job: str, review: Review):
+    with LOCK:
+        if not review.source_checked:
+            raise HTTPException(
+                422, "Confirm that source values and column alignment were checked."
+            )
+        directory = job_dir(job)
+        r = result(job)
+        try:
+            approve(r, review.note, review.accept_findings)
+        except ValueError as exc:
+            raise HTTPException(409, str(exc))
+        r.setdefault("events", []).append(
+            {
+                "at": r["review"]["at"],
+                "stage": "review",
+                "message": f"Human review completed; {r['review']['accepted_findings']} findings accepted."
+                + (" Note: " + review.note if review.note else ""),
+            }
+        )
+        save(directory / "result.json", r)
+        state = load(directory / "status.json")
+        state.update(quality=r["quality"], review_status="reviewed")
+        save(directory / "status.json", state)
+        return r
+
+
+@app.get("/api/jobs/{job}/versions")
+def versions(job: str):
+    items = [
+        {
+            "id": p.stem,
+            "saved_at": r.get("saved_at"),
+            "rows": r["row_count"],
+            "edits": len(r["edits"]),
+            "review_status": enrich(r)["quality"]["review_status"],
+        }
+        for p in sorted((job_dir(job) / "versions").glob("*.json"), reverse=True)
+        for r in [load(p)]
+    ]
+    return sorted(items, key=lambda item: item["saved_at"] or "", reverse=True)
+
+
+@app.get("/api/jobs/{job}/versions/{version}/export/{kind}")
+def version_export(job: str, version: str, kind: str):
+    try:
+        uuid.UUID(version)
+    except ValueError:
+        raise HTTPException(404, "Saved run not found")
+    p = job_dir(job) / "versions" / f"{version}.json"
+    if not p.exists():
+        raise HTTPException(404, "Saved run not found")
+    r = enrich(load(p))
+    if kind == "xlsx":
+        return Response(
+            xlsx(r),
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={
+                "Content-Disposition": 'attachment; filename="ledgerlens-previous-run.xlsx"'
+            },
+        )
+    if kind == "json":
+        return Response(
+            json.dumps(r, indent=2).encode(),
+            media_type="application/json",
+            headers={
+                "Content-Disposition": 'attachment; filename="ledgerlens-previous-run.json"'
+            },
+        )
+    raise HTTPException(404, "Unknown format")
 
 
 @app.get("/api/jobs/{job}/export/{kind}")

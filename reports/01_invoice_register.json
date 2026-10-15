@@ -10,7 +10,11 @@
       "attempts": [
         "native"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 10,
+      "seconds": 0.08,
+      "width": 1120.0,
+      "height": 700.0
     },
     {
       "page": 2,
@@ -19,7 +23,11 @@
       "attempts": [
         "native"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 10,
+      "seconds": 0.08,
+      "width": 1120.0,
+      "height": 700.0
     },
     {
       "page": 3,
@@ -28,7 +36,11 @@
       "attempts": [
         "native"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 11,
+      "seconds": 0.08,
+      "width": 1120.0,
+      "height": 700.0
     }
   ],
   "tables": [
@@ -867,9 +879,102 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 0.22,
+  "elapsed_seconds": 0.25,
   "row_count": 31,
   "headers_removed": 2,
-  "engine": "LedgerLens 1.0 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
-  "edits": []
+  "engine": "LedgerLens 1.1 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:05:37.142541+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "01_invoice_register.pdf"
+    },
+    {
+      "at": "2026-10-15T06:05:37.157503+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:05:37.232591+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "native"
+    },
+    {
+      "at": "2026-10-15T06:05:37.246170+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 2
+    },
+    {
+      "at": "2026-10-15T06:05:37.316966+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 2,
+      "tables": 1,
+      "method": "native"
+    },
+    {
+      "at": "2026-10-15T06:05:37.318968+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 3
+    },
+    {
+      "at": "2026-10-15T06:05:37.389716+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 3,
+      "tables": 1,
+      "method": "native"
+    },
+    {
+      "at": "2026-10-15T06:05:37.389716+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 3
+    },
+    {
+      "at": "2026-10-15T06:05:37.389716+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T06:05:37.389716+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 0,
+      "rows": 31
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 3,
+    "pages_total": 3,
+    "pages_needing_review": [],
+    "rows": 31,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 0,
+    "warnings": 0,
+    "findings": 0,
+    "flagged_rows": 0,
+    "rows_with_evidence": 31,
+    "ocr_rows": 0,
+    "ocr_recognition_mean": null,
+    "ocr_low_score_rows": 0,
+    "issue_types": {},
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
 }

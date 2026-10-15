@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-15T05:33:06.449270+00:00",
+  "generated": "2026-10-15T06:05:51.831148+00:00",
   "environment": "Windows-11-10.0.26200-SP0",
   "methodology": "Compare normalized whitespace in every output cell to independently generated source ground truth in original row order. Cell accuracy divides matching cells by the larger of expected and actual cell counts, penalizing dropped and extra cells. Row recall and precision use exact full-row multiset matches, preserving duplicate multiplicity. Header equality is reported separately. Source errors count as correct only when faithfully preserved.",
   "limitations": "Only three original, English, synthetic fixtures; clean scans at 150 DPI and consistent layouts. Results do not establish accuracy on unseen PDFs, handwriting, merged cells, nested tables, complex borderless layouts or other languages. No hidden evaluation was performed.",
@@ -16,7 +16,7 @@
       "row_recall": 1.0,
       "row_precision": 1.0,
       "headers_exact": true,
-      "seconds": 0.22,
+      "seconds": 0.25,
       "findings": 0,
       "finding_types": {}
     },
@@ -32,7 +32,7 @@
       "row_recall": 1.0,
       "row_precision": 1.0,
       "headers_exact": true,
-      "seconds": 24.02,
+      "seconds": 13.82,
       "findings": 0,
       "finding_types": {}
     },
@@ -48,7 +48,7 @@
       "row_recall": 1.0,
       "row_precision": 1.0,
       "headers_exact": true,
-      "seconds": 0.31,
+      "seconds": 0.18,
       "findings": 6,
       "finding_types": {
         "missing_value": 2,

@@ -11,6 +11,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
 from .engine import number, norm
+from .quality import assessment
 
 NAVY = "182D35"
 TEAL = "117B70"
@@ -21,29 +22,34 @@ RED = "FDE7E3"
 
 def typed(text, header):
     key = norm(header)
-    if key in {
-        "id",
-        "sku",
-        "code",
-        "account",
-        "reference",
-        "phone",
-        "zip",
-        "postal",
-        "invoice",
-        "number",
-    } or key.endswith(
-        (
-            "number",
-            "reference",
+    if (
+        re.search(r"\b(?:id|sku|code|reference)\b", header, re.I)
+        or key
+        in {
+            "id",
             "sku",
             "code",
-            "itemid",
-            "invoiceid",
-            "accountid",
-            "transactionid",
-            "invoiceno",
-            "accountno",
+            "account",
+            "reference",
+            "phone",
+            "zip",
+            "postal",
+            "invoice",
+            "number",
+        }
+        or key.endswith(
+            (
+                "number",
+                "reference",
+                "sku",
+                "code",
+                "itemid",
+                "invoiceid",
+                "accountid",
+                "transactionid",
+                "invoiceno",
+                "accountno",
+            )
         )
     ):
         return text
@@ -56,10 +62,29 @@ def typed(text, header):
         return text
     if re.fullmatch(r"0\d+", text):
         return text
+    if len(re.sub(r"[^0-9]", "", text)) > 15:
+        return text  # Excel cannot represent more than 15 significant digits.
     value = number(text)
     if value is not None:
         return value / 100 if "%" in text else value
     return text
+
+
+def source_number_format(text):
+    """Display the source decimal precision rather than silently rounding it."""
+    token = re.sub(r"[^0-9.,]", "", text)
+    precision = 0
+    if "." in token and "," in token:
+        precision = len(token) - max(token.rfind("."), token.rfind(",")) - 1
+    elif "." in token:
+        precision = len(token.rsplit(".", 1)[1])
+    elif "," in token and not re.fullmatch(
+        r"\d{1,3}(?:,\d{3})+|\d{1,2}(?:,\d{2})*,\d{3}", token
+    ):
+        precision = len(token.rsplit(",", 1)[1])
+    if "%" in text:
+        return "0." + "0" * max(2, min(precision, 12)) + "%"
+    return "#,##0" + ("." + "0" * min(precision, 12) if precision else "")
 
 
 def safe_cell(cell, value):
@@ -107,6 +132,7 @@ def xlsx(result):
     summary = wb.active
     summary.title = "Overview"
     summary.append(["LedgerLens extraction report", "Value"])
+    quality = assessment(result)
     for item in [
         ("Document", result["filename"]),
         ("Pages", result["page_count"]),
@@ -117,6 +143,16 @@ def xlsx(result):
         ("Processing seconds", result["elapsed_seconds"]),
         ("Source SHA-256", result["sha256"]),
         ("Engine", result["engine"]),
+        ("Review status", quality["export_label"]),
+        (
+            "Pages with extracted tables",
+            f"{quality['pages_extracted']} / {quality['pages_total']}",
+        ),
+        ("Validation errors", quality["errors"]),
+        ("Validation warnings", quality["warnings"]),
+        ("Rows with source evidence", quality["rows_with_evidence"]),
+        ("Review note", result.get("review", {}).get("note", "")),
+        ("Review completed (UTC)", result.get("review", {}).get("at", "")),
         (
             "Interpretation",
             "OCR recognition scores are not measured extraction accuracy. Review all findings.",
@@ -143,7 +179,7 @@ def xlsx(result):
                 if isinstance(cell.value, datetime):
                     cell.number_format = "yyyy-mm-dd"
                 elif isinstance(cell.value, (float, int)):
-                    cell.number_format = "0.00%" if "%" in value else "#,##0.00"
+                    cell.number_format = source_number_format(value)
             for i, v in enumerate(
                 [r["page"], r["id"], r["method"], r["confidence"]],
                 len(t["headers"]) + 1,
@@ -214,6 +250,37 @@ def xlsx(result):
             [e.get(k) for k in ["table", "row", "column", "before", "after", "at"]]
         )
     style(edits)
+    coverage = wb.create_sheet("Page coverage")
+    coverage.append(
+        [
+            "Page",
+            "Extraction",
+            "Table fragments",
+            "Data rows (page estimate)",
+            "Seconds",
+            "Status",
+            "Attempts",
+        ]
+    )
+    for p in result["pages"]:
+        coverage.append(
+            [
+                p["page"],
+                p["method"],
+                p["tables"],
+                p.get("rows"),
+                p.get("seconds"),
+                p["status"],
+                "; ".join(p["attempts"]),
+            ]
+        )
+    style(coverage)
+    log = wb.create_sheet("Run log")
+    log.append(["Time (UTC)", "Stage", "Action", "Page"])
+    for event in result.get("events", []):
+        log.append([event["at"], event["stage"], event["message"], event.get("page")])
+    style(log)
+    log.column_dimensions["C"].width = 70
     # Harden every sheet, including names, validation text and correction history.
     for ws in wb:
         for row in ws:

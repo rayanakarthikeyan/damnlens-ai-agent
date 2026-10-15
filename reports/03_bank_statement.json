@@ -10,7 +10,11 @@
       "attempts": [
         "native"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 10,
+      "seconds": 0.09,
+      "width": 1120.0,
+      "height": 700.0
     },
     {
       "page": 2,
@@ -19,7 +23,11 @@
       "attempts": [
         "native"
       ],
-      "status": "extracted"
+      "status": "extracted",
+      "rows": 11,
+      "seconds": 0.09,
+      "width": 1120.0,
+      "height": 700.0
     }
   ],
   "tables": [
@@ -652,9 +660,93 @@
       "message": "Debit: stated 2,600.00; preceding rows sum to 2,500.00."
     }
   ],
-  "elapsed_seconds": 0.31,
+  "elapsed_seconds": 0.18,
   "row_count": 21,
   "headers_removed": 1,
-  "engine": "LedgerLens 1.0 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
-  "edits": []
+  "engine": "LedgerLens 1.1 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:05:51.532756+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "03_bank_statement.pdf"
+    },
+    {
+      "at": "2026-10-15T06:05:51.537161+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:05:51.619635+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "native"
+    },
+    {
+      "at": "2026-10-15T06:05:51.622057+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 2
+    },
+    {
+      "at": "2026-10-15T06:05:51.706562+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 2,
+      "tables": 1,
+      "method": "native"
+    },
+    {
+      "at": "2026-10-15T06:05:51.706562+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 2
+    },
+    {
+      "at": "2026-10-15T06:05:51.707737+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T06:05:51.710740+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 6,
+      "rows": 21
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 2,
+    "pages_total": 2,
+    "pages_needing_review": [],
+    "rows": 21,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 3,
+    "warnings": 3,
+    "findings": 6,
+    "flagged_rows": 5,
+    "rows_with_evidence": 21,
+    "ocr_rows": 0,
+    "ocr_recognition_mean": null,
+    "ocr_low_score_rows": 0,
+    "issue_types": {
+      "missing_value": 2,
+      "balance_mismatch": 2,
+      "sparse_row": 1,
+      "total_mismatch": 1
+    },
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
 }

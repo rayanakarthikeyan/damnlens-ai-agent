@@ -187,6 +187,8 @@ def test_excel_types_formats_evidence_and_injection():
         "Validation",
         "Evidence",
         "Corrections",
+        "Page coverage",
+        "Run log",
     ]
     ws = wb["Table 1"]
     assert ws["A2"].value == "INV-0001" and ws["B2"].value.year == 2026
@@ -276,3 +278,108 @@ def test_borderless_native_keeps_multiword_headers(tmp_path):
     assert len(r["tables"]) == 1 and r["tables"][0]["headers"] == h
     assert [row["cells"] for row in r["tables"][0]["rows"]] == sum(p, [])
     assert any(i["kind"] == "alignment_review" for i in r["issues"])
+
+
+def test_multiple_table_streams_continue_across_pages():
+    a = ["Item ID", "Description", "Amount"]
+    b = ["Date", "Debit", "Balance"]
+    result = stitch(
+        [
+            fragment(1, [a, ["01", "First", "10"]]),
+            fragment(1, [b, ["2026-10-01", "5", "100"]]),
+            fragment(2, [a, ["02", "Second", "20"]]),
+            fragment(2, [b, ["2026-10-02", "6", "94"]]),
+        ]
+    )
+    assert len(result) == 2 and [len(t["rows"]) for t in result] == [2, 2]
+    assert [t["headers_removed"] for t in result] == [1, 1]
+    assert result[0]["rows"][1]["cells"] == ["02", "Second", "20"]
+
+
+def test_zero_and_indian_grouping_without_decimals():
+    from app.engine import clean
+
+    assert clean(0) == "0"
+    assert number("1,20,000") == 120000
+    assert number("12,34,567") == 1234567
+
+
+def test_long_numeric_values_are_not_rounded_by_excel():
+    assert typed("123456789012345678", "Value") == "123456789012345678"
+
+
+def test_execution_log_and_quality_are_observable():
+    events = []
+    r = extract(ROOT / "samples" / "01_invoice_register.pdf", event=events.append)
+    assert [
+        e["stage"] for e in events if e["stage"] in {"align", "validate", "review"}
+    ] == ["align", "validate", "review"]
+    assert (
+        r["quality"]["pages_extracted"] == 3
+        and r["quality"]["rows_with_evidence"] == 31
+    )
+    assert (
+        r["quality"]["review_status"] == "pending"
+        and r["quality"]["ocr_recognition_mean"] is None
+    )
+    assert all("seconds" in p and p["width"] > 0 for p in r["pages"])
+
+
+def test_similar_wide_schemas_do_not_merge_different_identity_columns():
+    a, p, _ = invoice_fixture(1)
+    b = list(a)
+    b[0] = "SKU"
+    b[3] = "Location"
+    t = stitch([fragment(1, [a, p[0][0]]), fragment(2, [b, p[0][1]])])
+    assert len(t) == 2
+
+
+def test_numeric_precision_and_generic_ids_are_preserved():
+    from app.exporter import source_number_format
+
+    assert source_number_format("1.2345") == "#,##0.0000"
+    assert source_number_format("1,20,000") == "#,##0"
+    assert source_number_format("12,345.670") == "#,##0.000"
+    assert source_number_format("10.125%") == "0.000%"
+    assert typed("123456", "Order ID") == "123456"
+
+
+def test_real_pdf_with_two_continuing_table_streams(tmp_path):
+    from reportlab.pdfgen import canvas
+
+    path = tmp_path / "parallel-tables.pdf"
+    c = canvas.Canvas(str(path), pagesize=(650, 700))
+    a = ["Item ID", "Description", "Amount"]
+    b = ["Date", "Debit", "Balance"]
+    for page in range(2):
+        for top, header, row in [
+            (600, a, [f"A{page + 1}", "Office paper", str(10 + page)]),
+            (350, b, [f"2026-10-0{page + 1}", "5", str(100 - page * 5)]),
+        ]:
+            for rid, cells in enumerate([header, row]):
+                for col, text in enumerate(cells):
+                    c.drawString(48 + col * 175, top - rid * 30 - 20, text)
+            for col in range(4):
+                c.line(40 + col * 175, top, 40 + col * 175, top - 60)
+            for rid in range(3):
+                c.line(40, top - rid * 30, 565, top - rid * 30)
+        c.showPage()
+    c.save()
+    r = extract(path)
+    assert len(r["tables"]) == 2 and [len(t["rows"]) for t in r["tables"]] == [2, 2]
+    assert [t["pages"] for t in r["tables"]] == [[1, 2], [1, 2]]
+
+
+def test_identical_table_schemas_match_their_page_positions():
+    h = ["Item ID", "Description", "Amount"]
+    fragments = []
+    for page in [1, 2]:
+        for y, label in [(100, "Top"), (350, "Bottom")]:
+            f = fragment(page, [h, [f"{label}{page}", label, "10"]])
+            f["bbox"][1] = y
+            fragments.append(f)
+    tables = stitch(fragments)
+    assert [[r["cells"][0] for r in t["rows"]] for t in tables] == [
+        ["Top1", "Top2"],
+        ["Bottom1", "Bottom2"],
+    ]

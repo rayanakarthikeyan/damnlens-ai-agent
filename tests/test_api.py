@@ -1,9 +1,11 @@
 import importlib
+import io
 import time
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -35,7 +37,7 @@ def completed(client):
 
 def test_health_and_frontend(client):
     assert client.get("/api/health").json()["max_pages"] == 50
-    assert "Less paperwork." in client.get("/").text
+    assert "Document extraction" in client.get("/").text
     assert client.get("/styles.css").status_code == 200
     assert client.get("/api/health").headers["X-Content-Type-Options"] == "nosniff"
 
@@ -116,3 +118,107 @@ def test_restart_marks_interrupted(client):
     )
     importlib.reload(module)
     assert module.load(p / "status.json")["status"] == "interrupted"
+
+
+def test_review_is_explicit_and_corrections_revoke_it(client):
+    job = completed(client)
+    assert (
+        client.get(f"/api/jobs/{job}/result").json()["quality"]["review_status"]
+        == "pending"
+    )
+    assert client.post(f"/api/jobs/{job}/review", json={}).status_code == 422
+    r = client.post(
+        f"/api/jobs/{job}/review",
+        json={"source_checked": True, "note": "Compared source and columns."},
+    ).json()
+    assert r["quality"]["review_status"] == "reviewed"
+    assert r["review"]["fingerprint"] and r["review"]["accepted_findings"] == 0
+    wb = load_workbook(io.BytesIO(client.get(f"/api/jobs/{job}/export/xlsx").content))
+    overview = dict(wb["Overview"].iter_rows(min_row=2, values_only=True))
+    assert (
+        overview["Review status"] == "Reviewed"
+        and overview["Review note"] == "Compared source and columns."
+    )
+    same = client.patch(
+        f"/api/jobs/{job}/cells",
+        json={"table": 1, "row": 1, "column": 8, "value": "44.00"},
+    ).json()
+    assert same["quality"]["review_status"] == "reviewed" and same["edits"] == []
+    r = client.patch(
+        f"/api/jobs/{job}/cells",
+        json={"table": 1, "row": 1, "column": 8, "value": "999"},
+    ).json()
+    assert r["quality"]["review_status"] == "pending"
+    assert r["review_history"][0]["note"] == "Compared source and columns."
+    assert client.get("/api/jobs").json()[0]["review_status"] == "pending"
+    wb = load_workbook(io.BytesIO(client.get(f"/api/jobs/{job}/export/xlsx").content))
+    assert (
+        dict(wb["Overview"].iter_rows(min_row=2, values_only=True))["Review status"]
+        == "Draft — review pending"
+    )
+
+
+def test_outstanding_findings_require_acknowledgement_and_note(client):
+    job = completed(client)
+    client.patch(
+        f"/api/jobs/{job}/cells",
+        json={"table": 1, "row": 1, "column": 8, "value": "999"},
+    )
+    route = f"/api/jobs/{job}/review"
+    assert client.post(route, json={"source_checked": True}).status_code == 409
+    assert (
+        client.post(
+            route, json={"source_checked": True, "accept_findings": True}
+        ).status_code
+        == 409
+    )
+    r = client.post(
+        route,
+        json={
+            "source_checked": True,
+            "accept_findings": True,
+            "note": "Synthetic source mismatch accepted for workflow test.",
+        },
+    ).json()
+    assert (
+        r["quality"]["review_status"] == "reviewed"
+        and r["review"]["accepted_findings"] > 0
+    )
+    assert client.get("/api/review").json()[0]["review_status"] == "reviewed"
+
+
+def test_retry_archives_corrections_and_blocks_stale_exports(client, monkeypatch):
+    import app.main as module
+
+    job = completed(client)
+    client.patch(
+        f"/api/jobs/{job}/cells",
+        json={"table": 1, "row": 1, "column": 8, "value": "999"},
+    )
+    monkeypatch.setattr(module.POOL, "submit", lambda *args: None)
+    state = client.post(f"/api/jobs/{job}/retry?force_ocr=true").json()
+    assert state["status"] == "queued" and state["attempt"] == 2
+    assert client.get(f"/api/jobs/{job}/result").status_code == 409
+    assert client.get(f"/api/jobs/{job}/export/xlsx").status_code == 409
+    versions = client.get(f"/api/jobs/{job}/versions").json()
+    assert len(versions) == 1 and versions[0]["edits"] == 1
+    snapshot = client.get(
+        f"/api/jobs/{job}/versions/{versions[0]['id']}/export/json"
+    ).json()
+    assert snapshot["tables"][0]["rows"][0]["cells"][7] == "999"
+    assert (
+        client.get(f"/api/jobs/{job}/versions/{versions[0]['id']}/export/xlsx").content[
+            :2
+        ]
+        == b"PK"
+    )
+
+
+def test_inbox_includes_document_and_source_page(client):
+    job = completed(client)
+    client.patch(
+        f"/api/jobs/{job}/cells",
+        json={"table": 1, "row": 1, "column": 8, "value": "999"},
+    )
+    inbox = client.get("/api/review").json()
+    assert any(i["job"] == job and i["page"] == 1 and i["row"] == 1 for i in inbox)
