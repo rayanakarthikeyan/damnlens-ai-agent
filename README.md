@@ -92,36 +92,45 @@ This is a bounded agent workflow with an explicit inspect → extract → retry 
 - Completing review requires a source-check confirmation. Outstanding findings also require explicit acknowledgement and a note. This is a human decision, not a measured accuracy guarantee.
 - Source data stays under `.jobs/`, which is ignored by Git. The delete control permanently removes the selected local job. Do not delete a job whose source is your only copy.
 
-## Deliverables and measured results
+## Submission deliverables
 
-| Deliverable | Location |
+| Required deliverable | Where to find it |
 |---|---|
-| Working application and source | `app/`, `web/`, `run.py`, `convert.py` |
-| Setup and run instructions | This README; `START_DAMNLENS.cmd`, `setup_judges.py`, `start.ps1`, `start.sh`, `Dockerfile` |
-| Three original sample PDFs | `samples/01_invoice_register.pdf`, `02_scanned_inventory.pdf`, `03_bank_statement.pdf` |
-| Corresponding Excel workbooks | `samples/converted/` |
-| Accuracy and validation report | [reports/ACCURACY_REPORT.md](reports/ACCURACY_REPORT.md) |
-| Cell-level benchmark output | `reports/benchmark.json`, `reports/01_*.json`, `reports/02_*.json`, `reports/03_*.json` |
-| Ground truth and regeneration | `samples/ground_truth.json`, `scripts/generate_samples.py` |
-| Automated tests | `tests/`, `reports/tests.xml`, `.github/workflows/test.yml` |
-| Short demo | `docs/damnlens-demo.mp4`, `docs/DEMO_SCRIPT.md` |
-| Requirement mapping | [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) |
-| Judge audit and rubric self-assessment | [reports/JUDGE_EVALUATION.md](reports/JUDGE_EVALUATION.md), `reports/judge-audit-before.json`, `reports/judge-audit-after.json`, `evaluation/pdfs/` |
-| Library/model credits | [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), `models/README.md` |
+| Working AI agent | [Application entry point](run.py) · [CLI converter](convert.py) |
+| Complete source code | [Python backend](app/) · [Browser UI](web/) · [Download source ZIP](https://github.com/rayanakarthikeyan/damnlens-ai-agent/archive/refs/heads/main.zip) |
+| Setup and run instructions | [Judge quick start](JUDGE_START_HERE.txt) · [Detailed setup](#judges-setup-and-launch) |
+| At least three sample PDFs with Excel outputs | [Matched PDF → Excel files](#sample-pdfs-and-excel-outputs) below |
+| Accuracy and validation report | [Sample accuracy and findings](reports/ACCURACY_REPORT.md) · [Complex/public evaluation and limits](reports/JUDGE_EVALUATION.md) |
+| Demo video, 2–5 minutes | [Watch the demo — 2 minutes 30 seconds](docs/damnlens-demo.mp4) |
 
-On the three included English synthetic fixtures, **864 / 864 data cells** and all headers match ground truth. The scanned fixture is image-only: 240 / 240 cells match. A separate automated 50-page test checks 501 rows × 12 columns and 49 removed repeated headers. These results describe this development set, not expected accuracy on arbitrary or hidden PDFs. Timings and raw comparisons are included in the report.
+[Requirement checklist](docs/SUBMISSION_CHECKLIST.md) · [Library and AI-assistance credits](THIRD_PARTY_NOTICES.md) · [OCR model credits](models/README.md)
 
-The v1.3 complex audit adds **16/16 exact cases and 962/962 cells**: multi-line/hierarchical headers, true vertical merges, nested child tables, cross-page descriptive row parts, distinct account sections and intentional blank cells. Full header paths, inherited-cell geometry and continuation parts survive JSON/Excel export. Clicking a shared cell highlights its original merged rectangle; continued rows expose each source-page part. Reconstructed structure remains flagged for source review.
+### Sample PDFs and Excel outputs
 
-A separate public-fixture comparison matches **261/261 cells across three digital PDFs**, using independent Camelot annotations and an explicit anchor/shared-value policy. It was used for development, so it is not a blind evaluation. Run `python scripts/complex_evaluation.py` for the bundled complex cases, or `python scripts/public_evaluation.py --fetch` for pinned public downloads. See [the judge evaluation](reports/JUDGE_EVALUATION.md), raw JSON reports, `evaluation/complex/` PDF/Excel pairs and `evaluation/public/manifest.json`. The complete suite has **100 tests**.
+All three samples contain fictional data and 12-column tables. Each PDF links directly to its corresponding workbook.
 
-The bank fixture deliberately contains a wrong debit total, an altered running balance, a missing debit and missing currency. Faithful extraction preserves these errors; validation flags them. A changed balance can produce two transition warnings because it affects both the row's incoming and outgoing balance checks.
+| Sample | Input PDF | Converted Excel |
+|---|---|---|
+| Invoice register — digital, 3 pages | [01_invoice_register.pdf](samples/01_invoice_register.pdf) | [01_invoice_register.xlsx](samples/converted/01_invoice_register.xlsx) |
+| Inventory — image-only scan, 2 pages | [02_scanned_inventory.pdf](samples/02_scanned_inventory.pdf) | [02_scanned_inventory.xlsx](samples/converted/02_scanned_inventory.xlsx) |
+| Bank statement — validation errors, 2 pages | [03_bank_statement.pdf](samples/03_bank_statement.pdf) | [03_bank_statement.xlsx](samples/converted/03_bank_statement.xlsx) |
+
+The bank sample deliberately contains a wrong total, an altered balance and missing fields. Extraction preserves these source errors; validation flags them.
+
+### Measured results
+
+| Evaluation | Exact cases | Matching data cells |
+|---|---:|---:|
+| [Submission samples](reports/benchmark.json) | 3/3 | 864/864 |
+| [Varied document audit](reports/judge-audit-after.json) | 15/15 | 1,440/1,440 |
+| [Complex table audit](reports/complex-evaluation.json) | 16/16 | 962/962 |
+| [Public digital PDFs](reports/public-evaluation-final.json) | 3/3 | 261/261 |
+
+These cases were used during development; they do not establish hidden-PDF accuracy. Public comparisons use the disclosed anchor/shared-value policy in the [evaluation report](reports/JUDGE_EVALUATION.md). The [100-test suite](tests/) also covers a 50-page, 501-row, 12-column table with 49 repeated headers removed. [Windows and Ubuntu CI results](https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions) are available on GitHub.
 
 ### Excel output
 
 Each workbook contains **Overview**, one sheet per joined **Table**, **Validation**, **Evidence**, **Corrections**, **Page coverage**, and **Run log**. Overview records draft/reviewed status, review time, accepted findings and the review note. Amounts, dates and percentages are typed; identifiers and leading zeros remain text. Source decimal precision is retained. Values exceeding Excel’s 15-digit numeric precision remain text. Tables have filters, frozen headers, readable widths and warning highlights. Row evidence includes the source page and bounding box in PDF points. Source text beginning with `=` is stored as text, never as an executable formula. CSV formula-like values are escaped.
-
-The expanded regression suite includes same-schema table-position matching, real multi-table PDFs, snapshot-bound review, prior-run recovery, precision-preserving exports and 15 differently styled document cases. The development audit improved from **5/15 to 15/15 exact cases** after targeted fixes. The new documents are regression fixtures used during development, not an independent hidden set. See the judge evaluation for the evidence and remaining gaps.
 
 ## Reproduce the evaluation
 
@@ -130,6 +139,9 @@ python -m pip install -r requirements-dev.txt
 python scripts/generate_samples.py
 python scripts/benchmark.py
 python scripts/judge_audit.py
+python scripts/complex_evaluation.py
+# Optional: download and verify the pinned public PDF fixtures
+python scripts/public_evaluation.py --fetch
 python -m pytest -q --junitxml=reports/tests.xml
 ```
 
