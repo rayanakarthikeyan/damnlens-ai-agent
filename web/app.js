@@ -206,7 +206,7 @@ function jobBadge(j) {
 function jobTable(list) {
   if (!list.length)
     return `<div class="empty-state">${icon("file")}<strong>No documents in this view</strong>Upload a document or run an evaluation fixture to start an extraction.</div>`;
-  return `<div class="table-container"><table class="document-table"><thead><tr><th>Document</th><th class="doc-date-col">Created</th><th class="doc-shape-col">Extraction</th><th class="doc-scope-col">Page coverage</th><th>Review status</th><th></th></tr></thead><tbody>${list.map((j) => `<tr><td><button class="doc-open" data-job="${esc(j.id)}"><span class="file-tile">${icon("file")}</span><span><span class="doc-name">${esc(j.filename)}</span><span class="doc-meta">${j.force_ocr ? "OCR only" : "Automatic routing"}${j.attempt > 1 ? " · attempt " + j.attempt : ""}</span></span></button></td><td class="doc-date-col">${dateText(j.created)}</td><td class="doc-shape-col">${j.rows ?? "—"} rows <span class="muted">/</span> ${j.tables ?? "—"} tables</td><td class="doc-scope-col">${j.quality ? j.quality.pages_extracted + " / " + j.quality.pages_total : "—"}</td><td>${jobBadge(j)}</td><td><div class="doc-actions"><button class="text-button" data-job="${esc(j.id)}">${j.status === "complete" ? "Open" : "View"}</button><button class="delete-doc" data-delete="${esc(j.id)}" aria-label="Delete ${esc(j.filename)}">${icon("close")}</button></div></td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="table-container"><table class="document-table"><thead><tr><th>Document</th><th class="doc-date-col">Created</th><th class="doc-shape-col">Extraction</th><th class="doc-scope-col">Page coverage</th><th>Review status</th><th></th></tr></thead><tbody>${list.map((j) => `<tr><td><button class="doc-open" data-job="${esc(j.id)}"><span class="file-tile">${icon("file")}</span><span><span class="doc-name">${esc(j.filename)}</span><span class="doc-meta">${j.force_ocr ? "OCR only" : "Automatic routing"}${j.attempt > 1 ? " · attempt " + j.attempt : ""}</span></span></button></td><td class="doc-date-col">${dateText(j.created)}</td><td class="doc-shape-col">${j.rows ?? "—"} rows <span class="muted">/</span> ${j.tables ?? "—"} table${j.tables === 1 ? "" : "s"}</td><td class="doc-scope-col">${j.quality ? j.quality.pages_extracted + " / " + j.quality.pages_total : "—"}</td><td>${jobBadge(j)}</td><td><div class="doc-actions"><button class="text-button" data-job="${esc(j.id)}">${j.status === "complete" ? "Open" : "View"}</button><button class="delete-doc" data-delete="${esc(j.id)}" aria-label="Delete ${esc(j.filename)}">${icon("close")}</button></div></td></tr>`).join("")}</tbody></table></div>`;
 }
 function renderJobs() {
   const search = $("#job-search").value.toLowerCase(),
@@ -473,7 +473,7 @@ function renderResult(preserveTab = false) {
       q.pages_extracted + " / " + q.pages_total,
       "Pages with extracted tables",
     ],
-    ["Extracted rows", q.rows, q.tables + " joined tables"],
+    ["Extracted rows", q.rows, q.tables + " joined table" + (q.tables === 1 ? "" : "s")],
     [
       "Max. columns",
       q.max_columns,
@@ -605,7 +605,7 @@ async function loadVersions() {
         ? versions
             .map(
               (v) =>
-                `<div class="version-row"><span>${dateText(v.saved_at)} · ${v.rows} rows · ${v.edits} corrections · ${esc(v.review_status)}</span><div><a class="text-button" href="/api/jobs/${id}/versions/${v.id}/export/xlsx">Excel ${icon("download")}</a><a class="text-button" href="/api/jobs/${id}/versions/${v.id}/export/json">JSON ${icon("download")}</a></div></div>`,
+                `<div class="version-row"><span>${dateText(v.saved_at)} · ${v.rows} rows · ${v.edits} correction${v.edits === 1 ? "" : "s"} · ${esc(v.review_status)}</span><div><a class="text-button" href="/api/jobs/${id}/versions/${v.id}/export/xlsx">Excel ${icon("download")}</a><a class="text-button" href="/api/jobs/${id}/versions/${v.id}/export/json">JSON ${icon("download")}</a></div></div>`,
             )
             .join("")
         : '<p class="muted">No retries yet. A previous run is saved before every OCR retry.</p>');
@@ -616,7 +616,7 @@ async function loadVersions() {
 function renderCorrections() {
   const r = currentResult;
   $("#corrections-panel").innerHTML =
-    `<div class="panel-tools"><div><h2>Correction history</h2><p>Original values remain available. A change resets the review decision.</p></div><span class="badge neutral">${r.edits.length} changes</span></div>` +
+    `<div class="panel-tools"><div><h2>Correction history</h2><p>Original values remain available. A change resets the review decision.</p></div><span class="badge neutral">${r.edits.length} change${r.edits.length === 1 ? "" : "s"}</span></div>` +
     (r.edits.length
       ? `<div class="table-container"><table class="correction-table"><thead><tr><th>Location</th><th>Original</th><th>Corrected</th><th>Recorded</th></tr></thead><tbody>${r.edits.map((e) => `<tr><td>Table ${e.table} · Row ${e.row} · Column ${e.column}</td><td class="old-value">${esc(e.before) || "Empty"}</td><td class="new-value">${esc(e.after) || "Empty"}</td><td>${dateText(e.at)}</td></tr>`).join("")}</tbody></table></div>`
       : '<div class="empty-state">No cells have been manually changed in this run.</div>');

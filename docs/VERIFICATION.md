@@ -2,7 +2,7 @@
 
 Verified locally on Windows with Python 3.12.14.
 
-- **51 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
+- **52 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
 - **864/864 synthetic fixture data cells match ground truth**, with exact headers and exact-row recall. See `reports/benchmark.json` and `reports/ACCURACY_REPORT.md` for methodology and limitations.
 - **50-page stress test:** one joined table, 501 rows, 12 columns, all source cells preserved, 49 repeated headers removed.
 - **Borderless regression:** two-page digital fixture preserves multiword headers and all data cells, with alignment marked for review.
@@ -24,3 +24,5 @@ Windows and Linux CI results are visible under the repository's Actions tab. The
 - Multi-table accuracy: a real two-page PDF with two separate continuing table streams produces two joined tables with both rows preserved in each. Similar wide schemas with different identity headers are kept separate.
 - Numeric integrity: zero values, Indian grouping without decimals, source decimal precision and values beyond Excel's 15-digit numeric precision have dedicated regression coverage.
 - Source documents and extracted content remain data, never executable agent instructions. Benchmark accuracy remains measured against explicit ground truth, not inferred from OCR scores.
+
+- Live Windows stress verification exposed a temporary file-sharing lock on progress persistence. Atomic writes now use unique temporary files and bounded exponential retries on PermissionError; a regression simulates two locked replacements and verifies successful persistence with no leftover temporary file.

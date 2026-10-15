@@ -110,7 +110,7 @@ The bank fixture deliberately contains a wrong debit total, an altered running b
 
 Each workbook contains **Overview**, one sheet per joined **Table**, **Validation**, **Evidence**, **Corrections**, **Page coverage**, and **Run log**. Overview records draft/reviewed status, review time, accepted findings and the review note. Amounts, dates and percentages are typed; identifiers and leading zeros remain text. Source decimal precision is retained. Values exceeding Excel’s 15-digit numeric precision remain text. Tables have filters, frozen headers, readable widths and warning highlights. Row evidence includes the source page and bounding box in PDF points. Source text beginning with `=` is stored as text, never as an executable formula. CSV formula-like values are escaped.
 
-The v1.1 regression suite contains **51 tests**, including same-schema table-position matching, real multi-table PDFs, snapshot-bound review, prior-run recovery and precision-preserving exports.
+The v1.1 regression suite contains **52 tests**, including same-schema table-position matching, real multi-table PDFs, snapshot-bound review, prior-run recovery and precision-preserving exports.
 
 ## Reproduce the evaluation
 

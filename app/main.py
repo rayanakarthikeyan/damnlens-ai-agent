@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import threading
+import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -42,11 +43,27 @@ def job_dir(job):
 
 def save(path, data):
     with LOCK:
-        temp = path.with_suffix(".tmp")
+        temp = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
         temp.write_text(
             json.dumps(data, ensure_ascii=False, allow_nan=False), encoding="utf-8"
         )
-        temp.replace(path)
+        # Windows indexers/antivirus can briefly hold the destination without
+        # delete sharing. Retry atomic replacement; never truncate live JSON.
+        try:
+            for attempt in range(7):
+                try:
+                    temp.replace(path)
+                    return
+                except PermissionError:
+                    if attempt == 6:
+                        raise
+                    time.sleep(0.02 * (2**attempt))
+        finally:
+            if temp.exists():
+                try:
+                    temp.unlink()
+                except OSError:
+                    pass
 
 
 def load(path):

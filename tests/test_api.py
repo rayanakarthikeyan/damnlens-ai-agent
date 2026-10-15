@@ -222,3 +222,25 @@ def test_inbox_includes_document_and_source_page(client):
     )
     inbox = client.get("/api/review").json()
     assert any(i["job"] == job and i["page"] == 1 and i["row"] == 1 for i in inbox)
+
+
+def test_progress_write_recovers_from_transient_windows_file_locks(
+    client, tmp_path, monkeypatch
+):
+    import app.main as module
+
+    target = tmp_path / "state.json"
+    target.write_text('{"status":"old"}')
+    original = Path.replace
+    attempts = []
+
+    def temporarily_locked(path, destination):
+        attempts.append(path)
+        if len(attempts) < 3:
+            raise PermissionError("simulated Windows sharing lock")
+        return original(path, destination)
+
+    monkeypatch.setattr(Path, "replace", temporarily_locked)
+    module.save(target, {"status": "complete"})
+    assert module.load(target) == {"status": "complete"} and len(attempts) == 3
+    assert list(tmp_path.glob("*.tmp")) == []
