@@ -1,0 +1,32 @@
+{
+  "scope": "Real non-root Docker API: three dummy samples, exact data/headers, Excel and keyless local routing. No hidden or cloud accuracy claim.",
+  "checks": [
+    {
+      "sample": "01_invoice_register.pdf",
+      "rows": 31,
+      "cells": 372,
+      "headers_exact": true,
+      "xlsx_valid": true,
+      "workflow": "local",
+      "passed": true
+    },
+    {
+      "sample": "02_scanned_inventory.pdf",
+      "rows": 20,
+      "cells": 240,
+      "headers_exact": true,
+      "xlsx_valid": true,
+      "workflow": "local",
+      "passed": true
+    },
+    {
+      "sample": "03_bank_statement.pdf",
+      "rows": 21,
+      "cells": 252,
+      "headers_exact": true,
+      "xlsx_valid": true,
+      "workflow": "local",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "source_commit": "c8d8b2be6793cafb5112e6a95684937c8ecacfd9",
+  "run_url": "https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions/runs/38715554376",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "quality",
+      "conclusion": "success"
+    },
+    {
+      "name": "container",
+      "conclusion": "success"
+    },
+    {
+      "name": "test (ubuntu-latest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "test (macos-latest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "test (windows-latest)",
+      "conclusion": "success"
+    }
+  ],
+  "platform_test_artifacts": [
+    {
+      "artifact": "test-results-macos-latest",
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "artifact": "test-results-ubuntu-latest",
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "artifact": "test-results-windows-latest",
+      "tests": 158,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "scope": "Static quality gate, full tests/fresh setup/judge checks/public evaluations on three operating systems, and non-root Docker with exact original sample conversions. No new blind-accuracy claim."
+}

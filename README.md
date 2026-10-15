@@ -35,7 +35,7 @@ The launcher prints and opens the local URL. It starts at **http://127.0.0.1:876
 
 **Diagnostics only:** `START_DAMNLENS.cmd --check --offline`, or `python setup_judges.py --check`. **Install without launching:** `python setup_judges.py --setup-only`. Add `--no-browser` or `--port 8786` to the launcher as needed. The UI's **Text size → Large** setting increases all text by 12.5% and persists on this browser. Standard mode uses 13px minimum secondary labels, 14px data cells and 15px explanatory text with stronger contrast; normal browser zoom also works.
 
-If script execution is restricted on Windows, use the manual commands below rather than changing your system policy. On Linux, OpenCV may require `sudo apt-get install libgl1 libglib2.0-0`; Python virtual environments may require the `python3-venv` package. macOS dependencies are supplied as Python wheels on supported systems. Windows is locally verified; Linux is covered by the included CI workflow when GitHub Actions is available.
+If script execution is restricted on Windows, use the manual commands below rather than changing your system policy. On Linux, OpenCV may require `sudo apt-get install libgl1 libglib2.0-0`; Python virtual environments may require the `python3-venv` package. macOS dependencies are supplied as Python wheels on supported systems. Windows is locally verified; Windows, Ubuntu and macOS are covered by passing CI tests, fresh setup and offline judge checks.
 
 ### Manual setup
 
@@ -67,7 +67,7 @@ docker build -t damnlens-ai-agent .
 docker run --rm -p 127.0.0.1:8765:8765 -v damnlens-data:/data damnlens-ai-agent
 ```
 
-The container runs as a non-root user. The Dockerfile is supplied for portability; local Windows Python execution is the directly verified setup.
+The image is verified in CI as a non-root service: all three sample documents are converted through its API with exact cells/headers and valid Excel. `.env` files are excluded from the build. For optional Gemini, pass your configuration at runtime with `--env-file .env`; no cloud key is needed for Local AI. See the [container evidence](reports/container-check.json).
 
 ## What the agent does
 
@@ -184,7 +184,7 @@ The expanded evaluator returns a failure code for the remaining strict header mi
 
 Tests cover native tables, OCR, borderless multiword headers, page stitching, duplicate preservation, headerless continuations, the 50/51-page boundary, encrypted/corrupt/oversized files, numeric locales, subtotals, line arithmetic, bank errors, typed XLSX, formula injection, evidence, corrections, origin/host protection and restart recovery.
 
-Maintainer checks: install `requirements-dev.txt`, run `npm ci --ignore-scripts`, then `python scripts/check_quality.py`. This checks Python lint/imports/formatting plus JavaScript syntax and frontend formatting. Node.js is needed only for maintenance checks; judges can run the Python app without it. See [CONTRIBUTING.md](CONTRIBUTING.md) for module contracts, isolated testing, Docker verification and release checks. Result tabs support **Left/Right, Home and End** with labelled panels and one selected Tab-stop.
+Maintainer checks: install `requirements-dev.txt`, run `npm ci --ignore-scripts`, then `python scripts/check_quality.py`. This checks Python lint/imports/formatting plus JavaScript syntax and frontend formatting. Node.js is needed only for maintenance checks; judges can run the Python app without it. The [quality audit](reports/CODE_QUALITY.md) records 158 passing tests on Windows, Ubuntu and macOS, plus verified Docker extraction/export. See [CONTRIBUTING.md](CONTRIBUTING.md) for module contracts, isolated testing, Docker verification and release checks. Result tabs support **Left/Right, Home and End** with labelled panels and one selected Tab-stop.
 
 ## Architecture
 

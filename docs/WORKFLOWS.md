@@ -44,7 +44,7 @@ Selected **full pages** go to Google and may include surrounding text/images. Go
 | Quality/usability / 10 | One-command setup, keyless judge path, explicit workflow/cost controls, CLI/API, readable UI, pinned local dependencies and Windows/Ubuntu CI. |
 | Submission | README maps app/source/setup, three PDF/Excel pairs, accuracy report, 150-second demo and credits. |
 
-The earlier 95/100 rubric estimate is subjective; adding Gemini does not justify increasing it. No hidden-PDF or 100/100 guarantee is made. Severe damage, handwriting, multilingual OCR and arbitrary changing/nested schemas remain risks.
+The current rubric estimate is 96/100 after the [code-quality audit](../reports/CODE_QUALITY.md); adding Gemini alone did not increase it. This remains subjective. No hidden-PDF or 100/100 guarantee is made. Severe damage, handwriting, multilingual OCR and arbitrary changing/nested schemas remain risks.
 
 ## Verification
 
