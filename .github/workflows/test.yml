@@ -23,6 +23,8 @@ jobs:
         run: python setup_judges.py --setup-only
       - name: Judge smoke checks without network installation
         run: python setup_judges.py --judge-test --offline
+      - name: Independent expected cells on pinned public PDF fixtures
+        run: python scripts/public_evaluation.py --fetch
       - name: Verify Windows double-click entry point
         if: runner.os == 'Windows'
         shell: cmd
@@ -31,4 +33,6 @@ jobs:
         if: always()
         with:
           name: test-results-${{ matrix.os }}
-          path: reports/tests.xml
+          path: |
+            reports/tests.xml
+            reports/public-evaluation-final.json

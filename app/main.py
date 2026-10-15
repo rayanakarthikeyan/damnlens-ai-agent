@@ -27,7 +27,7 @@ JOBS = Path(
 JOBS.mkdir(parents=True, exist_ok=True)
 POOL = ThreadPoolExecutor(max_workers=1)
 LOCK = threading.RLock()
-app = FastAPI(title="DamnLens AI Agent", version="1.2.0", docs_url="/api/docs")
+app = FastAPI(title="DamnLens AI Agent", version="1.3.0", docs_url="/api/docs")
 ALLOWED = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 MAX_BYTES = 40 * 1024 * 1024
 
@@ -79,7 +79,7 @@ for status in JOBS.glob("*/status.json"):
     if data["status"] in {"queued", "processing"}:
         data.update(
             status="interrupted",
-            message="Processing interrupted by restart. Use retry to resume from the original document.",
+            message="Processing interrupted by restart. Resume extraction reuses verified completed pages; Retry OCR starts a fresh OCR run.",
         )
         save(status, data)
 
@@ -147,6 +147,8 @@ def work(job):
             progress,
             force_ocr=state.get("force_ocr", False),
             event=event,
+            checkpoint_dir=directory / "checkpoints",
+            resume=state.get("resume", False),
         )
         result["filename"] = state["filename"]
         save(directory / "result.json", result)
@@ -285,6 +287,28 @@ def judge_audit():
     }
 
 
+@app.get("/api/complex-audit")
+def complex_audit():
+    return {
+        name: load(ROOT / "reports" / filename)
+        if (ROOT / "reports" / filename).exists()
+        else None
+        for name, filename in [
+            ("complex", "complex-evaluation.json"),
+            ("public", "public-evaluation-final.json"),
+        ]
+    }
+
+
+@app.post("/api/complex-samples/{name}", status_code=202)
+def complex_sample(name: str):
+    allowed = {p.stem: p for p in (ROOT / "evaluation/complex/pdfs").glob("*.pdf")}
+    if name not in allowed:
+        raise HTTPException(404, "Example not found")
+    path = allowed[name]
+    return create_job(path.read_bytes(), path.name, False)
+
+
 @app.post("/api/samples/{name}", status_code=202)
 def run_sample(name: str):
     if name not in {p.stem for p in (ROOT / "samples").glob("*.pdf")}:
@@ -310,12 +334,18 @@ def result(job: str):
 
 
 @app.post("/api/jobs/{job}/retry", status_code=202)
-def retry(job: str, force_ocr: bool = False):
+def retry(job: str, force_ocr: bool = False, resume: bool = False):
     with LOCK:
         directory = job_dir(job)
         state = load(directory / "status.json")
         if state["status"] in {"queued", "processing"}:
             raise HTTPException(409, "Already processing")
+        if resume and state["status"] not in {"failed", "interrupted"}:
+            raise HTTPException(
+                409, "Only a failed or interrupted run can resume checkpoints."
+            )
+        if resume:
+            force_ocr = state.get("force_ocr", False)
         if (directory / "result.json").exists():
             versions = directory / "versions"
             versions.mkdir(exist_ok=True)
@@ -332,6 +362,7 @@ def retry(job: str, force_ocr: bool = False):
             events=[],
             attempt=state.get("attempt", 1) + 1,
             review_status="pending",
+            resume=resume,
         )
         save(directory / "status.json", state)
     POOL.submit(work, job)

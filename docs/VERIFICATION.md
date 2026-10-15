@@ -2,7 +2,7 @@
 
 Verified locally on Windows with Python 3.12.14.
 
-- **74 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
+- **100 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
 - **864/864 synthetic fixture data cells match ground truth**, with exact headers and exact-row recall. See `reports/benchmark.json` and `reports/ACCURACY_REPORT.md` for methodology and limitations.
 - **50-page stress test:** one joined table, 501 rows, 12 columns, all source cells preserved, 49 repeated headers removed.
 - **Borderless regression:** two-page digital fixture preserves multiword headers and all data cells, with alignment marked for review.
@@ -13,7 +13,19 @@ Verified locally on Windows with Python 3.12.14.
 - **Video:** H.264 MP4, 1920 × 1080, 12 frames/second, exactly 150 seconds. Captioned walkthrough using real UI captures, not an uncut performance recording.
 - **Static checks:** Python compilation and JavaScript syntax checks pass. Python and frontend sources are formatted for readability.
 
-Windows and Linux CI results are visible under the repository's Actions tab. The previous release passed on both operating systems. Docker configuration is supplied but was not manually verified locally.
+Windows and Linux CI results are visible under the repository's Actions tab. The workflow runs the full suite, fresh bootstrap, offline judge checks and pinned public PDF comparisons on both systems. Docker configuration is supplied but was not manually verified locally.
+
+## Complex structure and recovery (v1.3)
+
+- Full Windows regression: **100 passed**, including all existing varied audit cases and new complex/checkpoint/API regressions. Tests include native body rows containing header words, a single low-confidence OCR cell and geometric punctuation order.
+- Complex development cohort: **16/16 exact cases, 962/962 data cells**, with exact headers/table counts. The original twelve cases improved from 2/12 to 12/12; four additional blank/nested cases have no baseline. PDFs, truth, JSON and converted Excel are in `evaluation/complex/`.
+- Public reference cohort: **3/3, 261/261 cells**, using independent pinned Camelot annotations. `foo.pdf` first passed 30/35, prompting a geometric character fix. The final result is development evidence, not held out. `column_span_2.pdf` uses an explicitly disclosed anchor-cell comparison rather than raw shared-value output.
+- All original submission workbooks were regenerated: **864/864** sample cells, including 240/240 scanned cells; the faulty bank fixture retains all six intended findings.
+- Windows launcher: **8/8** runtime-only offline checks, now including nested structure, two source parts for a continued row and recovery after a deliberate interruption.
+- Checkpoints: resuming a three-page invoice reuses exactly the first two completed pages and extracts only page three. Source/mode changes, malformed JSON and checksum tampering invalidate caches. Interrupted current-page work restarts.
+- Browser: a real interrupted split-row job resumed page one from cache, extracted page two and kept six logical rows with twelve columns. Selecting Part 2 highlighted the continued description on page two. Selecting an inherited order ID in the nested example highlighted the original merged source rectangle. Header paths and shared-value warnings were visible; console had no errors.
+- Excel: complex cases add Structure only when relevant; ordinary samples retain seven sheets. Evidence includes both source fragments for continued rows, and shared values retain origin geometry.
+- Screenshots 18–22 and the updated 150-second captioned demo show the real application. Scores in `JUDGE_EVALUATION.md` are subjective rubric estimates, not organizer results or hidden-PDF accuracy measurements.
 
 ## Accuracy workflow audit (v1.1)
 

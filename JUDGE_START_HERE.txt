@@ -20,8 +20,9 @@ Diagnostics only:
   Windows: START_DAMNLENS.cmd --check --offline
   macOS/Linux: sh start.sh --check --offline
 
-The checks compare all three samples with exact ground truth, inspect Excel
-exports, preserve duplicate records through 50 pages and reject 51 pages.
+Eight checks compare all three samples with exact truth, inspect Excel,
+test nested headers and cross-page source parts, preserve duplicate records
+through 50 pages, reject 51 pages and resume verified page checkpoints.
 They return a nonzero exit code on failure. Report: reports/judge-check-latest.json
 
 Submission evidence:
@@ -31,11 +32,17 @@ Submission evidence:
   reports/ACCURACY_REPORT.md        Measured sample accuracy and validation
   reports/JUDGE_EVALUATION.md       Rubric self-assessment and gaps fixed
   evaluation/pdfs/                  Fifteen varied development audit PDFs
+  evaluation/complex/               Sixteen complex PDF/Excel pairs and truth
+  evaluation/public/                Pinned public URLs/annotations and license
   docs/damnlens-demo.mp4            2m30s captioned walkthrough of actual screens
   THIRD_PARTY_NOTICES.md            Libraries, models, licenses and AI assistance
 
-Synthetic development results are not a guarantee for hidden PDFs. Printed
-English is the evaluated OCR target. Complex nested/merged layouts, changing
-multi-line headers and severe scan damage can require manual reconstruction.
+Development results are not a guarantee for hidden PDFs. Printed English is
+the evaluated OCR target. Supported multi-line/merged layouts keep source
+geometry and review warnings. Arbitrary nesting, changing schemas and severe
+scan damage can still require manual reconstruction.
+
+On an interrupted extraction, Resume extraction reuses verified completed
+pages. Retry OCR starts a fresh OCR run. No API key or cloud upload is needed.
 
 Press Ctrl+C in the console to stop the application.

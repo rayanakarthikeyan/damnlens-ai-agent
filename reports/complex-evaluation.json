@@ -1,0 +1,252 @@
+{
+  "generated": "2026-10-15T07:26:30.539324+00:00",
+  "scope": "16 original English development fixtures: multi-line and hierarchical headers, actual vertical merges, nested line items, cross-page row parts, distinct account contexts, right-aligned borderless tables and deliberate blank cells. All cells, table counts and ordered headers must match. These cases were used to repair the engine and are regression evidence, not an independent hidden corpus. OCR scores are not measured accuracy. Shared values and recovered cells remain flagged for source review.",
+  "results": [
+    {
+      "case": "multiline_grid_header",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {},
+      "seconds": 0.08
+    },
+    {
+      "case": "grouped_header_with_keywords",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {},
+      "seconds": 0.07
+    },
+    {
+      "case": "wrapped_grid_cell",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {},
+      "seconds": 0.07
+    },
+    {
+      "case": "vertical_merged_region",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "merged_cell_review": 1
+      },
+      "seconds": 0.06
+    },
+    {
+      "case": "borderless_multiline_header",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "alignment_review": 1
+      },
+      "seconds": 0.05
+    },
+    {
+      "case": "row_split_across_pages",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "row_continuation": 1
+      },
+      "seconds": 0.08
+    },
+    {
+      "case": "distinct_accounts_same_schema",
+      "expected_tables": 2,
+      "actual_tables": 2,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {},
+      "seconds": 0.08
+    },
+    {
+      "case": "hierarchical_duplicate_headers",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 2,
+      "actual_rows": 2,
+      "correct_cells": 8,
+      "denominator": 8,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {},
+      "seconds": 0.03
+    },
+    {
+      "case": "scan_grouped_header",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "low_ocr": 1
+      },
+      "seconds": 12.79
+    },
+    {
+      "case": "scan_multiline_header",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "ocr_retry_review": 1
+      },
+      "seconds": 8.75
+    },
+    {
+      "case": "scan_borderless_multiline",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "alignment_review": 1,
+        "ocr_retry_review": 2
+      },
+      "seconds": 7.39
+    },
+    {
+      "case": "scan_low_contrast",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "low_ocr": 1,
+        "ocr_retry_review": 1
+      },
+      "seconds": 9.59
+    },
+    {
+      "case": "intentional_blank_native",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {},
+      "seconds": 0.16
+    },
+    {
+      "case": "intentional_blank_scan",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 6,
+      "actual_rows": 6,
+      "correct_cells": 72,
+      "denominator": 72,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "low_ocr": 1
+      },
+      "seconds": 9.35
+    },
+    {
+      "case": "nested_line_items",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 3,
+      "actual_rows": 3,
+      "correct_cells": 9,
+      "denominator": 9,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "merged_cell_review": 3
+      },
+      "seconds": 0.04
+    },
+    {
+      "case": "scan_nested_line_items",
+      "expected_tables": 1,
+      "actual_tables": 1,
+      "expected_rows": 3,
+      "actual_rows": 3,
+      "correct_cells": 9,
+      "denominator": 9,
+      "cell_accuracy": 1.0,
+      "headers_exact": true,
+      "exact": true,
+      "findings": {
+        "merged_cell_review": 2
+      },
+      "seconds": 13.45
+    }
+  ]
+}

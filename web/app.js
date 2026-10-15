@@ -24,6 +24,9 @@ const labels = {
   header_review: "Header identification needs review",
   alignment_review: "Inferred column alignment",
   page_review: "Page needs visual review",
+  row_continuation: "Row continues across pages",
+  merged_cell_review: "Merged source cell",
+  ocr_retry_review: "Recovered OCR cell",
 };
 const suggestions = {
   total_mismatch:
@@ -41,6 +44,12 @@ const suggestions = {
     "Check every column against the source, especially wrapped and merged cells.",
   page_review:
     "Open the page to confirm whether it contains a table. Try OCR if needed.",
+  row_continuation:
+    "Compare every source part before accepting the reconstructed row.",
+  merged_cell_review:
+    "Inspect the source span and its shared value. Covered horizontal cells remain empty when their meaning is ambiguous.",
+  ocr_retry_review:
+    "Compare the recovered cell with the original ink. Agreement between two OCR scales is not a measured accuracy guarantee.",
 };
 let jobs = [],
   inbox = [],
@@ -129,7 +138,7 @@ function go(next) {
     history.replaceState(null, "", "#" + next);
     refreshJobs();
   }
-  if (next === "benchmarks") loadBenchmark();
+  if (next === "benchmarks") loadBenchmark().then(loadComplexEvidence);
   if (next === "validation") loadInbox();
 }
 function metric(label, value, note, type = "file", tone = "") {
@@ -363,12 +372,15 @@ async function openJob(id) {
   history.replaceState(null, "", "#job=" + id);
   $("#processing").hidden = false;
   $("#result-content").hidden = true;
-  ["#excel-download", "#review-button", "#retry-button"].forEach(
-    (s) => ($(s).hidden = true),
-  );
+  [
+    "#excel-download",
+    "#review-button",
+    "#retry-button",
+    "#resume-button",
+  ].forEach((s) => ($(s).hidden = true));
   $("#progress-label").textContent = "Opening extraction run";
-  $('#progress-bar').style.width='0%';
-  $('#progress-text').textContent='0%';
+  $("#progress-bar").style.width = "0%";
+  $("#progress-text").textContent = "0%";
   $("#progress-detail").textContent =
     "The agent records extraction decisions and exceptions for review.";
   $("#processing-log").textContent = "Waiting for agent status…";
@@ -411,6 +423,7 @@ async function pollJob() {
       renderResult();
       refreshJobs();
     } else if (["failed", "interrupted"].includes(j.status)) {
+      $("#resume-button").hidden = false;
       $("#retry-button").hidden = false;
       $("#progress-detail").textContent = j.message;
       toast(j.message);
@@ -430,6 +443,7 @@ function renderResult(preserveTab = false) {
   $("#result-content").hidden = false;
   $("#excel-download").hidden = false;
   $("#retry-button").hidden = false;
+  $("#resume-button").hidden = true;
   $("#review-button").hidden = !q.can_review;
   $("#review-button").disabled = q.review_status === "reviewed";
   $("#review-button").innerHTML =
@@ -473,7 +487,11 @@ function renderResult(preserveTab = false) {
       q.pages_extracted + " / " + q.pages_total,
       "Pages with extracted tables",
     ],
-    ["Extracted rows", q.rows, q.tables + " joined table" + (q.tables === 1 ? "" : "s")],
+    [
+      "Extracted rows",
+      q.rows,
+      q.tables + " joined table" + (q.tables === 1 ? "" : "s"),
+    ],
     [
       "Max. columns",
       q.max_columns,
@@ -514,13 +532,14 @@ function renderResult(preserveTab = false) {
   renderCorrections();
   setTab(preserveTab ? activeTab : "data");
   if (!preserveTab) {
-    $('#data-table').scrollTo({top:0,left:0});
+    $("#data-table").scrollTo({ top: 0, left: 0 });
     showSourcePage(1);
   }
 }
 function renderTable() {
   const t = currentResult.tables[currentTable];
   if (!t) {
+    $("#table-structure").hidden = true;
     $("#data-table").innerHTML =
       '<div class="empty-state">No structured tables were recovered. Inspect page coverage or retry with OCR.</div>';
     $("#table-shape").textContent = "No data";
@@ -539,7 +558,14 @@ function renderTable() {
   $("#table-shape").textContent =
     `${t.rows.length} rows × ${t.headers.length} columns · pages ${t.pages.join(", ")}`;
   $("#table-footer").textContent =
-    `Showing ${rows.length} / ${t.rows.length} rows · ${flagged.size} rows have findings · ${quality().export_label}`;
+    `Showing ${rows.length} / ${t.rows.length} rows · ${flagged.size} rows have findings · ${quality().export_label}${t.header_paths ? " · Header groups preserved in Excel Structure and JSON" : ""}`;
+  const continued = t.rows.filter((r) => r.sources?.length > 1).length;
+  const merged = t.rows.filter(
+    (r) => r.merged_cells?.length || r.inherited_cells?.length,
+  ).length;
+  $("#table-structure").hidden = !(t.header_paths || continued || merged);
+  $("#structure-details").innerHTML =
+    `<p>${continued} rows continue across source pages · ${merged} rows include merged-cell geometry. Inspect the linked source parts and review findings.</p>${t.header_paths ? `<dl>${t.header_paths.map((path, i) => `<div><dt>${esc(t.headers[i])}</dt><dd>${path.map(esc).join(" → ")}</dd></div>`).join("")}</dl>` : ""}`;
   $("#data-table").innerHTML = rows.length
     ? `<table class="data-table"><thead><tr><th>#</th>${t.headers.map((h) => `<th>${esc(h)}</th>`).join("")}<th>Source page</th></tr></thead><tbody>${rows
         .map(
@@ -551,7 +577,9 @@ function renderTable() {
                 );
                 return `<td tabindex="0" data-cell="${index},${col}" class="${found.length ? "flagged" : ""} ${found.some((i) => i.severity === "error") ? "error" : ""}" title="${esc(found.map((i) => i.message).join("\n") || "Enter or double-click to correct")}">${cell ? esc(cell) : '<span class="muted">—</span>'}</td>`;
               })
-              .join("")}<td>${r.page}</td></tr>`,
+              .join(
+                "",
+              )}<td>${[...new Set((r.sources || [r]).map((s) => s.page))].join(", ")}</td></tr>`,
         )
         .join("")}</tbody></table>`
     : '<div class="empty-state">No flagged rows in this table.</div>';
@@ -629,6 +657,22 @@ function showSourcePage(page, row = null) {
     Math.max(1, Number(page) || 1),
   );
   const details = currentResult.pages[currentPage - 1];
+  const parts = row?.sources || (row ? [row] : []);
+  const part = parts.find((p) => p.page === currentPage) || row;
+  $("#source-parts").innerHTML =
+    parts.length > 1
+      ? parts
+          .map(
+            (p, i) =>
+              `<button class="secondary" data-part="${i}">Part ${i + 1} · page ${p.page}</button>`,
+          )
+          .join("")
+      : "";
+  $$("[data-part]").forEach(
+    (button) =>
+      (button.onclick = () =>
+        showSourcePage(parts[Number(button.dataset.part)].page, row)),
+  );
   $("#page-number").value = currentPage;
   $("#page-number").max = currentResult.page_count;
   $("#source-page-label").textContent = "/ " + currentResult.page_count;
@@ -639,14 +683,14 @@ function showSourcePage(page, row = null) {
     box = $("#source-highlight");
   box.hidden = true;
   $("#source-caption").textContent = row
-    ? `Table ${currentTable + 1} · Row ${row.id} · ${row.method}${row.method.startsWith("OCR") ? " · recognition " + (row.confidence * 100).toFixed(1) + "%" : ""}`
+    ? `Table ${currentTable + 1} · Row ${row.id} · ${part.method}${part.method.startsWith("OCR") ? " · recognition " + (part.confidence * 100).toFixed(1) + "%" : ""}${parts.length > 1 ? " · " + parts.length + " source parts" : ""}${row.source_context ? " · " + row.source_context : ""}`
     : "Select a row to inspect its source location.";
   img.onload = () => {
     if (token !== sourceToken) return;
     if (row) {
       const width = details.width || (img.naturalWidth * 72) / 110,
         height = details.height || (img.naturalHeight * 72) / 110;
-      const [x0, y0, x1, y1] = row.bbox;
+      const [x0, y0, x1, y1] = part.bbox;
       Object.assign(box.style, {
         left: (x0 / width) * 100 + "%",
         top: (y0 / height) * 100 + "%",
@@ -663,13 +707,28 @@ function showSourcePage(page, row = null) {
   img.src = `/api/jobs/${currentJob}/page/${currentPage}`;
   if (img.complete && img.naturalWidth) img.onload();
 }
-function selectRow(index) {
+function selectRow(index, column = null) {
   selectedRow = index;
   $$("tr[data-row]").forEach((tr) =>
     tr.classList.toggle("selected", Number(tr.dataset.row) === index),
   );
   const row = currentResult.tables[currentTable]?.rows[index];
-  if (row) showSourcePage(row.page, row);
+  if (!row) return;
+  const shared = row.inherited_cells?.find(
+    (cell) => cell.column === column + 1,
+  );
+  const merged = row.merged_cells?.find((cell) => cell.column === column + 1);
+  const origin = column === null ? null : shared || merged;
+  if (origin?.bbox) {
+    const page = origin.from_page || row.page;
+    showSourcePage(page, {
+      ...row,
+      page,
+      bbox: origin.bbox,
+      sources: undefined,
+      source_context: "Merged source cell origin",
+    });
+  } else showSourcePage(row.page, row);
 }
 function locate(table, row, page) {
   if (table && row) {
@@ -836,12 +895,17 @@ async function loadBenchmark() {
           ([a, b, c]) =>
             `<tr><td>${esc(a)}</td><td>${esc(b)}</td><td><span class="score-weight">${esc(c)}</span></td></tr>`,
         )
-        .join("")}</tbody></table></div></div><section id="judge-audit-panel" class="card requirements-card" aria-label="Varied document audit"></section>`;
+        .join(
+          "",
+        )}</tbody></table></div></div><section id="judge-audit-panel" class="card requirements-card" aria-label="Varied document audit"></section>`;
     const audit = await api("/api/judge-audit");
     if (audit.after && $("#judge-audit-panel")) {
-      const passed = audit.after.results.filter(x => x.passed).length;
-      const before = audit.before ? audit.before.results.filter(x => x.passed).length : null;
-      $("#judge-audit-panel").innerHTML = `<div class="card-header"><div><h2>Varied document audit · ${passed} / ${audit.after.results.length} exact cases</h2><p>${before === null ? "" : `${before} cases passed before the fixes. `}Synthetic development checks, with visible before-and-after evidence.</p></div><span class="badge blue">12 columns</span></div><div class="table-container"><table class="report-table"><thead><tr><th>Document variation</th><th>Exact cells</th><th>Headers</th><th>Result</th></tr></thead><tbody>${audit.after.results.map(x => `<tr><td>${esc(x.case.replaceAll("_", " "))}</td><td>${x.denominator ? `${x.correct_cells} / ${x.denominator}` : "No fabricated table"}</td><td>${x.headers_exact ? "Exact" : "Review"}</td><td>${x.passed ? "Passed" : "Needs work"}</td></tr>`).join("")}</tbody></table></div><div class="report-note">${esc(audit.after.scope)}<br><br>Reproduce: <code>python scripts/judge_audit.py</code>. The rubric self-assessment is in <code>reports/JUDGE_EVALUATION.md</code>; it is not an official score.</div>`;
+      const passed = audit.after.results.filter((x) => x.passed).length;
+      const before = audit.before
+        ? audit.before.results.filter((x) => x.passed).length
+        : null;
+      $("#judge-audit-panel").innerHTML =
+        `<div class="card-header"><div><h2>Varied document audit · ${passed} / ${audit.after.results.length} exact cases</h2><p>${before === null ? "" : `${before} cases passed before the fixes. `}Synthetic development checks, with visible before-and-after evidence.</p></div><span class="badge blue">12 columns</span></div><div class="table-container"><table class="report-table"><thead><tr><th>Document variation</th><th>Exact cells</th><th>Headers</th><th>Result</th></tr></thead><tbody>${audit.after.results.map((x) => `<tr><td>${esc(x.case.replaceAll("_", " "))}</td><td>${x.denominator ? `${x.correct_cells} / ${x.denominator}` : "No fabricated table"}</td><td>${x.headers_exact ? "Exact" : "Review"}</td><td>${x.passed ? "Passed" : "Needs work"}</td></tr>`).join("")}</tbody></table></div><div class="report-note">${esc(audit.after.scope)}<br><br>Reproduce: <code>python scripts/judge_audit.py</code>. The rubric self-assessment is in <code>reports/JUDGE_EVALUATION.md</code>; it is not an official score.</div>`;
     }
   } catch (error) {
     fail(error);
@@ -889,7 +953,9 @@ document.addEventListener("click", async (event) => {
 });
 $("#data-table").addEventListener("click", (event) => {
   const row = event.target.closest("[data-row]");
-  if (row) selectRow(Number(row.dataset.row));
+  const cell = event.target.closest("[data-cell]");
+  const column = cell ? Number(cell.dataset.cell.split(",")[1]) : null;
+  if (row) selectRow(Number(row.dataset.row), column);
 });
 $("#data-table").addEventListener("dblclick", (event) => {
   const cell = event.target.closest("[data-cell]");
@@ -955,6 +1021,14 @@ $("#export-review").onclick = () => {
 };
 $("#export-confirm").onclick = () => $("#export-dialog").close();
 $("#retry-button").onclick = () => $("#retry-dialog").showModal();
+$("#resume-button").onclick = async () => {
+  try {
+    await api(`/api/jobs/${currentJob}/retry?resume=true`, { method: "POST" });
+    await openJob(currentJob);
+  } catch (error) {
+    fail(error);
+  }
+};
 $("#cancel-retry").onclick = () => $("#retry-dialog").close();
 $("#confirm-retry").onclick = async () => {
   try {
@@ -990,9 +1064,58 @@ init();
 
 // A local preference only; no document or review data is stored here.
 const textSize = $("#text-size");
-try { textSize.value = localStorage.getItem("damnlens.textSize") === "large" ? "large" : "standard"; } catch {}
+try {
+  textSize.value =
+    localStorage.getItem("damnlens.textSize") === "large"
+      ? "large"
+      : "standard";
+} catch {}
 document.documentElement.dataset.textSize = textSize.value;
 textSize.addEventListener("change", () => {
   document.documentElement.dataset.textSize = textSize.value;
-  try { localStorage.setItem("damnlens.textSize", textSize.value); } catch {}
+  try {
+    localStorage.setItem("damnlens.textSize", textSize.value);
+  } catch {}
 });
+
+async function loadComplexEvidence() {
+  try {
+    const reports = await api("/api/complex-audit");
+    if (view !== "benchmarks") return;
+    $("#complex-evidence-panel")?.remove();
+    const sections = [
+      ["Complex reconstruction", reports.complex, true],
+      ["Public fixtures with independent annotations", reports.public, false],
+    ].filter(([, report]) => report);
+    $("#benchmark-content").insertAdjacentHTML(
+      "beforeend",
+      `<div id="complex-evidence-panel">${sections
+        .map(([title, report, runnable]) => {
+          const correct = report.results.reduce(
+              (n, x) => n + x.correct_cells,
+              0,
+            ),
+            total = report.results.reduce((n, x) => n + x.denominator, 0);
+          return `<section class="card requirements-card"><div class="card-header"><div><h2>${title} · ${report.results.filter((x) => x.exact).length} / ${report.results.length} exact cases</h2><p>${correct} / ${total} data cells match their declared ground truth. Headers are checked separately.</p></div></div><div class="table-container"><table class="report-table"><thead><tr><th>Document</th><th>Matching cells</th><th>Headers</th><th>Result</th>${runnable ? "<th>Try example</th>" : ""}</tr></thead><tbody>${report.results.map((x) => `<tr><td>${esc((x.case || x.file).replaceAll("_", " "))}</td><td>${x.correct_cells} / ${x.denominator}</td><td>${x.headers_exact ? "Exact" : "Review"}</td><td>${x.exact ? "Passed" : "Needs work"}</td>${runnable ? `<td><button class="text-button" data-complex-example="${esc(x.case)}">Run example →</button></td>` : ""}</tr>`).join("")}</tbody></table></div><div class="report-note">${esc(report.scope)}</div></section>`;
+        })
+        .join("")}</div>`,
+    );
+    $$("[data-complex-example]").forEach(
+      (button) =>
+        (button.onclick = async () => {
+          try {
+            const job = await api(
+              "/api/complex-samples/" +
+                encodeURIComponent(button.dataset.complexExample),
+              { method: "POST" },
+            );
+            await openJob(job.id);
+          } catch (error) {
+            fail(error);
+          }
+        }),
+    );
+  } catch (error) {
+    fail(error);
+  }
+}

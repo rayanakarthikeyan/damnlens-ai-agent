@@ -31,7 +31,7 @@ sh start.sh
 
 The launcher prints and opens the local URL. It starts at **http://127.0.0.1:8765**, choosing the next free port if necessary. The browser opens after server readiness. Press Ctrl+C to stop. Subsequent launches work offline when all dependencies are present.
 
-**One-command judge checks:** `START_DAMNLENS.cmd --judge-test --offline` (Windows) or `sh start.sh --judge-test --offline` (macOS/Linux), after initial setup. This checks all three PDF/Excel pairs against exact ground truth, preserves duplicate records through 50 pages and rejects 51 pages. It returns a nonzero exit code on failure and writes `reports/judge-check-latest.json`. No development libraries are required.
+**One-command judge checks:** `START_DAMNLENS.cmd --judge-test --offline` (Windows) or `sh start.sh --judge-test --offline` (macOS/Linux), after initial setup. Eight checks cover all three PDF/Excel pairs against exact truth, nested line items, cross-page source parts, duplicate records through 50 pages, 51-page rejection and checkpoint recovery. Failure returns a nonzero exit code; results go to `reports/judge-check-latest.json`. No development libraries are required.
 
 **Diagnostics only:** `START_DAMNLENS.cmd --check --offline`, or `python setup_judges.py --check`. **Install without launching:** `python setup_judges.py --setup-only`. Add `--no-browser` or `--port 8786` to the launcher as needed. The UI's **Text size → Large** setting increases all text by 12.5% and persists on this browser. Standard mode uses 13px minimum secondary labels, 14px data cells and 15px explanatory text with stronger contrast; normal browser zoom also works.
 
@@ -111,6 +111,10 @@ This is a bounded agent workflow with an explicit inspect → extract → retry 
 
 On the three included English synthetic fixtures, **864 / 864 data cells** and all headers match ground truth. The scanned fixture is image-only: 240 / 240 cells match. A separate automated 50-page test checks 501 rows × 12 columns and 49 removed repeated headers. These results describe this development set, not expected accuracy on arbitrary or hidden PDFs. Timings and raw comparisons are included in the report.
 
+The v1.3 complex audit adds **16/16 exact cases and 962/962 cells**: multi-line/hierarchical headers, true vertical merges, nested child tables, cross-page descriptive row parts, distinct account sections and intentional blank cells. Full header paths, inherited-cell geometry and continuation parts survive JSON/Excel export. Clicking a shared cell highlights its original merged rectangle; continued rows expose each source-page part. Reconstructed structure remains flagged for source review.
+
+A separate public-fixture comparison matches **261/261 cells across three digital PDFs**, using independent Camelot annotations and an explicit anchor/shared-value policy. It was used for development, so it is not a blind evaluation. Run `python scripts/complex_evaluation.py` for the bundled complex cases, or `python scripts/public_evaluation.py --fetch` for pinned public downloads. See [the judge evaluation](reports/JUDGE_EVALUATION.md), raw JSON reports, `evaluation/complex/` PDF/Excel pairs and `evaluation/public/manifest.json`. The complete suite has **100 tests**.
+
 The bank fixture deliberately contains a wrong debit total, an altered running balance, a missing debit and missing currency. Faithful extraction preserves these errors; validation flags them. A changed balance can produce two transition warnings because it affects both the row's incoming and outgoing balance checks.
 
 ### Excel output
@@ -157,11 +161,11 @@ A review is a local workflow record; there is no authenticated reviewer identity
 
 ## Practical limits and recovery
 
-- Complex nested/merged cells, inconsistent schemas, multi-line or changing headers, handwriting and heavily damaged scans may require manual reconstruction. Right-angle rotations, modest skew and one sparse group-header row are covered by development regressions; this does not establish support for every rotated or merged layout. Predominantly English printed documents are the supported OCR target.
-- Identical schemas on consecutive pages can represent different business sections; verify the joined table. Similar wide tables with different identity columns are kept separate. Multiple compatible table streams can continue independently across consecutive pages. Repeated data rows are never dropped automatically. Split logical rows with complicated page breaks may need manual reconstruction.
+- Bounded multi-line/hierarchical headers, explicit merged spans, a nested line-item layout, rotations and modest skew are covered by development regressions. Arbitrary nested layouts, changing schemas, handwriting and heavily damaged scans may still need manual reconstruction. Printed English is the evaluated OCR target.
+- Identical schemas can represent different sections; explicit account/invoice context helps keep them separate. Compatible streams can continue independently. Duplicate business rows are never dropped automatically. Initial description-only continuation fragments can join the prior identified row, retaining both source parts and a review finding; complicated or ambiguous page breaks still require inspection.
 - Borderless detection is heuristic; a structured-looking result is not proof of correct column alignment. Pages without a detected table produce a page-level finding rather than disappearing silently. Unrecognized secondary tables on an otherwise extracted page may still require visual review.
 - Totals are checked only where recognizable labels and numeric columns exist. Quantity, price, net and bank checks require matching headers. Not every business rule is inferable. Section totals sum since the preceding total; an explicitly labelled grand total sums all normal rows. Sparse total rows may themselves receive a sparse-row warning.
-- The queue is single-process and persists source/status/results on disk. On restart, unfinished jobs become interrupted and can be retried from the original. There is no checkpointed mid-page continuation, cross-process locking, cancellation, authentication or hosted multi-user service.
+- The queue is single-process and persists source/status/results and completed-page checkpoints. On restart, unfinished jobs become interrupted. Resume reuses only pages verified against source, code, OCR mode/assets and library signatures; corrupt or mismatched checkpoints are recomputed. An interrupted current page restarts. There is no mid-page continuation, cross-process locking, cancellation, authentication or hosted multi-user service.
 - Jobs contain local source copies and extracted data until deleted. The app binds to localhost, restricts host/origin, uses generated job paths and does not send documents to cloud services. It is a local judging app, not an internet deployment configuration.
 
 ### Setup troubleshooting
@@ -171,7 +175,7 @@ A review is a local workflow record; there is no authenticated reviewer identity
 - **Linux OpenCV import error:** install `libgl1` and `libglib2.0-0`; `python3-venv` may also be required. Then rerun setup.
 - **Damaged OCR asset:** download the complete ZIP or clone again. Diagnostics verify model/dictionary SHA-256 hashes before launching.
 - **Port busy:** automatic launch tries ports 8765–8784; choose `--port 8786` if all are occupied. An explicitly requested occupied port produces an actionable error.
-- **Retry after interruption:** restart, open the interrupted document and use Retry OCR. The original is retained locally and prior results are archived. Export is unavailable during processing.
+- **Recover after interruption:** restart and open the interrupted document. **Resume extraction** reuses verified completed pages using the original routing mode. **Retry OCR** starts a fresh OCR run. The original stays local, existing results are archived and export is unavailable during processing.
 
 `DAMNLENS_DATA` selects an alternate job folder. The legacy `LEDGERLENS_DATA` variable remains a fallback for existing installations.
 

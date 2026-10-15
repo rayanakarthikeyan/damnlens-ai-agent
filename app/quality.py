@@ -23,8 +23,11 @@ def assessment(result):
     rows = [row for t in tables for row in t["rows"]]
     ocr = [r for r in rows if r["method"].startswith("OCR")]
     evidence = sum(
-        len(r.get("bbox", [])) == 4
-        and r.get("page") in range(1, result["page_count"] + 1)
+        all(
+            len(part.get("bbox", [])) == 4
+            and part.get("page") in range(1, result["page_count"] + 1)
+            for part in r.get("sources", [r])
+        )
         for r in rows
     )
     reviewed = result.get("review", {}).get("status") == "reviewed" and result[
@@ -49,7 +52,16 @@ def assessment(result):
         "ocr_recognition_mean": round(mean(r["confidence"] for r in ocr), 4)
         if ocr
         else None,
-        "ocr_low_score_rows": sum(r["confidence"] < 0.88 for r in ocr),
+        "ocr_low_score_rows": sum(
+            r["confidence"] < 0.88
+            or any(c is not None and c < 0.88 for c in r.get("cell_confidence", []))
+            for r in ocr
+        ),
+        "source_parts": sum(len(r.get("sources", [r])) for r in rows),
+        "continued_rows": sum(bool(r.get("continued_across_pages")) for r in rows),
+        "merged_value_rows": sum(
+            bool(r.get("inherited_cells") or r.get("merged_cells")) for r in rows
+        ),
         "issue_types": dict(Counter(i["kind"] for i in issues)),
         "review_status": "reviewed" if reviewed else "pending",
         "can_review": bool(rows) and evidence == len(rows),

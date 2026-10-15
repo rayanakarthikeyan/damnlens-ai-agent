@@ -1,0 +1,430 @@
+{
+  "commit": "92777b852e00933a5c4b9ba642601784604356cd",
+  "frozen_before_first_engine_comparison": true,
+  "scope": "Three external public fixtures, with independently authored expected cells from Camelot. English digital PDFs; not a representative corpus. Whitespace only is normalized. Header labels for foo use the leaf labels in its second header row. Anchor-cell mode removes only engine-declared inherited vertical values before comparing with an upstream anchor-only annotation; inherited geometry is tested separately. No source PDF or upstream extraction code is redistributed.",
+  "cases": [
+    {
+      "file": "foo.pdf",
+      "sha256": "7d6c24e45b38375e322419281cee1335ddb97e00fc86abe9f22afcd8b42e6d82",
+      "url": "https://raw.githubusercontent.com/camelot-dev/camelot/92777b852e00933a5c4b9ba642601784604356cd/tests/files/foo.pdf",
+      "expected_source": "https://github.com/camelot-dev/camelot/blob/92777b852e00933a5c4b9ba642601784604356cd/tests/data.py",
+      "upstream_annotation": "data_lattice",
+      "headers": [
+        "Cycle Name",
+        "KI (1/km)",
+        "Distance (mi)",
+        "Improved Speed",
+        "Decreased Accel",
+        "Eliminate Stops",
+        "Decreased Idle"
+      ],
+      "rows": [
+        [
+          "2012_2",
+          "3.30",
+          "1.3",
+          "5.9%",
+          "9.5%",
+          "29.2%",
+          "17.4%"
+        ],
+        [
+          "2145_1",
+          "0.68",
+          "11.2",
+          "2.4%",
+          "0.1%",
+          "9.5%",
+          "2.7%"
+        ],
+        [
+          "4234_1",
+          "0.59",
+          "58.7",
+          "8.5%",
+          "1.3%",
+          "8.5%",
+          "3.3%"
+        ],
+        [
+          "2032_2",
+          "0.17",
+          "57.8",
+          "21.7%",
+          "0.3%",
+          "2.7%",
+          "1.2%"
+        ],
+        [
+          "4171_1",
+          "0.07",
+          "173.9",
+          "58.1%",
+          "1.6%",
+          "2.1%",
+          "0.5%"
+        ]
+      ],
+      "comparison_mode": "shared_values"
+    },
+    {
+      "file": "row_span_1.pdf",
+      "sha256": "bd7d9ba30325818cfc0b61951b14789615ba3e347b04e8cc5d726614eac0f7f3",
+      "url": "https://raw.githubusercontent.com/camelot-dev/camelot/92777b852e00933a5c4b9ba642601784604356cd/tests/files/row_span_1.pdf",
+      "expected_source": "https://github.com/camelot-dev/camelot/blob/92777b852e00933a5c4b9ba642601784604356cd/tests/data.py",
+      "upstream_annotation": "data_lattice_copy_text",
+      "headers": [
+        "Plan Type",
+        "County",
+        "Plan Name",
+        "Totals"
+      ],
+      "rows": [
+        [
+          "GMC",
+          "Sacramento",
+          "Anthem Blue Cross",
+          "164,380"
+        ],
+        [
+          "GMC",
+          "Sacramento",
+          "Health Net",
+          "126,547"
+        ],
+        [
+          "GMC",
+          "Sacramento",
+          "Kaiser Foundation",
+          "74,620"
+        ],
+        [
+          "GMC",
+          "Sacramento",
+          "Molina Healthcare",
+          "59,989"
+        ],
+        [
+          "GMC",
+          "San Diego",
+          "Care 1st Health Plan",
+          "71,831"
+        ],
+        [
+          "GMC",
+          "San Diego",
+          "Community Health Group",
+          "264,639"
+        ],
+        [
+          "GMC",
+          "San Diego",
+          "Health Net",
+          "72,404"
+        ],
+        [
+          "GMC",
+          "San Diego",
+          "Kaiser",
+          "50,415"
+        ],
+        [
+          "GMC",
+          "San Diego",
+          "Molina Healthcare",
+          "206,430"
+        ],
+        [
+          "GMC",
+          "Total GMC Enrollment",
+          "",
+          "1,091,255"
+        ],
+        [
+          "COHS",
+          "Marin",
+          "Partnership Health Plan of CA",
+          "36,006"
+        ],
+        [
+          "COHS",
+          "Mendocino",
+          "Partnership Health Plan of CA",
+          "37,243"
+        ],
+        [
+          "COHS",
+          "Napa",
+          "Partnership Health Plan of CA",
+          "28,398"
+        ],
+        [
+          "COHS",
+          "Solano",
+          "Partnership Health Plan of CA",
+          "113,220"
+        ],
+        [
+          "COHS",
+          "Sonoma",
+          "Partnership Health Plan of CA",
+          "112,271"
+        ],
+        [
+          "COHS",
+          "Yolo",
+          "Partnership Health Plan of CA",
+          "52,674"
+        ],
+        [
+          "COHS",
+          "Del Norte",
+          "Partnership Health Plan of CA",
+          "11,242"
+        ],
+        [
+          "COHS",
+          "Humboldt",
+          "Partnership Health Plan of CA",
+          "49,911"
+        ],
+        [
+          "COHS",
+          "Lake",
+          "Partnership Health Plan of CA",
+          "29,149"
+        ],
+        [
+          "COHS",
+          "Lassen",
+          "Partnership Health Plan of CA",
+          "7,360"
+        ],
+        [
+          "COHS",
+          "Modoc",
+          "Partnership Health Plan of CA",
+          "2,940"
+        ],
+        [
+          "COHS",
+          "Shasta",
+          "Partnership Health Plan of CA",
+          "61,763"
+        ],
+        [
+          "COHS",
+          "Siskiyou",
+          "Partnership Health Plan of CA",
+          "16,715"
+        ],
+        [
+          "COHS",
+          "Trinity",
+          "Partnership Health Plan of CA",
+          "4,542"
+        ],
+        [
+          "COHS",
+          "Merced",
+          "Central California Alliance for Health",
+          "123,907"
+        ],
+        [
+          "COHS",
+          "Monterey",
+          "Central California Alliance for Health",
+          "147,397"
+        ],
+        [
+          "COHS",
+          "Santa Cruz",
+          "Central California Alliance for Health",
+          "69,458"
+        ],
+        [
+          "COHS",
+          "Santa Barbara",
+          "CenCal",
+          "117,609"
+        ],
+        [
+          "COHS",
+          "San Luis Obispo",
+          "CenCal",
+          "55,761"
+        ],
+        [
+          "COHS",
+          "Orange",
+          "CalOptima",
+          "783,079"
+        ],
+        [
+          "COHS",
+          "San Mateo",
+          "Health Plan of San Mateo",
+          "113,202"
+        ],
+        [
+          "COHS",
+          "Ventura",
+          "Gold Coast Health Plan",
+          "202,217"
+        ],
+        [
+          "COHS",
+          "Total COHS Enrollment",
+          "",
+          "2,176,064"
+        ],
+        [
+          "Subtotal for Two-Plan, Regional Model, GMC and COHS",
+          "",
+          "",
+          "10,132,022"
+        ],
+        [
+          "PCCM",
+          "Los Angeles",
+          "AIDS Healthcare Foundation",
+          "828"
+        ],
+        [
+          "PCCM",
+          "San Francisco",
+          "Family Mosaic",
+          "25"
+        ],
+        [
+          "PCCM",
+          "Total PHP Enrollment",
+          "",
+          "853"
+        ],
+        [
+          "All Models Total Enrollments",
+          "",
+          "",
+          "10,132,875"
+        ],
+        [
+          "Source: Data Warehouse 12/14/15",
+          "",
+          "",
+          ""
+        ]
+      ],
+      "comparison_mode": "shared_values"
+    },
+    {
+      "file": "column_span_2.pdf",
+      "sha256": "14290fe5c01ad98b9362906b0c9646756ebf2999a82aaaeefc4dcecff5d3726f",
+      "url": "https://raw.githubusercontent.com/camelot-dev/camelot/92777b852e00933a5c4b9ba642601784604356cd/tests/files/column_span_2.pdf",
+      "expected_source": "https://github.com/camelot-dev/camelot/blob/92777b852e00933a5c4b9ba642601784604356cd/tests/data.py",
+      "upstream_annotation": "data_lattice_shift_text_left_top",
+      "headers": [
+        "Investigations",
+        "No. of HHs",
+        "Age/Sex/ Physiological Group",
+        "Preva- lence",
+        "C.I*",
+        "Relative Precision",
+        "Sample size per State"
+      ],
+      "rows": [
+        [
+          "Anthropometry",
+          "2400",
+          "All the available individuals",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Clinical Examination",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "History of morbidity",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Diet survey",
+          "1200",
+          "All the individuals partaking meals in the HH",
+          "",
+          "",
+          "",
+          ""
+        ],
+        [
+          "Blood Pressure #",
+          "2400",
+          "Men (\u2265 18yrs)",
+          "10%",
+          "95%",
+          "20%",
+          "1728"
+        ],
+        [
+          "",
+          "",
+          "Women (\u2265 18 yrs)",
+          "",
+          "",
+          "",
+          "1728"
+        ],
+        [
+          "Fasting blood glucose",
+          "2400",
+          "Men (\u2265 18 yrs)",
+          "5%",
+          "95%",
+          "20%",
+          "1825"
+        ],
+        [
+          "",
+          "",
+          "Women (\u2265 18 yrs)",
+          "",
+          "",
+          "",
+          "1825"
+        ],
+        [
+          "Knowledge & Practices on HTN & DM",
+          "2400",
+          "Men (\u2265 18 yrs)",
+          "-",
+          "-",
+          "-",
+          "1728"
+        ],
+        [
+          "",
+          "2400",
+          "Women (\u2265 18 yrs)",
+          "-",
+          "-",
+          "-",
+          "1728"
+        ]
+      ],
+      "comparison_mode": "anchor_cells"
+    }
+  ]
+}

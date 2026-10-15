@@ -244,3 +244,33 @@ def test_progress_write_recovers_from_transient_windows_file_locks(
     module.save(target, {"status": "complete"})
     assert module.load(target) == {"status": "complete"} and len(attempts) == 3
     assert list(tmp_path.glob("*.tmp")) == []
+
+
+def test_interrupted_job_resumes_verified_pages_and_original_route(client, monkeypatch):
+    import app.main as module
+    import app.engine as engine
+
+    job = completed(client)
+    assert client.post(f"/api/jobs/{job}/retry?resume=true").status_code == 409
+    directory = module.JOBS / job
+    status = module.load(directory / "status.json")
+    status["status"] = "interrupted"
+    module.save(directory / "status.json", status)
+
+    def should_not_extract_again(*args):
+        raise AssertionError("A verified page was extracted again")
+
+    monkeypatch.setattr(engine, "native_tables", should_not_extract_again)
+    response = client.post(f"/api/jobs/{job}/retry?resume=true&force_ocr=true")
+    assert response.status_code == 202 and response.json()["force_ocr"] is False
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:
+        state = client.get(f"/api/jobs/{job}").json()
+        if state["status"] in {"complete", "failed"}:
+            break
+        time.sleep(0.05)
+    assert state["status"] == "complete"
+    result = client.get(f"/api/jobs/{job}/result").json()
+    assert all(p.get("resumed") for p in result["pages"])
+    assert result["row_count"] == 31 and result["quality"]["review_status"] == "pending"
+    assert len(client.get(f"/api/jobs/{job}/versions").json()) == 1

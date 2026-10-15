@@ -58,6 +58,32 @@ def main():
 
         check(filename, fixture)
 
+    complex_truth = json.loads(
+        (ROOT / "evaluation/complex/ground_truth.json").read_text(encoding="utf-8")
+    )
+    for name in ("nested_line_items", "row_split_across_pages"):
+
+        def complex_fixture(name=name):
+            result = extract(ROOT / "evaluation/complex/pdfs" / f"{name}.pdf")
+            actual = [
+                {"headers": t["headers"], "rows": [r["cells"] for r in t["rows"]]}
+                for t in result["tables"]
+            ]
+            assert actual == complex_truth[name]["tables"], "Complex table mismatch"
+            workbook = load_workbook(io.BytesIO(xlsx(result)))
+            assert "Structure" in workbook.sheetnames
+            if name == "nested_line_items":
+                assert all(
+                    r.get("inherited_cells") for r in result["tables"][0]["rows"]
+                )
+                return "Nested child headers and three shared order IDs preserved; Structure sheet inspected"
+            row = result["tables"][0]["rows"][2]
+            assert [part["page"] for part in row["sources"]] == [1, 2]
+            assert workbook["Evidence"].max_row == 8, "Missing source part in Excel"
+            return "One logical continuation row retains two source-page parts; six rows x 12 columns"
+
+        check(name.replace("_", " "), complex_fixture)
+
     (ROOT / "tmp").mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(
         prefix="damnlens-judge-", dir=ROOT / "tmp"
@@ -97,10 +123,37 @@ def main():
 
         check("Over-limit recovery", rejected)
 
+        def resumed():
+            source = ROOT / "samples/01_invoice_register.pdf"
+            cache = temp / "checkpoints"
+
+            def interrupt(done, total, message):
+                if done == 2 and message == "Inspecting page 3":
+                    raise RuntimeError("Deliberate judge-check interruption")
+
+            try:
+                extract(source, checkpoint_dir=cache, progress=interrupt)
+            except RuntimeError as exc:
+                assert "Deliberate judge-check" in str(exc)
+            else:
+                raise AssertionError("Interruption was not exercised")
+            result = extract(source, checkpoint_dir=cache, resume=True)
+            assert [p.get("resumed", False) for p in result["pages"]] == [
+                True,
+                True,
+                False,
+            ]
+            assert [r["cells"] for r in result["tables"][0]["rows"]] == truth[
+                "01_invoice_register.pdf"
+            ]["rows"]
+            return "Two verified pages reused after interruption; final page extracted; exact rows retained"
+
+        check("Verified page checkpoint recovery", resumed)
+
     report = {
         "application": "DamnLens AI Agent",
         "seconds": round(time.perf_counter() - started, 2),
-        "scope": "Bundled synthetic samples, XLSX readability and page boundaries. This is a reproducible smoke check, not a hidden-PDF accuracy guarantee.",
+        "scope": "Bundled synthetic samples, complex structure, source parts, XLSX readability, page boundaries and checkpoint recovery. This is a reproducible smoke check, not a hidden-PDF accuracy guarantee.",
         "checks": checks,
     }
     (ROOT / "reports").mkdir(exist_ok=True)

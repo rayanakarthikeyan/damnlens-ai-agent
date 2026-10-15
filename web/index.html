@@ -141,7 +141,8 @@
           Workspace <span>/</span><strong id="breadcrumb">Overview</strong>
         </div>
         <div class="top-actions">
-          <label class="text-size-control" for="text-size">Text size
+          <label class="text-size-control" for="text-size"
+            >Text size
             <select id="text-size" aria-label="Interface text size">
               <option value="standard">Standard</option>
               <option value="large">Large</option>
@@ -416,6 +417,9 @@
               <p id="result-subtitle" class="muted"></p>
             </div>
             <div class="result-actions">
+              <button class="secondary" id="resume-button" hidden>
+                Resume extraction
+              </button>
               <button class="secondary" id="retry-button">
                 <svg><use href="#i-retry" /></svg>Retry OCR</button
               ><button class="secondary" id="excel-download">
@@ -484,6 +488,10 @@
                     >
                   </div>
                 </div>
+                <details id="table-structure" class="table-structure" hidden>
+                  <summary>Header groups and reconstructed structure</summary>
+                  <div id="structure-details"></div>
+                </details>
                 <div class="evidence-layout" id="evidence-layout">
                   <div class="data-wrap">
                     <div class="data-hint">
@@ -530,6 +538,11 @@
                     <div class="source-caption" id="source-caption">
                       Select a row to inspect its source location.
                     </div>
+                    <div
+                      id="source-parts"
+                      class="source-parts"
+                      aria-label="Source parts for selected row"
+                    ></div>
                   </aside>
                 </div>
               </div>
@@ -565,7 +578,7 @@
           <span
             >DamnLens AI Agent <span class="footer-divider">/</span> AI document
             extraction agent</span
-          ><span>Local processing · English OCR · v1.2</span>
+          ><span>Local processing · English OCR · v1.3</span>
         </footer>
       </main>
     </div>

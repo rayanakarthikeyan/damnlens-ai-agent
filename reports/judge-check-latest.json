@@ -1,7 +1,7 @@
 {
   "application": "DamnLens AI Agent",
-  "seconds": 18.73,
-  "scope": "Bundled synthetic samples, XLSX readability and page boundaries. This is a reproducible smoke check, not a hidden-PDF accuracy guarantee.",
+  "seconds": 21.79,
+  "scope": "Bundled synthetic samples, complex structure, source parts, XLSX readability, page boundaries and checkpoint recovery. This is a reproducible smoke check, not a hidden-PDF accuracy guarantee.",
   "checks": [
     {
       "name": "01_invoice_register.pdf",
@@ -19,6 +19,16 @@
       "detail": "21 rows x 12 columns, exact cells/headers; Excel inspected"
     },
     {
+      "name": "nested line items",
+      "passed": true,
+      "detail": "Nested child headers and three shared order IDs preserved; Structure sheet inspected"
+    },
+    {
+      "name": "row split across pages",
+      "passed": true,
+      "detail": "One logical continuation row retains two source-page parts; six rows x 12 columns"
+    },
+    {
       "name": "50-page boundary and duplicate preservation",
       "passed": true,
       "detail": "50 pages, 500 rows, 12 columns; 49 headers removed; duplicate business rows preserved"
@@ -27,6 +37,11 @@
       "name": "Over-limit recovery",
       "passed": true,
       "detail": "51-page input rejected with an actionable message"
+    },
+    {
+      "name": "Verified page checkpoint recovery",
+      "passed": true,
+      "detail": "Two verified pages reused after interruption; final page extracted; exact rows retained"
     }
   ]
 }

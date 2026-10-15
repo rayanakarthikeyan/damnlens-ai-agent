@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 0.08,
+      "seconds": 0.12,
       "width": 1120.0,
       "height": 700.0
     },
@@ -25,7 +25,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 0.07,
+      "seconds": 0.11,
       "width": 1120.0,
       "height": 700.0
     },
@@ -38,7 +38,7 @@
       ],
       "status": "extracted",
       "rows": 11,
-      "seconds": 0.07,
+      "seconds": 0.11,
       "width": 1120.0,
       "height": 700.0
     }
@@ -879,26 +879,26 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 0.24,
+  "elapsed_seconds": 0.35,
   "row_count": 31,
   "headers_removed": 2,
-  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "engine": "DamnLens AI Agent 1.3 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T06:39:50.105645+00:00",
+      "at": "2026-10-15T07:48:13.877763+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "01_invoice_register.pdf"
     },
     {
-      "at": "2026-10-15T06:39:50.118611+00:00",
+      "at": "2026-10-15T07:48:13.884692+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T06:39:50.182983+00:00",
+      "at": "2026-10-15T07:48:13.994854+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -906,13 +906,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T06:39:50.192272+00:00",
+      "at": "2026-10-15T07:48:13.996854+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T06:39:50.251292+00:00",
+      "at": "2026-10-15T07:48:14.104918+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -920,13 +920,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T06:39:50.262076+00:00",
+      "at": "2026-10-15T07:48:14.106918+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 3
     },
     {
-      "at": "2026-10-15T06:39:50.332142+00:00",
+      "at": "2026-10-15T07:48:14.220641+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 3,
@@ -934,19 +934,19 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T06:39:50.332142+00:00",
+      "at": "2026-10-15T07:48:14.220641+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 3
     },
     {
-      "at": "2026-10-15T06:39:50.332142+00:00",
+      "at": "2026-10-15T07:48:14.225101+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T06:39:50.332142+00:00",
+      "at": "2026-10-15T07:48:14.230100+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,
@@ -972,6 +972,9 @@
     "ocr_rows": 0,
     "ocr_recognition_mean": null,
     "ocr_low_score_rows": 0,
+    "source_parts": 31,
+    "continued_rows": 0,
+    "merged_value_rows": 0,
     "issue_types": {},
     "review_status": "pending",
     "can_review": true,

@@ -1,0 +1,277 @@
+{
+  "filename": "wrapped_grid_cell.pdf",
+  "sha256": "5ff120ecf41968c91b9e1a17594b50d92ea6258c336900717cc06c1e4f5ee5e1",
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 1,
+      "method": "native",
+      "attempts": [
+        "native"
+      ],
+      "status": "extracted",
+      "rows": 6,
+      "seconds": 0.05,
+      "width": 1100.0,
+      "height": 750.0
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "name": "Table 1",
+      "headers": [
+        "Item ID",
+        "Description",
+        "Quantity",
+        "Unit price",
+        "Net",
+        "Tax",
+        "Total",
+        "Region",
+        "Status",
+        "Category",
+        "Reference",
+        "Currency"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "Z001",
+            "Precision part 1",
+            "2",
+            "30.00",
+            "60.00",
+            "6.00",
+            "66.00",
+            "North",
+            "Open",
+            "Tools",
+            "B-001",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.0,
+            178.0,
+            986.0,
+            216.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 1
+        },
+        {
+          "cells": [
+            "Z002",
+            "Precision part 2",
+            "3",
+            "30.00",
+            "90.00",
+            "9.00",
+            "99.00",
+            "North",
+            "Open",
+            "Tools",
+            "B-002",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.0,
+            216.0,
+            986.0,
+            254.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 2
+        },
+        {
+          "cells": [
+            "Z003",
+            "Precision part 3 with mounting kit",
+            "4",
+            "30.00",
+            "120.00",
+            "12.00",
+            "132.00",
+            "North",
+            "Open",
+            "Tools",
+            "B-003",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.0,
+            254.0,
+            986.0,
+            292.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 3
+        },
+        {
+          "cells": [
+            "Z004",
+            "Precision part 4",
+            "5",
+            "30.00",
+            "150.00",
+            "15.00",
+            "165.00",
+            "North",
+            "Open",
+            "Tools",
+            "B-004",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.0,
+            292.0,
+            986.0,
+            330.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 4
+        },
+        {
+          "cells": [
+            "Z005",
+            "Precision part 5",
+            "6",
+            "30.00",
+            "180.00",
+            "18.00",
+            "198.00",
+            "North",
+            "Open",
+            "Tools",
+            "B-005",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.0,
+            330.0,
+            986.0,
+            368.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 5
+        },
+        {
+          "cells": [
+            "Z006",
+            "Precision part 6",
+            "7",
+            "30.00",
+            "210.00",
+            "21.00",
+            "231.00",
+            "North",
+            "Open",
+            "Tools",
+            "B-006",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.0,
+            368.0,
+            986.0,
+            406.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 6
+        }
+      ],
+      "pages": [
+        1
+      ],
+      "headers_removed": 0,
+      "inferred_headers": false
+    }
+  ],
+  "issues": [],
+  "elapsed_seconds": 0.07,
+  "row_count": 6,
+  "headers_removed": 0,
+  "engine": "DamnLens AI Agent 1.3 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T07:25:26.437487+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "wrapped_grid_cell.pdf"
+    },
+    {
+      "at": "2026-10-15T07:25:26.454002+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T07:25:26.505780+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "native"
+    },
+    {
+      "at": "2026-10-15T07:25:26.505780+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 1
+    },
+    {
+      "at": "2026-10-15T07:25:26.507698+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T07:25:26.508279+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 0,
+      "rows": 6
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 1,
+    "pages_total": 1,
+    "pages_needing_review": [],
+    "rows": 6,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 0,
+    "warnings": 0,
+    "findings": 0,
+    "flagged_rows": 0,
+    "rows_with_evidence": 6,
+    "ocr_rows": 0,
+    "ocr_recognition_mean": null,
+    "ocr_low_score_rows": 0,
+    "source_parts": 6,
+    "continued_rows": 0,
+    "merged_value_rows": 0,
+    "issue_types": {},
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
+}

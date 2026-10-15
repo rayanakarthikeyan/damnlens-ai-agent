@@ -1,0 +1,4804 @@
+[
+  {
+    "case": "multiline_grid_header",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "multiline_grid_header.pdf",
+      "sha256": "94a36b81329f2f53b92b2c80f9bb21df3a5e1a95bd68d0984abb073cf30a5ac6",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 6,
+          "seconds": 0.05,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                192.0,
+                986.0,
+                230.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                230.0,
+                986.0,
+                268.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                268.0,
+                986.0,
+                306.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                306.0,
+                986.0,
+                344.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                344.0,
+                986.0,
+                382.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                382.0,
+                986.0,
+                420.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [],
+      "elapsed_seconds": 0.07,
+      "row_count": 6,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:07.735734+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "multiline_grid_header.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:07.765424+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.814873+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:07.814873+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.814873+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.814873+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 0,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 0,
+        "findings": 0,
+        "flagged_rows": 0,
+        "rows_with_evidence": 6,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {},
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "grouped_header_with_keywords",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ],
+      "header_context": true
+    },
+    "actual": {
+      "filename": "grouped_header_with_keywords.pdf",
+      "sha256": "0a1b644012165600d1d145642df130ebd85e5f3b524ec61c626b30a7f311b13e",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 7,
+          "seconds": 0.04,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item details",
+            "Column 2",
+            "Amount summary",
+            "Column 4",
+            "Column 5",
+            "Column 6",
+            "Column 7",
+            "Classification",
+            "Column 9",
+            "Column 10",
+            "Column 11",
+            "Column 12"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Item ID",
+                "Description",
+                "Quantity",
+                "Unit price",
+                "Net",
+                "Tax",
+                "Total",
+                "Region",
+                "Status",
+                "Category",
+                "Reference",
+                "Currency"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                150.0,
+                986.0,
+                178.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                216.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                292.0,
+                986.0,
+                330.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                330.0,
+                986.0,
+                368.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 6
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                368.0,
+                986.0,
+                406.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 7
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": 1,
+          "column": 3,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Amount summary\"."
+        },
+        {
+          "id": 2,
+          "table": 1,
+          "row": 1,
+          "column": 4,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 4\"."
+        },
+        {
+          "id": 3,
+          "table": 1,
+          "row": 1,
+          "column": 5,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 5\"."
+        },
+        {
+          "id": 4,
+          "table": 1,
+          "row": 1,
+          "column": 6,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 6\"."
+        },
+        {
+          "id": 5,
+          "table": 1,
+          "row": 1,
+          "column": 7,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 7\"."
+        }
+      ],
+      "elapsed_seconds": 0.06,
+      "row_count": 7,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:07.814873+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "grouped_header_with_keywords.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:07.838328+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.876928+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:07.876928+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.877760+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.878324+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 5,
+          "rows": 7
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 7,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 5,
+        "findings": 5,
+        "flagged_rows": 1,
+        "rows_with_evidence": 7,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "column_type": 5
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "wrapped_grid_cell",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3 with mounting kit",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "wrapped_grid_cell.pdf",
+      "sha256": "8a138b4b6b6303a27afe74517c01013529f9b882e26a5a80fe327bbc99b44472",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 6,
+          "seconds": 0.06,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                216.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3 with mounting kit",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                292.0,
+                986.0,
+                330.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                330.0,
+                986.0,
+                368.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                368.0,
+                986.0,
+                406.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [],
+      "elapsed_seconds": 0.07,
+      "row_count": 6,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:07.878324+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "wrapped_grid_cell.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:07.894333+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.947795+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:07.947795+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.947795+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:07.947795+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 0,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 0,
+        "findings": 0,
+        "flagged_rows": 0,
+        "rows_with_evidence": 6,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {},
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "vertical_merged_region",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ],
+      "merged_cells": true
+    },
+    "actual": {
+      "filename": "vertical_merged_region.pdf",
+      "sha256": "2200c764ddaf35050f9831dc99748c76508faf101acf756deba2a80e0ddadf68",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 6,
+          "seconds": 0.04,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                292.0,
+                986.0,
+                330.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                330.0,
+                986.0,
+                368.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                368.0,
+                986.0,
+                406.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [],
+      "elapsed_seconds": 0.06,
+      "row_count": 6,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:07.947795+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "vertical_merged_region.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:07.972696+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.003062+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.010310+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.010310+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.010310+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 0,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 0,
+        "findings": 0,
+        "flagged_rows": 0,
+        "rows_with_evidence": 6,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {},
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "borderless_multiline_header",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "borderless_multiline_header.pdf",
+      "sha256": "3947d99aed10774de3eac8eaa5cc596338465c8bc1cf40da9f9c756a292cb476",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 6,
+          "seconds": 0.02,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "ID",
+            "price"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001 Precision part 1 2",
+                "30.00 60.00 6.00 66.00 North Open Tools B-001 USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.0,
+                197.25,
+                942.11,
+                210.99
+              ],
+              "method": "Native PDF \u00b7 inferred columns",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002 Precision part 2 3",
+                "30.00 90.00 9.00 99.00 North Open Tools B-002 USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.0,
+                235.25,
+                942.11,
+                248.99
+              ],
+              "method": "Native PDF \u00b7 inferred columns",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003 Precision part 3 4",
+                "30.00 120.00 12.00 132.00 North Open Tools B-003 USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.0,
+                273.25,
+                942.11,
+                286.99
+              ],
+              "method": "Native PDF \u00b7 inferred columns",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004 Precision part 4 5",
+                "30.00 150.00 15.00 165.00 North Open Tools B-004 USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.0,
+                311.25,
+                942.11,
+                324.99
+              ],
+              "method": "Native PDF \u00b7 inferred columns",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005 Precision part 5 6",
+                "30.00 180.00 18.00 198.00 North Open Tools B-005 USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.0,
+                349.25,
+                942.11,
+                362.99
+              ],
+              "method": "Native PDF \u00b7 inferred columns",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006 Precision part 6 7",
+                "30.00 210.00 21.00 231.00 North Open Tools B-006 USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.0,
+                387.25,
+                942.11,
+                400.99
+              ],
+              "method": "Native PDF \u00b7 inferred columns",
+              "confidence": 1.0,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": null,
+          "column": null,
+          "kind": "alignment_review",
+          "severity": "warning",
+          "message": "Borderless column positions were inferred from aligned text. Verify alignment against the source."
+        }
+      ],
+      "elapsed_seconds": 0.04,
+      "row_count": 6,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:08.012677+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "borderless_multiline_header.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:08.029869+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.047873+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.047873+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.047873+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.049876+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 1,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 2,
+        "errors": 0,
+        "warnings": 1,
+        "findings": 1,
+        "flagged_rows": 0,
+        "rows_with_evidence": 6,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "alignment_review": 1
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "row_split_across_pages",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3 with mounting kit",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ],
+      "split_row": true
+    },
+    "actual": {
+      "filename": "row_split_across_pages.pdf",
+      "sha256": "720d753633bb69391bbf14e5f4fd1c45e116da8ec3c4ec767db49fd24d4d1d0c",
+      "page_count": 2,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 3,
+          "seconds": 0.03,
+          "width": 1100.0,
+          "height": 750.0
+        },
+        {
+          "page": 2,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 4,
+          "seconds": 0.02,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                216.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "",
+                "with mounting kit",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                216.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 6
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                292.0,
+                986.0,
+                330.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 7
+            }
+          ],
+          "pages": [
+            1,
+            2
+          ],
+          "headers_removed": 1,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": 4,
+          "column": null,
+          "kind": "sparse_row",
+          "severity": "warning",
+          "message": "Most cells are empty; possible merged or shifted row."
+        },
+        {
+          "id": 2,
+          "table": 1,
+          "row": 4,
+          "column": 3,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Quantity\"."
+        },
+        {
+          "id": 3,
+          "table": 1,
+          "row": 4,
+          "column": 4,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Unit price\"."
+        },
+        {
+          "id": 4,
+          "table": 1,
+          "row": 4,
+          "column": 5,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Net\"."
+        },
+        {
+          "id": 5,
+          "table": 1,
+          "row": 4,
+          "column": 6,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Tax\"."
+        },
+        {
+          "id": 6,
+          "table": 1,
+          "row": 4,
+          "column": 7,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Total\"."
+        }
+      ],
+      "elapsed_seconds": 0.06,
+      "row_count": 7,
+      "headers_removed": 1,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:08.049876+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "row_split_across_pages.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:08.064722+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.086011+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.086011+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 2
+        },
+        {
+          "at": "2026-10-15T07:02:08.110174+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 2,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.110174+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 2
+        },
+        {
+          "at": "2026-10-15T07:02:08.110174+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.110174+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 6,
+          "rows": 7
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 2,
+        "pages_total": 2,
+        "pages_needing_review": [],
+        "rows": 7,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 6,
+        "findings": 6,
+        "flagged_rows": 1,
+        "rows_with_evidence": 7,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "sparse_row": 1,
+          "missing_value": 5
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "distinct_accounts_same_schema",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ]
+          ]
+        },
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "distinct_accounts_same_schema.pdf",
+      "sha256": "da49ce73b49c31c2fc361350253d451827b6853021ae33e6a5e8c5da4d86f57b",
+      "page_count": 2,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 3,
+          "seconds": 0.02,
+          "width": 1100.0,
+          "height": 750.0
+        },
+        {
+          "page": 2,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 3,
+          "seconds": 0.02,
+          "width": 1100.0,
+          "height": 750.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                216.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                178.0,
+                986.0,
+                216.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                216.0,
+                986.0,
+                254.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 2,
+              "bbox": [
+                35.0,
+                254.0,
+                986.0,
+                292.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1,
+            2
+          ],
+          "headers_removed": 1,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [],
+      "elapsed_seconds": 0.06,
+      "row_count": 6,
+      "headers_removed": 1,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:08.110174+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "distinct_accounts_same_schema.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:08.127639+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.152729+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.152729+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 2
+        },
+        {
+          "at": "2026-10-15T07:02:08.169134+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 2,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.169134+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 2
+        },
+        {
+          "at": "2026-10-15T07:02:08.169134+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.175680+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 0,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 2,
+        "pages_total": 2,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 0,
+        "findings": 0,
+        "flagged_rows": 0,
+        "rows_with_evidence": 6,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {},
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "hierarchical_duplicate_headers",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "2025 Sales",
+            "2025 Cost",
+            "2026 Sales",
+            "2026 Cost"
+          ],
+          "rows": [
+            [
+              "120",
+              "70",
+              "180",
+              "95"
+            ],
+            [
+              "90",
+              "40",
+              "130",
+              "65"
+            ]
+          ]
+        }
+      ],
+      "header_context": true
+    },
+    "actual": {
+      "filename": "hierarchical_duplicate_headers.pdf",
+      "sha256": "77adfb657922af9f5836b855d3e7f1c0eaf1cbe86bae81055fb15fd75ac02d3c",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "native",
+          "attempts": [
+            "native"
+          ],
+          "status": "extracted",
+          "rows": 4,
+          "seconds": 0.01,
+          "width": 500.0,
+          "height": 500.0
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Sales",
+            "Cost",
+            "Sales (2)",
+            "Cost (2)"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "120",
+                "70",
+                "180",
+                "95"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                126.0,
+                455.0,
+                156.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 1
+            },
+            {
+              "cells": [
+                "90",
+                "40",
+                "130",
+                "65"
+              ],
+              "page": 1,
+              "bbox": [
+                35.0,
+                156.0,
+                455.0,
+                186.0
+              ],
+              "method": "Native PDF \u00b7 grid",
+              "confidence": 1.0,
+              "id": 2
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [],
+      "elapsed_seconds": 0.03,
+      "row_count": 2,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:08.176499+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "hierarchical_duplicate_headers.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:08.194038+00:00",
+          "stage": "inspect",
+          "message": "Selected native text extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.199676+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "native"
+        },
+        {
+          "at": "2026-10-15T07:02:08.199676+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.199676+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.199676+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 0,
+          "rows": 2
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 2,
+        "tables": 1,
+        "max_columns": 4,
+        "errors": 0,
+        "warnings": 0,
+        "findings": 0,
+        "flagged_rows": 0,
+        "rows_with_evidence": 2,
+        "ocr_rows": 0,
+        "ocr_recognition_mean": null,
+        "ocr_low_score_rows": 0,
+        "issue_types": {},
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "scan_grouped_header",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ],
+      "header_context": true
+    },
+    "actual": {
+      "filename": "scan_grouped_header.pdf",
+      "sha256": "23ddcf9959ab6372c0779a1e467d26a7da47c8fe8454909d4695a8afd47d3e57",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "ocr",
+          "attempts": [
+            "ocr"
+          ],
+          "status": "extracted",
+          "rows": 7,
+          "seconds": 13.74,
+          "width": 1100.1600341796875,
+          "height": 750.239990234375
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item details",
+            "Column 2",
+            "Amount summary",
+            "nmary",
+            "Column 5",
+            "Column 6",
+            "Column 7",
+            "Classification",
+            "Column 9",
+            "Column 10",
+            "Column 11",
+            "Column 12"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Item ID",
+                "Description",
+                "Quantity",
+                "Unit price",
+                "Net",
+                "Tax",
+                "Total",
+                "Region",
+                "Status",
+                "Category",
+                "Reference",
+                "Currency"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                149.89,
+                985.91,
+                177.87
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.994,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                177.87,
+                985.91,
+                215.84
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.991,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                215.84,
+                985.91,
+                253.8
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.993,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                253.8,
+                985.91,
+                291.93
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.991,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                291.93,
+                985.91,
+                329.89
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.993,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                329.89,
+                985.91,
+                368.02
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.969,
+              "id": 6
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "7",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                368.02,
+                985.91,
+                405.98
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.995,
+              "id": 7
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": 1,
+          "column": 3,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Amount summary\"."
+        },
+        {
+          "id": 2,
+          "table": 1,
+          "row": 1,
+          "column": 4,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"nmary\"."
+        },
+        {
+          "id": 3,
+          "table": 1,
+          "row": 1,
+          "column": 5,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 5\"."
+        },
+        {
+          "id": 4,
+          "table": 1,
+          "row": 1,
+          "column": 6,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 6\"."
+        },
+        {
+          "id": 5,
+          "table": 1,
+          "row": 1,
+          "column": 7,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Column 7\"."
+        }
+      ],
+      "elapsed_seconds": 13.76,
+      "row_count": 7,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:08.199676+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "scan_grouped_header.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:08.215602+00:00",
+          "stage": "inspect",
+          "message": "Selected OCR extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:08.215602+00:00",
+          "stage": "extract",
+          "message": "Running local OCR and layout reconstruction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:21.954527+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "ocr"
+        },
+        {
+          "at": "2026-10-15T07:02:21.954527+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:21.954527+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:21.954527+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 5,
+          "rows": 7
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 7,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 5,
+        "findings": 5,
+        "flagged_rows": 1,
+        "rows_with_evidence": 7,
+        "ocr_rows": 7,
+        "ocr_recognition_mean": 0.9894,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "column_type": 5
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "scan_multiline_header",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "scan_multiline_header.pdf",
+      "sha256": "b0957f351ce46d42df9a5b8848848c7c27b4dceb199408f2088ca36885d8896e",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "ocr",
+          "attempts": [
+            "ocr"
+          ],
+          "status": "extracted",
+          "rows": 6,
+          "seconds": 4.43,
+          "width": 1100.1600341796875,
+          "height": 750.239990234375
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                191.95,
+                985.91,
+                229.91
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.997,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                229.91,
+                985.91,
+                267.87
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.991,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                267.87,
+                985.91,
+                306.0
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.996,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                306.0,
+                985.91,
+                343.96
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.987,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                343.96,
+                985.91,
+                381.93
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.993,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                381.93,
+                985.91,
+                420.05
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.99,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": 6,
+          "column": 3,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Quantity\"."
+        }
+      ],
+      "elapsed_seconds": 4.45,
+      "row_count": 6,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:21.954527+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "scan_multiline_header.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:21.974393+00:00",
+          "stage": "inspect",
+          "message": "Selected OCR extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:21.974393+00:00",
+          "stage": "extract",
+          "message": "Running local OCR and layout reconstruction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:26.405264+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "ocr"
+        },
+        {
+          "at": "2026-10-15T07:02:26.405264+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:26.405264+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:26.407690+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 1,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 1,
+        "findings": 1,
+        "flagged_rows": 1,
+        "rows_with_evidence": 6,
+        "ocr_rows": 6,
+        "ocr_recognition_mean": 0.9923,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "missing_value": 1
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "scan_borderless_multiline",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "scan_borderless_multiline.pdf",
+      "sha256": "ff1da3f27f0d17d54b905b4489e46696e724b906e973622342728e2ee311d333",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "ocr",
+          "attempts": [
+            "ocr"
+          ],
+          "status": "extracted",
+          "rows": 7,
+          "seconds": 6.3,
+          "width": 1100.1600341796875,
+          "height": 750.239990234375
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item",
+            "Description",
+            "Quantity",
+            "Unit",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "ID",
+                "",
+                "",
+                "price",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                169.61,
+                351.05,
+                183.79
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.994,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                196.88,
+                945.01,
+                212.7
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.933,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                235.06,
+                943.9,
+                252.51
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.976,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                273.23,
+                945.01,
+                289.05
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.9,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                310.86,
+                944.45,
+                326.68
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.959,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                349.04,
+                944.45,
+                364.31
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.915,
+              "id": 6
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                38.27,
+                387.22,
+                943.9,
+                403.03
+              ],
+              "method": "OCR \u00b7 inferred columns",
+              "confidence": 0.939,
+              "id": 7
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": null,
+          "column": null,
+          "kind": "alignment_review",
+          "severity": "warning",
+          "message": "Borderless column positions were inferred from aligned text. Verify alignment against the source."
+        },
+        {
+          "id": 2,
+          "table": 1,
+          "row": 1,
+          "column": null,
+          "kind": "sparse_row",
+          "severity": "warning",
+          "message": "Most cells are empty; possible merged or shifted row."
+        },
+        {
+          "id": 3,
+          "table": 1,
+          "row": 1,
+          "column": 4,
+          "kind": "column_type",
+          "severity": "warning",
+          "message": "Non-numeric value in mostly numeric column \"Unit\"."
+        },
+        {
+          "id": 4,
+          "table": 1,
+          "row": 1,
+          "column": 3,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Quantity\"."
+        },
+        {
+          "id": 5,
+          "table": 1,
+          "row": 1,
+          "column": 5,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Net\"."
+        },
+        {
+          "id": 6,
+          "table": 1,
+          "row": 1,
+          "column": 6,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Tax\"."
+        },
+        {
+          "id": 7,
+          "table": 1,
+          "row": 1,
+          "column": 7,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Total\"."
+        },
+        {
+          "id": 8,
+          "table": 1,
+          "row": 4,
+          "column": 3,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Quantity\"."
+        },
+        {
+          "id": 9,
+          "table": 1,
+          "row": 7,
+          "column": 3,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Quantity\"."
+        }
+      ],
+      "elapsed_seconds": 6.32,
+      "row_count": 7,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:26.407690+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "scan_borderless_multiline.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:26.428705+00:00",
+          "stage": "inspect",
+          "message": "Selected OCR extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:26.428705+00:00",
+          "stage": "extract",
+          "message": "Running local OCR and layout reconstruction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:32.724368+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "ocr"
+        },
+        {
+          "at": "2026-10-15T07:02:32.724368+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:32.728637+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:32.730383+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 9,
+          "rows": 7
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 7,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 9,
+        "findings": 9,
+        "flagged_rows": 3,
+        "rows_with_evidence": 7,
+        "ocr_rows": 7,
+        "ocr_recognition_mean": 0.9451,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "alignment_review": 1,
+          "sparse_row": 1,
+          "column_type": 1,
+          "missing_value": 6
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  },
+  {
+    "case": "scan_low_contrast",
+    "expected": {
+      "tables": [
+        {
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            [
+              "Z001",
+              "Precision part 1",
+              "2",
+              "30.00",
+              "60.00",
+              "6.00",
+              "66.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-001",
+              "USD"
+            ],
+            [
+              "Z002",
+              "Precision part 2",
+              "3",
+              "30.00",
+              "90.00",
+              "9.00",
+              "99.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-002",
+              "USD"
+            ],
+            [
+              "Z003",
+              "Precision part 3",
+              "4",
+              "30.00",
+              "120.00",
+              "12.00",
+              "132.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-003",
+              "USD"
+            ],
+            [
+              "Z004",
+              "Precision part 4",
+              "5",
+              "30.00",
+              "150.00",
+              "15.00",
+              "165.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-004",
+              "USD"
+            ],
+            [
+              "Z005",
+              "Precision part 5",
+              "6",
+              "30.00",
+              "180.00",
+              "18.00",
+              "198.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-005",
+              "USD"
+            ],
+            [
+              "Z006",
+              "Precision part 6",
+              "7",
+              "30.00",
+              "210.00",
+              "21.00",
+              "231.00",
+              "North",
+              "Open",
+              "Tools",
+              "B-006",
+              "USD"
+            ]
+          ]
+        }
+      ]
+    },
+    "actual": {
+      "filename": "scan_low_contrast.pdf",
+      "sha256": "e9f00e3df3c9ff6e9c23aaf5d06659295d5e8b7b05047ae46e34fd18e33982e7",
+      "page_count": 1,
+      "pages": [
+        {
+          "page": 1,
+          "tables": 1,
+          "method": "ocr",
+          "attempts": [
+            "ocr"
+          ],
+          "status": "extracted",
+          "rows": 6,
+          "seconds": 8.03,
+          "width": 1100.1600341796875,
+          "height": 750.239990234375
+        }
+      ],
+      "tables": [
+        {
+          "id": 1,
+          "name": "Table 1",
+          "headers": [
+            "Item ID",
+            "Description",
+            "Quantity",
+            "Unit price",
+            "Net",
+            "Tax",
+            "Total",
+            "Region",
+            "Status",
+            "Category",
+            "Reference",
+            "Currency"
+          ],
+          "rows": [
+            {
+              "cells": [
+                "Z001",
+                "Precision part 1",
+                "2",
+                "30.00",
+                "60.00",
+                "6.00",
+                "66.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-001",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                178.04,
+                985.91,
+                216.0
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.988,
+              "id": 1
+            },
+            {
+              "cells": [
+                "Z002",
+                "Precision part 2",
+                "3",
+                "30.00",
+                "90.00",
+                "9.00",
+                "99.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-002",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                216.0,
+                985.91,
+                253.96
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.995,
+              "id": 2
+            },
+            {
+              "cells": [
+                "Z003",
+                "Precision part 3",
+                "4",
+                "30.00",
+                "120.00",
+                "12.00",
+                "132.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-003",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                253.96,
+                985.91,
+                291.93
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.998,
+              "id": 3
+            },
+            {
+              "cells": [
+                "Z004",
+                "Precision part 4",
+                "5",
+                "30.00",
+                "150.00",
+                "15.00",
+                "165.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-004",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                291.93,
+                985.91,
+                329.89
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.989,
+              "id": 4
+            },
+            {
+              "cells": [
+                "Z005",
+                "Precision part 5",
+                "6",
+                "30.00",
+                "180.00",
+                "18.00",
+                "198.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-005",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                329.89,
+                985.91,
+                367.85
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.978,
+              "id": 5
+            },
+            {
+              "cells": [
+                "Z006",
+                "Precision part 6",
+                "",
+                "30.00",
+                "210.00",
+                "21.00",
+                "231.00",
+                "North",
+                "Open",
+                "Tools",
+                "B-006",
+                "USD"
+              ],
+              "page": 1,
+              "bbox": [
+                34.85,
+                367.85,
+                985.91,
+                405.98
+              ],
+              "method": "OCR \u00b7 grid",
+              "confidence": 0.986,
+              "id": 6
+            }
+          ],
+          "pages": [
+            1
+          ],
+          "headers_removed": 0,
+          "inferred_headers": false
+        }
+      ],
+      "issues": [
+        {
+          "id": 1,
+          "table": 1,
+          "row": 6,
+          "column": 3,
+          "kind": "missing_value",
+          "severity": "warning",
+          "message": "Missing value in usually populated column \"Quantity\"."
+        }
+      ],
+      "elapsed_seconds": 8.05,
+      "row_count": 6,
+      "headers_removed": 0,
+      "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+      "edits": [],
+      "events": [
+        {
+          "at": "2026-10-15T07:02:32.732388+00:00",
+          "stage": "inspect",
+          "message": "Opened source document",
+          "filename": "scan_low_contrast.pdf"
+        },
+        {
+          "at": "2026-10-15T07:02:32.750607+00:00",
+          "stage": "inspect",
+          "message": "Selected OCR extraction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:32.750607+00:00",
+          "stage": "extract",
+          "message": "Running local OCR and layout reconstruction",
+          "page": 1
+        },
+        {
+          "at": "2026-10-15T07:02:40.771331+00:00",
+          "stage": "extract",
+          "message": "Extracted table fragments",
+          "page": 1,
+          "tables": 1,
+          "method": "ocr"
+        },
+        {
+          "at": "2026-10-15T07:02:40.771331+00:00",
+          "stage": "align",
+          "message": "Matching table schemas and continuation pages",
+          "fragments": 1
+        },
+        {
+          "at": "2026-10-15T07:02:40.771331+00:00",
+          "stage": "validate",
+          "message": "Checking totals, arithmetic, balances and table integrity",
+          "tables": 1
+        },
+        {
+          "at": "2026-10-15T07:02:40.771331+00:00",
+          "stage": "review",
+          "message": "Extraction complete; human review is pending",
+          "findings": 1,
+          "rows": 6
+        }
+      ],
+      "review": {
+        "status": "pending"
+      },
+      "review_history": [],
+      "quality": {
+        "pages_extracted": 1,
+        "pages_total": 1,
+        "pages_needing_review": [],
+        "rows": 6,
+        "tables": 1,
+        "max_columns": 12,
+        "errors": 0,
+        "warnings": 1,
+        "findings": 1,
+        "flagged_rows": 1,
+        "rows_with_evidence": 6,
+        "ocr_rows": 6,
+        "ocr_recognition_mean": 0.989,
+        "ocr_low_score_rows": 0,
+        "issue_types": {
+          "missing_value": 1
+        },
+        "review_status": "pending",
+        "can_review": true,
+        "export_label": "Draft \u2014 review pending"
+      }
+    }
+  }
+]

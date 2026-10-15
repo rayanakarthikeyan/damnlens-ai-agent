@@ -23,3 +23,7 @@ DamnLens AI Agent uses existing open-source tools and pretrained models. The orc
 Application source is licensed under AGPL-3.0-or-later, compatible with the selected PyMuPDF licensing path. Dependencies and model weights retain their licenses. No third-party artwork from the competition poster is incorporated. System fonts are used; no font files are redistributed.
 
 Fixture records are fictional. No customer or banking data is included. Document content is treated as data: no LLM instructions, macros or external spreadsheet links are executed.
+
+## Public evaluation annotations
+
+Three public Camelot fixtures provide additional layout coverage. `evaluation/public/manifest.json` includes expected arrays derived from [Camelot's test annotations](https://github.com/camelot-dev/camelot/blob/92777b852e00933a5c4b9ba642601784604356cd/tests/data.py), pinned at that commit under the MIT license. The full notice is in `evaluation/public/CAMELOT_LICENSE.txt`. No upstream extraction implementation is copied or executed. The PDFs are downloaded explicitly to ignored temporary storage by `python scripts/public_evaluation.py --fetch`; they are not redistributed in the repository or submission ZIP. URLs, checksums and anchor/shared-value comparison modes are recorded in the manifest. These public documents and annotations were used for development, not blind evaluation.

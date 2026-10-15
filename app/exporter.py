@@ -237,16 +237,19 @@ def xlsx(result):
     )
     for t in result["tables"]:
         for r in t["rows"]:
-            evidence.append(
-                [
-                    t["id"],
-                    r["id"],
-                    r["page"],
-                    str(r["bbox"]),
-                    r["method"],
-                    r["confidence"] if r["method"].startswith("OCR") else None,
-                ]
-            )
+            for part in r.get("sources", [r]):
+                evidence.append(
+                    [
+                        t["id"],
+                        r["id"],
+                        part["page"],
+                        str(part["bbox"]),
+                        part["method"],
+                        part["confidence"]
+                        if part["method"].startswith("OCR")
+                        else None,
+                    ]
+                )
     style(evidence)
     edits = wb.create_sheet("Corrections")
     edits.append(["Table", "Row", "Column", "Original", "Edited", "Time (UTC)"])
@@ -286,6 +289,41 @@ def xlsx(result):
         log.append([event["at"], event["stage"], event["message"], event.get("page")])
     style(log)
     log.column_dimensions["C"].width = 70
+    structural = any(
+        t.get("header_paths")
+        or any(
+            r.get("merged_cells") or r.get("inherited_cells") or r.get("sources")
+            for r in t["rows"]
+        )
+        for t in result["tables"]
+    )
+    if structural:
+        import json
+
+        structure = wb.create_sheet("Structure")
+        structure.append(
+            ["Table", "Structure", "Row", "Column", "Source page", "Details"]
+        )
+        for t in result["tables"]:
+            for col, path in enumerate(t.get("header_paths", []), 1):
+                structure.append(
+                    [t["id"], "Header hierarchy", None, col, None, " → ".join(path)]
+                )
+            for r in t["rows"]:
+                for kind in ("merged_cells", "inherited_cells", "sources"):
+                    for item in r.get(kind, []):
+                        structure.append(
+                            [
+                                t["id"],
+                                kind,
+                                r["id"],
+                                item.get("column"),
+                                item.get("page", item.get("from_page", r["page"])),
+                                json.dumps(item, ensure_ascii=False),
+                            ]
+                        )
+        style(structure)
+        structure.column_dimensions["F"].width = 90
     # Harden every sheet, including names, validation text and correction history.
     for ws in wb:
         for row in ws:

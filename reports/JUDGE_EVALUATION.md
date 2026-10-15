@@ -1,63 +1,62 @@
-# Judge evaluation — DamnLens AI Agent
+# Judge evaluation — DamnLens AI Agent v1.3
 
-This is a development self-assessment against the supplied rubric, not an official judging result or a prediction of hidden-PDF performance. All documents used here are fictional and were generated for this project. The same developer used the audit failures to improve the implementation; the final audit is a regression set, not a held-out test.
+**Provisional self-assessment: 95/100.** This is a subjective review against the supplied rubric, not an official score or a prediction of hidden-PDF performance. No organizer's hidden PDFs have been tested. The developer used these failures to repair the engine: final results are regression evidence, not a blind evaluation.
 
-## Provisional rubric assessment
-
-| Area | Weight | Provisional mark | Evidence and remaining risk |
+| Area | Weight | Estimate | Evidence and remaining risk |
 |---|---:|---:|---|
-| OCR and extraction | 30 | 26 | 864/864 cells on the three submission samples; broader checks include rotated, lower-contrast and borderless printed scans. English only; no independent real-world corpus, handwriting or severe damage evaluation. |
-| Multi-page and complex tables | 25 | 21 | 50 pages / 501 rows / 12 columns; two independently continuing streams; headerless continuation; repeated-header removal; sparse group headers and mixed native/scan pages. Arbitrary nested cells, multi-line headers and rows split across page boundaries remain risks. |
-| Alignment and integrity | 20 | 19 | Exact cell order and headers, duplicate multiplicity, evidence transforms, precision-safe identifiers, decimal financial checks, source errors preserved, corrections and review fingerprint. Borderless inference remains heuristic. |
-| Automation and recovery | 15 | 14 | Native/OCR routing, orientation recovery, selective empty-cell OCR, page findings, persistent queue, bounded Windows file-write retries, archived prior runs and blocked stale exports. No mid-page checkpoint or cancellation. |
-| Code quality and usability | 10 | 9 | Pinned dependencies, offline model assets and checksums, double-click bootstrap, CLI, readable UI, persisted Large text mode, automated tests and cross-platform CI. Docker/macOS execution is not locally verified. |
-| **Total** | **100** | **89** | **Conservative reviewer estimate. Actual judges can assign a different score.** |
+| OCR and extraction | 30 | 28 | 864/864 submission cells; varied and complex printed-scan cases pass; 261/261 public reference cells. English only, small public digital corpus, no handwriting/severe damage evaluation. |
+| Multi-page and complex tables | 25 | 24 | 50 pages / 501 rows / 12 columns; independent table streams; multi-line/grouped headers, vertical merges, nested line items and cross-page row parts. Arbitrary layouts and changing schemas remain uncertain. |
+| Alignment and integrity | 20 | 19 | Exact ordered cells/headers, intentional blanks, ragged-value preservation, duplicate multiplicity, distinct account contexts, source geometry, decimal checks and precision-safe Excel. Borderless inference needs review. |
+| Automation and recovery | 15 | 15 | Routing, bounded OCR recovery, persistent queue, Windows lock retries, verified page checkpoints, archived runs and stale-export protection. Interrupted current pages restart; no mid-page cancellation. |
+| Code quality and usability | 10 | 9 | 100 tests, Windows/Ubuntu CI, pinned packages/model hashes, offline bootstrap, eight judge checks, readable UI and source inspection. Docker/macOS not manually verified locally. |
+| **Total** | **100** | **95** | **Subjective readiness estimate; actual judges may score differently.** |
 
-## Measured before-and-after development audit
+## Separate measured cohorts
 
-Exact cases: **5/15 before → 15/15 after**. The 14 table-bearing cases contain 1,440 expected data cells; the fifteenth is prose with no table. All output cells and headers match in the final run, and the narrative case produces no invented table. Borderless alignment still receives a review finding; repeated legitimate rows in the mixed case are retained and flagged.
+| Cohort | Exact cases | Ordered matching data cells | Scope |
+|---|---:|---:|---|
+| Submission samples | 3/3 | 864/864 | Original dummy invoice, image-only inventory and deliberately faulty bank statement. Source errors must remain and be flagged. |
+| Varied development audit | 15/15 | 1,440/1,440 | Fourteen table cases plus prose: rotations, skew, low contrast, borderless, grouped headers and mixed pages. |
+| Complex development audit | 16/16 | 962/962 | Multi-line/hierarchical headers, vertical merges, nested line items, wrapped descriptions, cross-page parts, account boundaries and intentional blanks. |
+| Public reference fixtures | 3/3 | 261/261 | Camelot public PDFs with independent upstream annotations; comparison policy below. All three are digital. |
 
-| Variation | Before cell match | After cell match | Exact headers after | Final status |
-|---|---:|---:|---|---|
-| right_aligned_native | 96/96 | 96/96 | True | Pass |
-| borderless_native | 96/96 | 96/96 | True | Pass |
-| merged_group_header | 30/120 | 96/96 | True | Pass |
-| pdf_rotation_90 | 3/99 | 96/96 | True | Pass |
-| pdf_rotation_180 | 0/108 | 96/96 | True | Pass |
-| pdf_rotation_270 | 3/108 | 96/96 | True | Pass |
-| scan_clean | 95/96 | 96/96 | True | Pass |
-| scan_borderless | 61/96 | 96/96 | True | Pass |
-| scan_skew_2deg | 96/96 | 96/96 | True | Pass |
-| scan_degraded | 96/96 | 96/96 | True | Pass |
-| scan_sideways_90 | 0/108 | 96/96 | True | Pass |
-| scan_sideways_180 | 0/108 | 96/96 | True | Pass |
-| scan_sideways_270 | 3/99 | 96/96 | True | Pass |
-| mixed_native_scan | 191/192 | 192/192 | True | Pass |
-| narrative_no_table | No table | No table | True | Pass |
+Do not pool these into an independent-corpus accuracy claim. Synthetic fixtures were authored for this project. Public annotations are independent but their first-pass failures were used for development. OCR confidence is not measured accuracy.
 
-## Gaps fixed during review
+The first twelve complex cases improved from **2/12 exact to 12/12**; four additional negative/nested cases bring the final result to 16/16. Those four have no baseline. The earlier varied audit improved from 5/15 to 15/15. Raw baselines are preserved.
 
-1. PDF rotation previously scrambled headers and columns. Extraction now runs in native text coordinates and maps row evidence back into the original viewer orientation.
-2. Physically rotated scans previously produced misaligned output. Weak orientation evidence triggers bounded right-angle OCR attempts with inverse coordinate mapping.
-3. Borderless scans assigned right-aligned values to the nearest next header. Header boundaries now determine assignment; a table header is required to avoid interpreting prose as a table.
-4. An isolated digit missed by page OCR left a populated grid cell blank. Visibly inked empty cells receive a local crop OCR retry, with no value inferred from arithmetic.
-5. Sparse spanning group labels above column names became data. A real header within the first three rows can supersede preceding sparse group rows.
-6. Floating-point checks and a relative tolerance could miss a one-cent error on large totals. Validation now uses Decimal and a fixed half-cent rounding tolerance.
-7. Several UI labels shrank to 6–11px. Relative font units now enforce a 13px secondary minimum at standard size, with 14px table cells, 15px explanations, darker text and a persisted 12.5% Large mode.
-8. Launch scripts reinstalled on every run. The standard-library bootstrap verifies versions, native-library imports and bundled asset hashes, installs only when needed, reports actionable failures and supports offline diagnosis/judge checks.
+## Gaps fixed
 
-## Evidence and reproduction
+1. **Multi-line and hierarchical headers:** combine bounded physical header rows, retain full paths and qualify duplicate leaves (`2025 Sales`, `2026 Sales`). Native bold evidence helps separate headers from ordinary rows containing header words. JSON and the optional Excel **Structure** sheet retain hierarchy.
+2. **Merged cells and nested line items:** share values only where explicit source geometry supports a span. Keep origin metadata, highlight the actual source cell when clicked and flag reconstruction for review. True empty source cells stay empty.
+3. **Cross-page rows:** conservatively append an initial description-only fragment to a previously identified row. Preserve both raw cell arrays/pages/boxes, export both Evidence records and offer source-part buttons. Accepted joins remain review findings; numeric/identity gaps are never filled by arithmetic.
+4. **Unrelated tables:** explicit account/invoice context prevents joining adjacent same-schema sections. Multiple compatible table streams can continue independently.
+5. **Borderless alignment:** native words and OCR share column-boundary logic for right-aligned values and short wrapped headers. Inferred alignment remains flagged.
+6. **OCR recovery:** visibly inked empty regions get recognition-only crops at two scales. Accept only agreeing text above the score threshold, record retries and flag review. One low-confidence cell triggers a finding even with a high row mean.
+7. **Native glyph order:** reconstruct cell text geometrically; remove inferred whitespace only when it overlaps a separately drawn glyph. Preserve meaningful spaces and underscores. The public `foo.pdf` exposed this issue.
+8. **Ragged rows:** pad to the widest observed row, preserving extra values rather than truncating them; flag uncertain alignment.
+9. **Restart recovery:** save completed pages atomically. Reuse only verified checkpoints matching source bytes, engine/layout code, OCR mode/assets and relevant library versions. Corrupt, truncated or mismatched caches are recomputed. Retry OCR remains a fresh run and archives existing results.
 
-- `reports/judge-audit-before.json` and `reports/judge-audit-after.json`: raw per-case measurements, row counts, exact headers, findings and timings.
-- `evaluation/pdfs/`: 15 original audit PDFs; `scripts/judge_audit.py` defines independent source values and rendering.
-- `evaluation/ground_truth.json`: expected headers and ordered rows, including duplicate multiplicity.
-- `tests/test_judge_audit.py`: all audit cases plus coordinate provenance, offline bootstrap behavior and cent-level financial regressions.
-- `START_DAMNLENS.cmd --judge-test --offline`: runtime-only checks after first setup; no pytest/ReportLab installation required.
-- `python scripts/judge_audit.py`: regenerate and measure all varied cases with development dependencies installed.
-- `python -m pytest -q`: full extraction, API, review, export, recovery and audit suite.
+## Public fixture policy and license
 
-Cell accuracy compares normalized whitespace at the same row and column and divides by the larger actual/expected cell count. Wrong row order, missing cells and extra cells are penalized. Exact case pass also requires the intended table count, all headers and all ordered rows. The no-table case passes only when no table is fabricated. OCR recognition confidence is never used as measured accuracy.
+The manifest was pinned before the first comparison. It contains URLs, SHA-256 hashes and expected arrays from Camelot commit `92777b852e00933a5c4b9ba642601784604356cd` ([annotations](https://github.com/camelot-dev/camelot/blob/92777b852e00933a5c4b9ba642601784604356cd/tests/data.py)). Only annotations and the MIT license are included; no upstream extraction code is incorporated or executed. PDFs download explicitly on request rather than being redistributed.
 
-## Remaining competition risks
+- `foo.pdf`: 35 data cells and two header rows; first pass 30/35, final 35/35 after the glyph fix.
+- `row_span_1.pdf`: 156 cells using upstream shared-value expectations; first and final passes exact.
+- `column_span_2.pdf`: 70 cells using upstream **anchor-cell** expectations. For comparison only, inherited values declared by the engine's vertical-span metadata are suppressed to match the anchor-only annotation. Exports retain shared values and provenance. This policy is explicit in the manifest and each report; raw exported values are not claimed identical to anchor-only annotations.
 
-A clean synthetic pass does not establish performance on hidden PDFs. The largest remaining technical risk is complex merged/nested layouts and changing or multi-line schemas. The workflow surfaces uncertain alignment and uncovered pages, but an unrecognized secondary table on an otherwise extracted page can still require visual inspection. Only printed English OCR is evaluated. The 150-second demo is a captioned walkthrough of actual screens, not an uncut performance recording. AI coding assistance is disclosed in the repository; entrant eligibility and the final submission link must be confirmed with the organizer.
+Other normalization changes whitespace only. Extra/missing cells, ordered positions, table counts and headers matter. This is **not held out**: the first case prompted a fix. These three PDFs add external layout coverage, not an unbiased performance estimate.
+
+## Reproduce and inspect
+
+- `START_DAMNLENS.cmd --judge-test --offline` / `sh start.sh --judge-test --offline`: eight runtime checks after first setup: three sample workbooks, nested structure, split-row evidence, 50-page duplicates, 51-page rejection and interrupted recovery.
+- `python -m pytest -q`: 100 extraction/API/review/export/recovery tests; JUnit in `reports/tests.xml`.
+- `python scripts/benchmark.py`: original sample workbooks, `reports/benchmark.json` and `ACCURACY_REPORT.md`.
+- `python scripts/judge_audit.py`: 15 varied cases; historical before/after JSON reports remain available.
+- `python scripts/complex_evaluation.py`: 16 bundled complex PDFs, JSON and Excel in `evaluation/complex/`; report `reports/complex-evaluation.json`; original twelve-case baseline `reports/complex-before.json`.
+- `python scripts/public_evaluation.py --fetch`: download/verify pinned public PDFs and write `reports/public-evaluation-final.json`. Omit `--fetch` for cached offline files. First-pass and glyph-fix reports are preserved.
+- `docs/screenshots/18-checkpoint-recovery.jpg` through `22-nested-header-groups.jpg`: actual restart, resume log, source-part, evaluation and nested-origin screens.
+- [GitHub Actions](https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions): Windows/Ubuntu tests, fresh setup, offline smoke checks and public-fixture comparisons.
+
+## Remaining risks
+
+Unseen nested/ragged structures, changing schemas, dense footnotes, missed secondary tables, severe blur, handwriting and other OCR languages remain risks. Shared values, recovered glyphs, inferred alignment and cross-page joins require visible source review. No cloud LLM is required; document content is never an executable instruction. The demo is a 150-second captioned walkthrough of real screens, not an uncut speed recording. AI assistance is disclosed. Entrant details, eligibility interpretation and the real submission link remain the entrant's responsibility.

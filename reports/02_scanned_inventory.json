@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 9.04,
+      "seconds": 8.34,
       "width": 1120.0,
       "height": 700.0
     },
@@ -25,7 +25,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 6.72,
+      "seconds": 6.39,
       "width": 1120.0,
       "height": 700.0
     }
@@ -73,6 +73,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.995,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.975,
+            0.973,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0
+          ],
           "id": 1
         },
         {
@@ -99,6 +113,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
+          "cell_confidence": [
+            1.0,
+            0.997,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 2
         },
         {
@@ -125,6 +153,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.987,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.97,
+            0.974,
+            1.0,
+            1.0,
+            1.0,
+            0.9,
+            1.0,
+            1.0,
+            0.999,
+            1.0
+          ],
           "id": 3
         },
         {
@@ -151,6 +193,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
+          "cell_confidence": [
+            1.0,
+            1.0,
+            0.998,
+            0.975,
+            0.995,
+            1.0,
+            0.999,
+            0.999,
+            0.999,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 4
         },
         {
@@ -177,6 +233,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 1.0,
+          "cell_confidence": [
+            1.0,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0
+          ],
           "id": 5
         },
         {
@@ -203,6 +273,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.998,
+          "cell_confidence": [
+            1.0,
+            1.0,
+            0.984,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 6
         },
         {
@@ -229,6 +313,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.999,
+            1.0,
+            0.998,
+            1.0,
+            1.0,
+            1.0,
+            0.993,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 7
         },
         {
@@ -255,6 +353,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.993,
+          "cell_confidence": [
+            1.0,
+            0.95,
+            0.999,
+            0.974,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.997,
+            0.999
+          ],
           "id": 8
         },
         {
@@ -281,6 +393,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.998,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.999,
+            0.978,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0
+          ],
           "id": 9
         },
         {
@@ -307,6 +433,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.99,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.999,
+            0.973,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.917,
+            0.998,
+            0.999
+          ],
           "id": 10
         },
         {
@@ -333,6 +473,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
+          "cell_confidence": [
+            1.0,
+            0.998,
+            0.999,
+            0.973,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0
+          ],
           "id": 11
         },
         {
@@ -359,6 +513,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.991,
+          "cell_confidence": [
+            1.0,
+            0.997,
+            0.998,
+            0.976,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.92,
+            0.998,
+            0.999
+          ],
           "id": 12
         },
         {
@@ -385,6 +553,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
+          "cell_confidence": [
+            1.0,
+            1.0,
+            0.999,
+            0.974,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0,
+            0.999,
+            1.0
+          ],
           "id": 13
         },
         {
@@ -411,6 +593,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.998,
+            0.975,
+            0.998,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 14
         },
         {
@@ -437,6 +633,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 1.0,
+          "cell_confidence": [
+            1.0,
+            1.0,
+            0.997,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0
+          ],
           "id": 15
         },
         {
@@ -463,6 +673,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.995,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.977,
+            0.975,
+            0.999,
+            1.0,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 16
         },
         {
@@ -489,6 +713,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.999,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            0.999
+          ],
           "id": 17
         },
         {
@@ -515,6 +753,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.999,
+            0.974,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.997,
+            0.999
+          ],
           "id": 18
         },
         {
@@ -541,6 +793,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
+          "cell_confidence": [
+            1.0,
+            0.998,
+            0.995,
+            0.978,
+            0.999,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.998,
+            1.0
+          ],
           "id": 19
         },
         {
@@ -567,6 +833,20 @@
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
+          "cell_confidence": [
+            1.0,
+            0.999,
+            0.999,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            0.999,
+            1.0,
+            1.0,
+            0.997,
+            0.999
+          ],
           "id": 20
         }
       ],
@@ -579,32 +859,32 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 15.78,
+  "elapsed_seconds": 14.73,
   "row_count": 20,
   "headers_removed": 1,
-  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "engine": "DamnLens AI Agent 1.3 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T06:39:50.490151+00:00",
+      "at": "2026-10-15T07:48:14.413926+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "02_scanned_inventory.pdf"
     },
     {
-      "at": "2026-10-15T06:39:50.500905+00:00",
+      "at": "2026-10-15T07:48:14.416160+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T06:39:50.500905+00:00",
+      "at": "2026-10-15T07:48:14.416160+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 1
     },
     {
-      "at": "2026-10-15T06:39:59.533759+00:00",
+      "at": "2026-10-15T07:48:22.744569+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -612,19 +892,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T06:39:59.543723+00:00",
+      "at": "2026-10-15T07:48:22.745551+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T06:39:59.543723+00:00",
+      "at": "2026-10-15T07:48:22.745551+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 2
     },
     {
-      "at": "2026-10-15T06:40:06.265665+00:00",
+      "at": "2026-10-15T07:48:29.130771+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -632,19 +912,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T06:40:06.265665+00:00",
+      "at": "2026-10-15T07:48:29.131563+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 2
     },
     {
-      "at": "2026-10-15T06:40:06.267247+00:00",
+      "at": "2026-10-15T07:48:29.134203+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T06:40:06.270583+00:00",
+      "at": "2026-10-15T07:48:29.136206+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,
@@ -670,6 +950,9 @@
     "ocr_rows": 20,
     "ocr_recognition_mean": 0.9962,
     "ocr_low_score_rows": 0,
+    "source_parts": 20,
+    "continued_rows": 0,
+    "merged_value_rows": 0,
     "issue_types": {},
     "review_status": "pending",
     "can_review": true,
