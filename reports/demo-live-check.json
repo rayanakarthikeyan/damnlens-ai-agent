@@ -1,50 +1,59 @@
 {
-  "scope": "Actual jobs operated in the recorded application demonstration, using fictional fixtures. Original bank currency blank was explicitly changed to USD for the correction demonstration; this is not an extraction repair or blind accuracy claim.",
+  "scope": "Checks of the actual jobs operated in the two Chrome recordings and their downloaded workbook. Fictional development fixtures; not hidden-document accuracy.",
   "checks": [
     {
-      "case": "invoice",
+      "case": "01_invoice_register.pdf",
+      "pages": 3,
       "rows": 31,
       "columns": 12,
       "exact_cells": 372,
-      "headers_exact": true
+      "headers_exact": true,
+      "all_rows_have_source_evidence": true,
+      "ocr_pages": 0
     },
     {
-      "case": "scan",
+      "case": "02_scanned_inventory.pdf",
+      "pages": 2,
       "rows": 20,
       "columns": 12,
       "exact_cells": 240,
-      "headers_exact": true
-    },
-    {
-      "case": "image",
-      "rows": 10,
-      "columns": 12,
-      "exact_cells": 120,
-      "headers_exact": true
+      "headers_exact": true,
+      "all_rows_have_source_evidence": true,
+      "ocr_pages": 2
     },
     {
       "case": "50-page repeated-page stress",
+      "pages": 50,
       "rows": 500,
       "columns": 12,
       "exact_cells": 6000,
       "headers_removed": 49,
-      "duplicates_preserved_and_flagged": 490
+      "duplicates_preserved_and_flagged": 490,
+      "source_pages_covered": 50,
+      "scope": "A ten-row dummy page repeated 50 times; not 50 distinct layouts."
     },
     {
       "case": "nested_line_items",
-      "exact_structure_and_cells": true
+      "rows": 3,
+      "columns": 3,
+      "exact_structure_and_cells": true,
+      "parent_child_headers_preserved": true,
+      "merged_source_geometry_preserved": true
     },
     {
-      "case": "row_split_across_pages",
-      "exact_structure_and_cells": true
-    },
-    {
-      "case": "bank review and downloaded workbook",
+      "case": "bank review and actual downloaded workbook",
       "rows": 21,
-      "columns": 12,
+      "source_columns": 12,
+      "workbook_columns": 16,
+      "traceability_columns": 4,
+      "all_252_source_cells_match_after_one_explicit_edit": true,
       "explicit_edits": 1,
       "remaining_findings": 5,
+      "errors": 3,
+      "warnings": 2,
       "reviewed": true,
+      "review_note_preserved": true,
+      "numeric_and_date_types_checked": true,
       "sheets": [
         "Overview",
         "Table 1",
@@ -54,10 +63,11 @@
         "Page coverage",
         "Run log"
       ],
-      "xlsx_sha256": "e187a2cd76ac00b6c4cf47fab09c406c7fa2eb7c403be6950722073eaa8b7598"
+      "xlsx_sha256": "b2b05e09577d2571c0e8f911acfcf7cb4eb313416fb2fe7e4b063f53987a4e43"
     }
   ],
   "gemini_requests_in_recording": 0,
-  "gemini_shown": "Configuration controls only",
+  "gemini_shown": "Optional workflow on opening screen only.",
+  "correction_scope": "USD edit occurred between captures; saved history is shown, not typing the edit.",
   "passed": true
 }

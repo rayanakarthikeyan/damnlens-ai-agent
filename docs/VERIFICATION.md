@@ -2,11 +2,13 @@
 
 ## Submission recording — 15 October 2026
 
-The final video is **3:49**, full-HD H.264 at 24 fps, with captions below the application and no audio. It uses **1,396 timestamped browser captures** collected while operating the working app, across 27 recorded operations. It replaces the earlier screenshot presentation. Idle gaps between steps and one static download pause are removed; captured extraction footage is not accelerated. No scoring sidebars, production banners, counters or timers are added. The original browser viewport is 1265 × 712 with a variable sampling rate; the output is encoded at 24 fps.
+The final video is **3:42**, full-HD H.264 encoded at 30 fps, with no audio or captions. It contains 24 cuts from two original Chrome window recordings made with screen sharing and MediaRecorder. Related operations are grouped, with navigation and idle gaps removed. Retained extraction footage plays at recorded speed. MP4 chapters provide navigation without adding visible labels or overlays.
 
-[The demonstrated-job checks](../reports/demo-live-check.json) verify the actual invoice, scan, image, 50-page, nested and split-row results. The downloaded workbook has all seven expected sheets, the explicit currency correction and five retained findings. Gemini configuration is shown without making a cloud request. [The media report](../reports/demo-verification.json) records full decoding, duration, source and output hashes. The raw recording, timeline and optional subtitles are included for rebuilding the final movie.
+[The demonstrated-job checks](../reports/demo-live-check.json) verify the actual invoice, scanned PDF, 50-page stress and nested-header results, plus the reviewed bank statement and downloaded workbook. The workbook has all seven expected sheets, all 252 source cells after one explicit currency edit, the review note and five retained findings. The video shows saved correction history; the edit itself occurred between sessions. Processing uses Local AI; Gemini is only visible as an optional opening-screen choice.
 
-Application runtime source is unchanged by this media revision. Python and frontend quality checks pass.
+[The media report](../reports/demo-verification.json) records successful full decoding of both source recordings and the final movie, duration, format and SHA-256 hashes. Both originals and the exact cut timeline are included for rebuilding. All 24 clip midpoints and selected full-resolution frames were visually checked for the intended content and readability; the 50-page coverage cut was corrected during that review. See [the chapter guide](DEMO_SCRIPT.md) for scope.
+
+Application runtime source is unchanged by this media revision. Python lint and formatting, JavaScript syntax and frontend formatting checks pass.
 
 ## Earlier application verification
 
@@ -20,7 +22,7 @@ Verified locally on Windows with Python 3.12.14.
 - **Export inspection:** seven sheet types, draft/reviewed metadata, typed numbers/dates/percentages, source decimal precision, preserved identifiers/long values, filtered/frozen table data, matching evidence rows and text-only untrusted formula-like content.
 - **CLI:** bank statement exported to Excel and JSON, with 21 rows and six source findings.
 - **Visual inspection:** rendered sample PDFs inspected for legibility and table alignment. Desktop and mobile browser screenshots are in `docs/screenshots/`.
-- **Video:** H.264 MP4, 1920 × 1080, 24 frames/second, exactly 229 seconds. Captioned walkthrough using real UI captures, not an uncut performance recording.
+- **Current video:** H.264 MP4, 1920 × 1080, 30 frames/second, exactly 222 seconds. Live application window recording with cuts, no audio or captions; details above.
 - **Static checks:** Python compilation and JavaScript syntax checks pass. Python and frontend sources are formatted for readability.
 
 Windows and Linux CI results are visible under the repository's Actions tab. The workflow runs the full suite, fresh bootstrap, offline judge checks and pinned public PDF comparisons on both systems. Docker configuration is supplied but was not manually verified locally.
@@ -39,7 +41,7 @@ The new source-reviewed public cohort improved from 3/11 to 10/11 strict checkpo
 - Checkpoints: resuming a three-page invoice reuses exactly the first two completed pages and extracts only page three. Source/mode changes, malformed JSON and checksum tampering invalidate caches. Interrupted current-page work restarts.
 - Browser: a real interrupted split-row job resumed page one from cache, extracted page two and kept six logical rows with twelve columns. Selecting Part 2 highlighted the continued description on page two. Selecting an inherited order ID in the nested example highlighted the original merged source rectangle. Header paths and shared-value warnings were visible; console had no errors.
 - Excel: complex cases add Structure only when relevant; ordinary samples retain seven sheets. Evidence includes both source fragments for continued rows, and shared values retain origin geometry.
-- Screenshots 18–22 and the updated 229-second captioned demo show the real application. Scores in `JUDGE_EVALUATION.md` are subjective rubric estimates, not organizer results or hidden-PDF accuracy measurements.
+- Screenshots 18–22 record the earlier application verification. Scores in `JUDGE_EVALUATION.md` are subjective rubric estimates, not organizer results or hidden-PDF accuracy measurements.
 
 ## Accuracy workflow audit (v1.1)
 
@@ -63,4 +65,3 @@ The new source-reviewed public cohort improved from 3/11 to 10/11 strict checkpo
 - Typography: relative font units, 13px minimum secondary labels, 14px data cells, 15px explanations, darker foregrounds and a persisted Large mode at 112.5%. Desktop 1440px and mobile 390px layouts were inspected without horizontal page overflow; source tables retain their own horizontal scrolling.
 - Browser verification reran invoice, scan and bank samples, checked page-two row highlighting, coverage/log tabs, explicit review acknowledgement, export summary and the visible 15-case audit. The dummy review note identifies the operation as an automated UI demonstration rather than an entrant or judge decision.
 - Setup diagnostics verify pinned package versions, native imports, model/dictionary hashes and writable files. Healthy launches skip pip. Server launch reserves an available loopback port and opens the browser after readiness.
-- Updated 229-second demo uses the renamed, larger-text UI. It remains a captioned walkthrough, not an uncut performance recording.

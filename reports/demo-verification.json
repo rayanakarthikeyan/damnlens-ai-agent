@@ -1,36 +1,40 @@
 {
   "file": "docs/damnlens-demo.mp4",
-  "seconds": 228.96,
+  "seconds": 222.0,
   "resolution": [
     1920,
     1080
   ],
   "codec": "H.264",
   "pixel_format": "yuv420p",
-  "fps": 24,
+  "fps": 30,
   "audio_streams": 0,
   "full_decode": "passed",
-  "recorded_clips": 27,
-  "captured_browser_frames": 1396,
-  "source_capture_resolution": [
-    1265,
-    712
-  ],
-  "capture_method": "Timestamped browser frames captured while operating the working application",
-  "editing": "Recorded browser interactions in chronological case order; idle gaps between steps and one static download pause removed. Extraction footage plays at captured speed.",
-  "gemini_scope": "Configuration controls only; no new cloud requests.",
-  "burned_in_captions": true,
-  "caption_font_pixels": 34,
-  "max_caption_lines": 2,
-  "presentation": "App screen and captions only; no added scores or production overlays.",
-  "bytes": 8095142,
-  "sha256": "5e07f48f3c27782ee96f97d89120307202b1f69200c5ce27ab909e30e7ab1c34",
-  "raw_recording_sha256": "e69a66956dbd5d7a3c8f31bf742bae71dc5c5091b1348d60fbb5fb4696b43805",
-  "encoded_frame_review": {
-    "operations_sampled": 27,
-    "frames_and_caption_layout": "reviewed",
-    "caption_timing_tolerance_seconds": 0.041666666666666664,
-    "runtime_within_four_minutes": true,
-    "scores_and_production_overlays_added": false
-  }
+  "recorded_clips": 24,
+  "original_recordings": 2,
+  "capture_method": "Chrome getDisplayMedia / MediaRecorder window video",
+  "editing": "Functional sections grouped for clarity. Navigation and idle pauses removed; retained extraction footage plays at recorded speed. Findings are revisited before export.",
+  "burned_in_captions": false,
+  "synthetic_frames": false,
+  "synthetic_cursor": false,
+  "gemini_scope": "The recorded processing uses Local AI; Gemini is visible as an optional workflow, with no live Gemini request in this recording.",
+  "correction_scope": "The USD edit occurred between sessions. Its actual saved history is shown; typing the correction is not represented as recorded.",
+  "bytes": 5884383,
+  "sha256": "0bd8be64bc2514ab1492b8ca4e351e706b30f4a4ffa69ae77d8b80d3c9711728",
+  "sources": [
+    {
+      "file": "docs/recordings/damnlens-session-01.webm",
+      "seconds": 719.368421,
+      "bytes": 6945783,
+      "sha256": "5590dd4ff1acb21fd4bb4ec9a54bdba25a1bfb64982e131e8ebad878c299610e",
+      "full_decode": "passed"
+    },
+    {
+      "file": "docs/recordings/damnlens-session-02.webm",
+      "seconds": 719.703,
+      "bytes": 5625489,
+      "sha256": "2fa2943cad772f2140768edf35fdcd5902d2c46d9d78fb4858de4e95c0300c80",
+      "full_decode": "passed"
+    }
+  ]
 }

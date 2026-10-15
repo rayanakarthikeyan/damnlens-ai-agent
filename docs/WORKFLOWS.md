@@ -42,7 +42,7 @@ Selected **full pages** go to Google and may include surrounding text/images. Go
 | Alignment and integrity / 20 | Decimal totals/balances, blanks/types/duplicates, source geometry, conservative proposals, safe Excel and human correction. No fabricated figures. |
 | Automation/recovery / 15 | Native/OCR routing, queue, verified checkpoints, archived retries, bounded cloud calls, no resend of unknown billable requests and local fallback. |
 | Quality/usability / 10 | One-command setup, keyless judge path, explicit workflow/cost controls, CLI/API, readable UI, pinned local dependencies and Windows/Ubuntu CI. |
-| Submission | README maps app/source/setup, three PDF/Excel pairs, accuracy report, 229-second caption-only demo and credits. |
+| Submission | README maps app/source/setup, three PDF/Excel pairs, accuracy report, 222-second live application recording and credits. |
 
 The current rubric estimate is 96/100 after the [code-quality audit](../reports/CODE_QUALITY.md); adding Gemini alone did not increase it. This remains subjective. No hidden-PDF or 100/100 guarantee is made. Severe damage, handwriting, multilingual OCR and arbitrary changing/nested schemas remain risks.
 

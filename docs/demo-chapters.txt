@@ -1,27 +1,6 @@
-00:00 Local workflow
-00:08 Invoice extraction
-00:20 Invoice source
-00:28 Invoice coverage
-00:35 Scanned pdf
-00:57 Scan source
-01:05 Image result
-01:13 Fifty pages
-01:25 Fifty coverage
-01:32 Nested headers
-01:39 Merged origin
-01:47 Split row first
-01:53 Split row second
-02:04 Bank extraction
-02:13 Bank validation
-02:21 Inspect total
-02:29 Inspect missing cell
-02:36 Open correction
-02:42 Save correction
-02:50 Correction history
-02:57 Review dialog
-03:03 Complete review
-03:11 Excel export
-03:18 Download excel
-03:23 Gemini workflow
-03:33 Gemini request limit
-03:39 Accuracy report
+00:00 Digital PDF and source evidence
+00:43 Scanned PDF and local OCR
+01:31 50-page extraction and integrity
+02:10 Nested headers and merged cells
+02:26 Validation and review
+03:27 Reviewed Excel download

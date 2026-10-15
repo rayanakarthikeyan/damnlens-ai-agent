@@ -131,11 +131,11 @@ Each request allows at most 8,192 output tokens and a 60-second socket timeout. 
 | Setup and run instructions | [Judge quick start](JUDGE_START_HERE.txt) · [Detailed setup](#judges-setup-and-launch) |
 | At least three sample PDFs with Excel outputs | [Matched PDF → Excel files](#sample-pdfs-and-excel-outputs) below |
 | Accuracy and validation report | [Sample accuracy and findings](reports/ACCURACY_REPORT.md) · [Complex/public evaluation and limits](reports/JUDGE_EVALUATION.md) |
-| Demo video, 2–5 minutes | [Watch the demo — 3 minutes 49 seconds](docs/damnlens-demo.mp4) |
+| Demo video, 2–5 minutes | [Watch the demo — 3 minutes 42 seconds](docs/damnlens-demo.mp4) |
 
-[![Watch the caption-only submission demo](docs/damnlens-demo-poster.jpg)](docs/damnlens-demo.mp4)
+[![Watch the DamnLens application demo](docs/damnlens-demo-poster.jpg)](docs/damnlens-demo.mp4)
 
-The 1080p video records operating the working application: PDF extraction, scanned OCR, source inspection, complex tables, validation, correction, review and an actual Excel download. Captions are burned in, with no audio or added scoring labels. Idle gaps between steps are removed; extraction footage plays at captured speed. Gemini configuration is demonstrated without a new cloud request. [Chapter guide](docs/DEMO_SCRIPT.md) · [Optional subtitles](docs/recordings/damnlens-demo.srt) · [Video verification](reports/demo-verification.json).
+The 1080p video is a live Chrome application recording: digital PDF extraction, scanned OCR, source inspection, 50-page processing, nested headers, validation, saved correction history, review and an actual Excel download. It has no audio or captions. Idle pauses are removed; retained extraction footage plays at recorded speed. Processing uses Local AI. [Chapter guide](docs/DEMO_SCRIPT.md) · [Video verification](reports/demo-verification.json).
 
 [Requirement checklist](docs/SUBMISSION_CHECKLIST.md) · [Library and AI-assistance credits](THIRD_PARTY_NOTICES.md) · [OCR model credits](models/README.md)
 
