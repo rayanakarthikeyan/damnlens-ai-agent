@@ -8,6 +8,7 @@ import statistics
 import time
 from collections import Counter
 from datetime import datetime, timezone
+from decimal import Decimal
 from difflib import SequenceMatcher
 from pathlib import Path
 from threading import Lock
@@ -65,7 +66,7 @@ def norm(value):
     return re.sub(r"[^a-z0-9]", "", clean(value).lower())
 
 
-def number(value):
+def decimal_number(value):
     """Parse unambiguous decimal amounts; preserve identifiers in the exporter."""
     text = clean(value).replace("−", "-").replace("\u00a0", "")
     if not text or text in {"-", "—", "N/A"}:
@@ -87,8 +88,13 @@ def number(value):
         )
     if not re.fullmatch(r"[+-]?\d+(?:\.\d+)?", text):
         return None
-    result = float(text)
+    result = Decimal(text)
     return -result if negative else result
+
+
+def number(value):
+    result = decimal_number(value)
+    return float(result) if result is not None else None
 
 
 def is_header(row):
@@ -108,6 +114,20 @@ def unique_headers(row):
         counts[c] += 1
         result.append(c if counts[c] == 1 else f"{c} ({counts[c]})")
     return result
+
+
+def header_row_index(rows):
+    """Skip an optional sparse spanning label above a real column-header row."""
+    for index, row in enumerate(rows[:3]):
+        if is_header(row["cells"]):
+            preceding = rows[:index]
+            if all(
+                sum(bool(clean(c)) for c in r["cells"]) <= max(2, len(r["cells"]) // 3)
+                for r in preceding
+            ):
+                return index
+            break
+    return None
 
 
 def record(cells, page, bbox, method, confidence=1.0):
@@ -294,6 +314,65 @@ def clusters(values, tolerance=8):
     return [statistics.mean(g) for g in groups]
 
 
+def orient_scan(image):
+    """Try right-angle OCR orientations only when upright evidence is weak.
+
+    Return the inverse transform so evidence still points into the original scan.
+    No recognized values are corrected or invented during orientation selection.
+    """
+    words = ocr_words(image)
+
+    def merit(items):
+        centers = clusters([(w["bbox"][1] + w["bbox"][3]) / 2 for w in items], 12)
+        header_terms = []
+        for y in centers:
+            texts = [
+                w["text"]
+                for w in items
+                if abs((w["bbox"][1] + w["bbox"][3]) / 2 - y) <= 12
+            ]
+            if is_header(texts):
+                header_terms.append(
+                    len(
+                        set(re.findall(r"[a-z]+", " ".join(texts).lower()))
+                        & HEADER_WORDS
+                    )
+                )
+        return max(header_terms, default=0), statistics.mean(
+            w["score"] for w in items
+        ) if items else 0
+
+    best = merit(words)
+    inverse = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]])
+    if best[0] >= 3 and best[1] >= 0.88:
+        return image, words, inverse, 0
+    # Prose with good recognition and no tabular header does not need 3 retries.
+    if best[0] == 0 and best[1] >= 0.94:
+        return image, words, inverse, 0
+    height, width = image.shape[:2]
+    chosen, angle = image, 0
+    candidates = [
+        (180, cv2.ROTATE_180, [[-1, 0, width - 1], [0, -1, height - 1]]),
+        (90, cv2.ROTATE_90_CLOCKWISE, [[0, 1, 0], [-1, 0, height - 1]]),
+        (270, cv2.ROTATE_90_COUNTERCLOCKWISE, [[0, -1, width - 1], [1, 0, 0]]),
+    ]
+    for rotation, code, mapping in candidates:
+        candidate = cv2.rotate(image, code)
+        recognized = ocr_words(candidate)
+        score = merit(recognized)
+        if score > best:
+            chosen, words, inverse, best, angle = (
+                candidate,
+                recognized,
+                np.array(mapping, dtype=float),
+                score,
+                rotation,
+            )
+        if best[0] >= 3 and best[1] >= 0.94:
+            break
+    return chosen, words, inverse, angle
+
+
 def scan_tables(page, page_no, dpi=220):
     pix = page.get_pixmap(dpi=dpi, colorspace=fitz.csRGB, alpha=False)
     image = (
@@ -302,6 +381,7 @@ def scan_tables(page, page_no, dpi=220):
         .copy()
     )
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    image, words, orientation_inverse, orientation = orient_scan(image)
     # Correct modest scan skew before both text recognition and grid detection.
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     bw = cv2.adaptiveThreshold(
@@ -327,12 +407,18 @@ def scan_tables(page, page_no, dpi=220):
             (image.shape[1], image.shape[0]),
             borderValue=(255, 255, 255),
         )
-    inverse = (
+    deskew_inverse = (
         cv2.invertAffineTransform(transform)
         if abs(angle) > 0.15
         else np.array([[1, 0, 0], [0, 1, 0]])
     )
-    words = ocr_words(image)
+    # Deskew changes word positions; recognize again only when it was applied.
+    if abs(angle) > 0.15:
+        words = ocr_words(image)
+    inverse = (
+        np.vstack([orientation_inverse, [0, 0, 1]])
+        @ np.vstack([deskew_inverse, [0, 0, 1]])
+    )[:2]
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     bw = cv2.adaptiveThreshold(
         gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 31, 15
@@ -394,13 +480,37 @@ def scan_tables(page, page_no, dpi=220):
                 selected.sort(key=lambda a: (round(a["bbox"][1] / 12), a["bbox"][0]))
                 cells.append(" ".join(a["text"] for a in selected))
                 scores.extend(a["score"] for a in selected)
+            # A detector can miss an isolated digit beside a ruling line. Retry
+            # only empty, visibly inked cells; never infer a value from totals.
+            for col, (left, right) in enumerate(zip(xs, xs[1:])):
+                if cells[col]:
+                    continue
+                x0, x1 = int(left) + 5, int(right) - 4
+                y0, y1 = int(top) + 5, int(bottom) - 4
+                crop = image[y0:y1, x0:x1]
+                if crop.size == 0:
+                    continue
+                dark = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY) < 140
+                if dark.mean() < 0.004:
+                    continue
+                retry = ocr_words(
+                    cv2.copyMakeBorder(
+                        crop, 12, 12, 12, 12, cv2.BORDER_CONSTANT, value=(255, 255, 255)
+                    )
+                )
+                if retry and all(w["score"] >= 0.75 for w in retry):
+                    cells[col] = " ".join(
+                        w["text"] for w in sorted(retry, key=lambda w: w["bbox"][0])
+                    )
+                    scores.extend(w["score"] for w in retry)
             if any(cells):
                 rows.append(
                     record(
                         cells,
                         page_no,
                         original_box([xs[0], top, xs[-1], bottom]),
-                        "OCR · grid",
+                        "OCR · grid"
+                        + (f" · rotated {orientation}°" if orientation else ""),
                         statistics.mean(scores) if scores else 0,
                     )
                 )
@@ -414,7 +524,7 @@ def scan_tables(page, page_no, dpi=220):
             )
     if out:
         return out
-    # Borderless fallback anchors columns to the densest aligned text line.
+    # Borderless scans require an actual header, rather than a dense prose line.
     line_centers = clusters(
         [(a["bbox"][1] + a["bbox"][3]) / 2 for a in words], tolerance=12
     )
@@ -427,14 +537,37 @@ def scan_tables(page, page_no, dpi=220):
     ]
     if not lines:
         return []
-    anchor = max(lines, key=len)
+    anchors = [
+        i for i, line in enumerate(lines) if is_header([a["text"] for a in line])
+    ]
+    if not anchors:
+        return []
+    start = anchors[0]
+    anchor = lines[start]
     starts = [a["bbox"][0] for a in anchor]
+    bounds = [starts[0] - 8] + [x - 8 for x in starts[1:]] + [image.shape[1]]
     rows = []
-    for line in lines:
+    previous_y = line_centers[0]
+    for line in lines[start:]:
+        center = statistics.mean((a["bbox"][1] + a["bbox"][3]) / 2 for a in line)
+        if rows and center - previous_y > max(
+            120, statistics.median(a["bbox"][3] - a["bbox"][1] for a in line) * 3.5
+        ):
+            break
         cells = [""] * len(starts)
         for a in line:
-            idx = min(range(len(starts)), key=lambda i: abs(starts[i] - a["bbox"][0]))
-            cells[idx] = clean(cells[idx] + " " + a["text"])
+            # Next header's left edge bounds the current column. Nearest-start
+            # assignment wrongly shifts right-aligned amounts into the next cell.
+            idx = next(
+                (
+                    i
+                    for i in range(len(starts))
+                    if bounds[i] <= a["bbox"][0] < bounds[i + 1]
+                ),
+                None,
+            )
+            if idx is not None:
+                cells[idx] = clean(cells[idx] + " " + a["text"])
         box = [
             min(a["bbox"][0] for a in line),
             min(a["bbox"][1] for a in line),
@@ -450,10 +583,18 @@ def scan_tables(page, page_no, dpi=220):
                 min(a["score"] for a in line),
             )
         )
+        previous_y = center
     return [
         {
             "rows": rows,
-            "bbox": [0, 0, page.rect.width, page.rect.height],
+            "bbox": original_box(
+                [
+                    anchor[0]["bbox"][0] - 5,
+                    anchor[0]["bbox"][1],
+                    image.shape[1],
+                    max(a["bbox"][3] for a in lines[start:][-1]),
+                ]
+            ),
             "width": page.rect.width,
         }
     ]
@@ -463,6 +604,9 @@ def stitch(fragments):
     tables = []
     for frag in fragments:
         rows = frag["rows"]
+        header_index = header_row_index(rows)
+        if header_index is not None and header_index > 0:
+            rows = rows[header_index:]
         first = rows[0]["cells"]
         has_header = is_header(first)
         headers = (
@@ -628,15 +772,14 @@ def validate(tables):
                 re.fullmatch(r"grand\s+total(?:\s*[:\-])?", c, re.I) for c in cells[:3]
             )
             for c in numeric_cols:
-                value = number(cells[c])
+                value = decimal_number(cells[c])
                 if total:
                     expected_sum = sums[c] if grand_total else section_sums[c]
                     expected_count = sum_counts[c] if grand_total else section_counts[c]
                     if (
                         value is not None
                         and expected_count
-                        and abs(value - expected_sum)
-                        > max(0.02, abs(expected_sum) * 0.00001)
+                        and abs(value - expected_sum) > Decimal("0.005")
                     ):
                         add(
                             t,
@@ -689,8 +832,8 @@ def validate(tables):
                 None,
             )
             if not total and None not in (qty, price, net):
-                q, p, v = [number(cells[i]) for i in (qty, price, net)]
-                if None not in (q, p, v) and abs(q * p - v) > 0.02:
+                q, p, v = [decimal_number(cells[i]) for i in (qty, price, net)]
+                if None not in (q, p, v) and abs(q * p - v) > Decimal("0.005"):
                     add(
                         t,
                         "arithmetic",
@@ -713,12 +856,11 @@ def validate(tables):
             )
             if not total and None not in (net, tax, line_total):
                 net_value, tax_value, total_value = [
-                    number(cells[i]) for i in (net, tax, line_total)
+                    decimal_number(cells[i]) for i in (net, tax, line_total)
                 ]
-                if (
-                    None not in (net_value, tax_value, total_value)
-                    and abs(net_value + tax_value - total_value) > 0.02
-                ):
+                if None not in (net_value, tax_value, total_value) and abs(
+                    net_value + tax_value - total_value
+                ) > Decimal("0.005"):
                     add(
                         t,
                         "line_total",
@@ -736,13 +878,13 @@ def validate(tables):
                 (i for i, h in enumerate(keys) if h in {"credit", "deposit"}), None
             )
             if rid > 1 and None not in (balance, debit, credit) and not total:
-                before = number(rows[rid - 2]["cells"][balance])
-                after = number(cells[balance])
-                d = number(cells[debit])
-                cr = number(cells[credit])
+                before = decimal_number(rows[rid - 2]["cells"][balance])
+                after = decimal_number(cells[balance])
+                d = decimal_number(cells[debit])
+                cr = decimal_number(cells[credit])
                 if None not in (before, after) and (d is not None or cr is not None):
                     expected = before - (d or 0) + (cr or 0)
-                    if abs(expected - after) > 0.02:
+                    if abs(expected - after) > Decimal("0.005"):
                         add(
                             t,
                             "balance_mismatch",
@@ -788,6 +930,19 @@ def extract(
         for i, page in enumerate(doc):
             page_start = time.perf_counter()
             progress(i, len(doc), f"Inspecting page {i + 1}")
+            rotation = page.rotation
+            original_rect = page.rect
+            evidence_transform = page.rotation_matrix
+            if rotation:
+                # Work in the PDF's text coordinate system, then transform row
+                # evidence back into the original viewer orientation.
+                page.set_rotation(0)
+                emit(
+                    "inspect",
+                    "Normalized PDF rotation for extraction",
+                    page=i + 1,
+                    degrees=rotation,
+                )
             native = len(page.get_text().strip()) >= 25 and not force_ocr
             emit(
                 "inspect",
@@ -818,6 +973,14 @@ def extract(
                     attempts.append(
                         f"OCR failed: {type(exc).__name__}: {str(exc)[:160]}"
                     )
+            if rotation:
+                for fragment in found:
+                    for row in fragment["rows"]:
+                        row["bbox"] = [
+                            round(v, 2)
+                            for v in fitz.Rect(row["bbox"]) * evidence_transform
+                        ]
+                page.set_rotation(rotation)
             fragments.extend(found)
             emit(
                 "extract",
@@ -840,8 +1003,8 @@ def extract(
                         for t in found
                     ),
                     "seconds": round(time.perf_counter() - page_start, 2),
-                    "width": page.rect.width,
-                    "height": page.rect.height,
+                    "width": original_rect.width,
+                    "height": original_rect.height,
                 }
             )
             progress(i + 1, len(doc), f"Page {i + 1} complete")
@@ -888,7 +1051,7 @@ def extract(
                 "elapsed_seconds": round(time.perf_counter() - start, 2),
                 "row_count": sum(len(t["rows"]) for t in tables),
                 "headers_removed": sum(t["headers_removed"] for t in tables),
-                "engine": "LedgerLens 1.1 · PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+                "engine": "DamnLens AI Agent 1.2 · PyMuPDF + RapidOCR (PP-OCR / ONNX)",
                 "edits": [],
                 "events": events,
             }

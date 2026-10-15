@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 cd "$(dirname "$0")"
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-exec .venv/bin/python run.py
+if [ -x .venv/bin/python ]; then
+  exec .venv/bin/python setup_judges.py "$@"
+fi
+exec python3 setup_judges.py "$@"

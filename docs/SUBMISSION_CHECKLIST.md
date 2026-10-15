@@ -9,11 +9,11 @@
 | Multi-page joining | Multiple independent table streams, conservative schema/span matching, repeated header removal and headerless span matching | 3-page invoice; 50-page stress; headerless and duplicate tests |
 | Errors and validation | Totals, arithmetic, balance transitions, empty/missing/type/sparse/duplicate/low-score/page checks | Deliberately faulty bank statement; raw JSON findings |
 | Working application | Local FastAPI + offline browser workspace | `python run.py`; screenshots and demo |
-| Complete source | Public GitHub repository + downloadable archive | https://github.com/rayanakarthikeyan/ledgerlens |
-| Setup and execution | Python launchers, manual setup, CLI, Dockerfile | README |
+| Complete source | Public GitHub repository + downloadable archive | https://github.com/rayanakarthikeyan/damnlens-ai-agent |
+| Setup and execution | Double-click Windows launcher, verified bootstrap, offline judge checks, manual setup, CLI, Dockerfile | README; START_DAMNLENS.cmd; setup_judges.py |
 | 3 sample PDFs and Excel | Original fictional invoices, scan and bank statement | `samples/` and `samples/converted/` |
 | Accuracy and validation report | Reproducible cell and row comparison | `reports/ACCURACY_REPORT.md`, raw JSON and ground truth |
-| 2–5 minute demo | Captioned walkthrough of real application screens | `docs/ledgerlens-demo.mp4` (updated v1.1 operational UI) |
+| 2–5 minute demo | Captioned walkthrough of real application screens | `docs/damnlens-demo.mp4` (v1.2 DamnLens UI) |
 | Library/API credits | Library licenses, OCR model source and hash, AI-assistance disclosure | THIRD_PARTY_NOTICES.md and models/README.md |
 | Public/dummy documents only | All fixtures generated for this project | Fixture generator; no private data in repository |
 | Solo / team up to 3 | User participation is not registered by this app | Confirm entrant/team details during submission |

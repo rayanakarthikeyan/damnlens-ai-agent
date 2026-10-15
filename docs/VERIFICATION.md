@@ -2,7 +2,7 @@
 
 Verified locally on Windows with Python 3.12.14.
 
-- **52 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
+- **74 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
 - **864/864 synthetic fixture data cells match ground truth**, with exact headers and exact-row recall. See `reports/benchmark.json` and `reports/ACCURACY_REPORT.md` for methodology and limitations.
 - **50-page stress test:** one joined table, 501 rows, 12 columns, all source cells preserved, 49 repeated headers removed.
 - **Borderless regression:** two-page digital fixture preserves multiword headers and all data cells, with alignment marked for review.
@@ -26,3 +26,15 @@ Windows and Linux CI results are visible under the repository's Actions tab. The
 - Source documents and extracted content remain data, never executable agent instructions. Benchmark accuracy remains measured against explicit ground truth, not inferred from OCR scores.
 
 - Live Windows stress verification exposed a temporary file-sharing lock on progress persistence. Atomic writes now use unique temporary files and bounded exponential retries on PermissionError; a regression simulates two locked replacements and verifies successful persistence with no leftover temporary file.
+
+## DamnLens judge audit (v1.2)
+
+- Renamed UI, API metadata, workbook titles, sample documents, demo, README and GitHub repository to DamnLens AI Agent. Existing local data and the legacy data-directory environment variable remain compatible.
+- All 15 varied development cases now match their intended headers and ordered cells, compared with 5 before the fixes. The 14 table cases contain 1,440 data cells. Source PDFs, explicit truth and raw measurements are included. This is a development regression set, not an independent hidden evaluation.
+- Added native PDF rotation normalization with viewer-coordinate evidence, right-angle OCR orientation recovery, header-boundary assignment for right-aligned borderless values, selective inked-empty-cell OCR retry and sparse group-heading handling.
+- Financial checks now use decimal arithmetic and a fixed half-cent rounding tolerance. Regressions include a one-cent error on a large total and an amount beyond binary floating-point precision.
+- The Windows `START_DAMNLENS.cmd --judge-test --offline` path passes all five runtime-only smoke checks: exact cells/headers and workbook inspection for the three fixtures, 50-page duplicate preservation and 51-page rejection.
+- Typography: relative font units, 13px minimum secondary labels, 14px data cells, 15px explanations, darker foregrounds and a persisted Large mode at 112.5%. Desktop 1440px and mobile 390px layouts were inspected without horizontal page overflow; source tables retain their own horizontal scrolling.
+- Browser verification reran invoice, scan and bank samples, checked page-two row highlighting, coverage/log tabs, explicit review acknowledgement, export summary and the visible 15-case audit. The dummy review note identifies the operation as an automated UI demonstration rather than an entrant or judge decision.
+- Setup diagnostics verify pinned package versions, native imports, model/dictionary hashes and writable files. Healthy launches skip pip. Server launch reserves an available loopback port and opens the browser after readiness.
+- Updated 150-second demo uses the renamed, larger-text UI. It remains a captioned walkthrough, not an uncut performance recording.

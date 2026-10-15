@@ -1,0 +1,332 @@
+{
+  "filename": "scan_sideways_270.pdf",
+  "sha256": "4b21db29ac7c6fc3f39a4e699965522f6f01ee1b3f709fd0a6750ea6829a1bc0",
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 1,
+      "method": "ocr",
+      "attempts": [
+        "ocr"
+      ],
+      "status": "extracted",
+      "rows": 8,
+      "seconds": 15.06,
+      "width": 660.0,
+      "height": 1000.3200073242188
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "name": "Table 1",
+      "headers": [
+        "Item ID",
+        "Description",
+        "Quantity",
+        "Unit price",
+        "Net",
+        "Tax",
+        "Total",
+        "Region",
+        "Status",
+        "Category",
+        "Reference",
+        "Currency"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "P001",
+            "Part 1",
+            "1",
+            "20.00",
+            "20.00",
+            "2.00",
+            "22.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-001",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            488.95,
+            35.84,
+            515.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.96,
+          "id": 1
+        },
+        {
+          "cells": [
+            "P002",
+            "Part 2",
+            "2",
+            "20.00",
+            "40.00",
+            "4.00",
+            "44.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-002",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            461.95,
+            35.84,
+            488.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.984,
+          "id": 2
+        },
+        {
+          "cells": [
+            "P003",
+            "Part 3",
+            "3",
+            "20.00",
+            "60.00",
+            "6.00",
+            "66.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-003",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            434.95,
+            35.84,
+            461.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.989,
+          "id": 3
+        },
+        {
+          "cells": [
+            "P004",
+            "Part 4",
+            "4",
+            "20.00",
+            "80.00",
+            "8.00",
+            "88.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-004",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            407.95,
+            35.84,
+            434.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.994,
+          "id": 4
+        },
+        {
+          "cells": [
+            "P005",
+            "Part 5",
+            "5",
+            "20.00",
+            "100.00",
+            "10.00",
+            "110.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-005",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            380.95,
+            35.84,
+            407.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.995,
+          "id": 5
+        },
+        {
+          "cells": [
+            "P006",
+            "Part 6",
+            "6",
+            "20.00",
+            "120.00",
+            "12.00",
+            "132.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-006",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            353.95,
+            35.84,
+            380.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.998,
+          "id": 6
+        },
+        {
+          "cells": [
+            "P007",
+            "Part 7",
+            "7",
+            "20.00",
+            "140.00",
+            "14.00",
+            "154.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-007",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            326.95,
+            35.84,
+            353.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.973,
+          "id": 7
+        },
+        {
+          "cells": [
+            "P008",
+            "Part 8",
+            "8",
+            "20.00",
+            "160.00",
+            "16.00",
+            "176.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-008",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            299.95,
+            35.84,
+            326.95,
+            933.05
+          ],
+          "method": "OCR \u00b7 grid \u00b7 rotated 270\u00b0",
+          "confidence": 0.996,
+          "id": 8
+        }
+      ],
+      "pages": [
+        1
+      ],
+      "headers_removed": 0,
+      "inferred_headers": false
+    }
+  ],
+  "issues": [],
+  "elapsed_seconds": 15.07,
+  "row_count": 8,
+  "headers_removed": 0,
+  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:33:22.285911+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "scan_sideways_270.pdf"
+    },
+    {
+      "at": "2026-10-15T06:33:22.288517+00:00",
+      "stage": "inspect",
+      "message": "Selected OCR extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:33:22.288517+00:00",
+      "stage": "extract",
+      "message": "Running local OCR and layout reconstruction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:33:37.353804+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "ocr"
+    },
+    {
+      "at": "2026-10-15T06:33:37.353804+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 1
+    },
+    {
+      "at": "2026-10-15T06:33:37.353804+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T06:33:37.358191+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 0,
+      "rows": 8
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 1,
+    "pages_total": 1,
+    "pages_needing_review": [],
+    "rows": 8,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 0,
+    "warnings": 0,
+    "findings": 0,
+    "flagged_rows": 0,
+    "rows_with_evidence": 8,
+    "ocr_rows": 8,
+    "ocr_recognition_mean": 0.9861,
+    "ocr_low_score_rows": 0,
+    "issue_types": {},
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
+}

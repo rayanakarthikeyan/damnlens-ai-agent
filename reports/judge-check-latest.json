@@ -1,0 +1,32 @@
+{
+  "application": "DamnLens AI Agent",
+  "seconds": 18.73,
+  "scope": "Bundled synthetic samples, XLSX readability and page boundaries. This is a reproducible smoke check, not a hidden-PDF accuracy guarantee.",
+  "checks": [
+    {
+      "name": "01_invoice_register.pdf",
+      "passed": true,
+      "detail": "31 rows x 12 columns, exact cells/headers; Excel inspected"
+    },
+    {
+      "name": "02_scanned_inventory.pdf",
+      "passed": true,
+      "detail": "20 rows x 12 columns, exact cells/headers; Excel inspected"
+    },
+    {
+      "name": "03_bank_statement.pdf",
+      "passed": true,
+      "detail": "21 rows x 12 columns, exact cells/headers; Excel inspected"
+    },
+    {
+      "name": "50-page boundary and duplicate preservation",
+      "passed": true,
+      "detail": "50 pages, 500 rows, 12 columns; 49 headers removed; duplicate business rows preserved"
+    },
+    {
+      "name": "Over-limit recovery",
+      "passed": true,
+      "detail": "51-page input rejected with an actionable message"
+    }
+  ]
+}

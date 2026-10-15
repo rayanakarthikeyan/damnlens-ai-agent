@@ -1,0 +1,114 @@
+{
+  "filename": "narrative_no_table.pdf",
+  "sha256": "415b31760ab20046113aba649b2c4a375c4377fcf62fde4eaa0527c93d5c0723",
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 0,
+      "method": "ocr",
+      "attempts": [
+        "native",
+        "ocr"
+      ],
+      "status": "needs_review",
+      "rows": 0,
+      "seconds": 3.26,
+      "width": 595.2755737304688,
+      "height": 841.8897705078125
+    }
+  ],
+  "tables": [],
+  "issues": [
+    {
+      "id": 1,
+      "table": null,
+      "row": null,
+      "column": null,
+      "kind": "page_review",
+      "page": 1,
+      "severity": "error",
+      "message": "Page 1: no table extracted. Inspect the page; output may be incomplete."
+    }
+  ],
+  "elapsed_seconds": 3.27,
+  "row_count": 0,
+  "headers_removed": 0,
+  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:33:42.070732+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "narrative_no_table.pdf"
+    },
+    {
+      "at": "2026-10-15T06:33:42.072461+00:00",
+      "stage": "inspect",
+      "message": "Selected native text extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:33:42.103023+00:00",
+      "stage": "extract",
+      "message": "Running local OCR and layout reconstruction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:33:45.336916+00:00",
+      "stage": "extract",
+      "message": "No tables found; page needs review",
+      "page": 1,
+      "tables": 0,
+      "method": "ocr"
+    },
+    {
+      "at": "2026-10-15T06:33:45.336916+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 0
+    },
+    {
+      "at": "2026-10-15T06:33:45.336916+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 0
+    },
+    {
+      "at": "2026-10-15T06:33:45.336916+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 1,
+      "rows": 0
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 0,
+    "pages_total": 1,
+    "pages_needing_review": [
+      1
+    ],
+    "rows": 0,
+    "tables": 0,
+    "max_columns": 0,
+    "errors": 1,
+    "warnings": 0,
+    "findings": 1,
+    "flagged_rows": 0,
+    "rows_with_evidence": 0,
+    "ocr_rows": 0,
+    "ocr_recognition_mean": null,
+    "ocr_low_score_rows": 0,
+    "issue_types": {
+      "page_review": 1
+    },
+    "review_status": "pending",
+    "can_review": false,
+    "export_label": "Draft \u2014 review pending"
+  }
+}

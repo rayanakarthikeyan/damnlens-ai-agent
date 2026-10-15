@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#111b31" />
     <meta
       name="description"
-      content="LedgerLens AI document extraction agent. Extract tables, inspect source evidence, reconcile findings and export reviewed Excel workbooks."
+      content="DamnLens AI Agent AI document extraction agent. Extract tables, inspect source evidence, reconcile findings and export reviewed Excel workbooks."
     />
-    <title>LedgerLens | Document AI workspace</title>
+    <title>DamnLens AI Agent | Document AI workspace</title>
     <link rel="icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/styles.css" />
     <script src="/app.js" defer></script>
@@ -88,10 +88,10 @@
       </defs>
     </svg>
     <aside class="sidebar">
-      <a class="brand" href="/" aria-label="LedgerLens workspace"
+      <a class="brand" href="/" aria-label="DamnLens AI Agent workspace"
         ><span class="brand-icon"
           ><svg><use href="#i-agent" /></svg></span
-        ><span>LedgerLens<small>Document AI</small></span></a
+        ><span>DamnLens<small>AI Agent</small></span></a
       >
       <div class="workspace-switch">
         <span class="workspace-avatar">RK</span
@@ -130,7 +130,7 @@
           <span class="engine-version">RapidOCR / ONNX · CPU</span>
         </div>
         <div class="sidebar-footer">
-          <span class="mini-logo">LL</span>
+          <span class="mini-logo">DL</span>
           <div>INCUXAI Challenge<small>Development edition · 2026</small></div>
         </div>
       </div>
@@ -141,6 +141,12 @@
           Workspace <span>/</span><strong id="breadcrumb">Overview</strong>
         </div>
         <div class="top-actions">
+          <label class="text-size-control" for="text-size">Text size
+            <select id="text-size" aria-label="Interface text size">
+              <option value="standard">Standard</option>
+              <option value="large">Large</option>
+            </select>
+          </label>
           <span class="local-badge"
             ><i></i><span id="engine-status">Connecting</span></span
           ><button
@@ -557,9 +563,9 @@
         </section>
         <footer>
           <span
-            >LedgerLens <span class="footer-divider">/</span> AI document
+            >DamnLens AI Agent <span class="footer-divider">/</span> AI document
             extraction agent</span
-          ><span>Local processing · English OCR · v1.1</span>
+          ><span>Local processing · English OCR · v1.2</span>
         </footer>
       </main>
     </div>

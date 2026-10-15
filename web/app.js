@@ -608,7 +608,7 @@ async function loadVersions() {
                 `<div class="version-row"><span>${dateText(v.saved_at)} · ${v.rows} rows · ${v.edits} correction${v.edits === 1 ? "" : "s"} · ${esc(v.review_status)}</span><div><a class="text-button" href="/api/jobs/${id}/versions/${v.id}/export/xlsx">Excel ${icon("download")}</a><a class="text-button" href="/api/jobs/${id}/versions/${v.id}/export/json">JSON ${icon("download")}</a></div></div>`,
             )
             .join("")
-        : '<p class="muted">No retries yet. A previous run is saved before every OCR retry.</p>');
+        : '<p class="muted">No saved completed runs. An existing result is archived before an OCR retry.</p>');
   } catch (error) {
     fail(error);
   }
@@ -766,7 +766,7 @@ function openExport() {
     : "Review is pending. This download is clearly labelled as a draft and retains all validation findings.";
   $("#export-facts").innerHTML = [
     ["Review state", q.export_label],
-    ["Data", `${q.rows} rows / ${q.tables} tables`],
+    ["Data", `${q.rows} rows / ${q.tables} table${q.tables === 1 ? "" : "s"}`],
     ["Page coverage", `${q.pages_extracted} / ${q.pages_total}`],
     ["Findings", `${q.errors} errors / ${q.warnings} warnings`],
     ["Sheets", "Data, validation, evidence, corrections, coverage, run log"],
@@ -836,7 +836,13 @@ async function loadBenchmark() {
           ([a, b, c]) =>
             `<tr><td>${esc(a)}</td><td>${esc(b)}</td><td><span class="score-weight">${esc(c)}</span></td></tr>`,
         )
-        .join("")}</tbody></table></div></div>`;
+        .join("")}</tbody></table></div></div><section id="judge-audit-panel" class="card requirements-card" aria-label="Varied document audit"></section>`;
+    const audit = await api("/api/judge-audit");
+    if (audit.after && $("#judge-audit-panel")) {
+      const passed = audit.after.results.filter(x => x.passed).length;
+      const before = audit.before ? audit.before.results.filter(x => x.passed).length : null;
+      $("#judge-audit-panel").innerHTML = `<div class="card-header"><div><h2>Varied document audit · ${passed} / ${audit.after.results.length} exact cases</h2><p>${before === null ? "" : `${before} cases passed before the fixes. `}Synthetic development checks, with visible before-and-after evidence.</p></div><span class="badge blue">12 columns</span></div><div class="table-container"><table class="report-table"><thead><tr><th>Document variation</th><th>Exact cells</th><th>Headers</th><th>Result</th></tr></thead><tbody>${audit.after.results.map(x => `<tr><td>${esc(x.case.replaceAll("_", " "))}</td><td>${x.denominator ? `${x.correct_cells} / ${x.denominator}` : "No fabricated table"}</td><td>${x.headers_exact ? "Exact" : "Review"}</td><td>${x.passed ? "Passed" : "Needs work"}</td></tr>`).join("")}</tbody></table></div><div class="report-note">${esc(audit.after.scope)}<br><br>Reproduce: <code>python scripts/judge_audit.py</code>. The rubric self-assessment is in <code>reports/JUDGE_EVALUATION.md</code>; it is not an official score.</div>`;
+    }
   } catch (error) {
     fail(error);
   }
@@ -981,3 +987,12 @@ async function init() {
   }
 }
 init();
+
+// A local preference only; no document or review data is stored here.
+const textSize = $("#text-size");
+try { textSize.value = localStorage.getItem("damnlens.textSize") === "large" ? "large" : "standard"; } catch {}
+document.documentElement.dataset.textSize = textSize.value;
+textSize.addEventListener("change", () => {
+  document.documentElement.dataset.textSize = textSize.value;
+  try { localStorage.setItem("damnlens.textSize", textSize.value); } catch {}
+});

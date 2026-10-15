@@ -1,0 +1,7 @@
+{
+  "scope": "Rendered leaf text in the desktop overview, standard text size; includes rendered rows outside the viewport. CSS backgrounds composited through ancestors, including alpha. Does not certify complete WCAG compliance or test every state, image background, opacity or focus behavior.",
+  "text_nodes": 125,
+  "minimum_font_px": 13.0,
+  "minimum_contrast": 4.75,
+  "under_4_5": []
+}

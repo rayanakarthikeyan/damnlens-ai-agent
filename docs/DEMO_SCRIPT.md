@@ -1,4 +1,4 @@
-# LedgerLens demonstration
+# DamnLens AI Agent demonstration
 
 The supplied video is a captioned walkthrough assembled from actual application screenshots. It is not an uncut real-time performance recording. Processing timings in the video are those displayed by the application; screenshot display durations are editorial. A live demonstration is recommended when presenting to the judges.
 

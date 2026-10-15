@@ -1,24 +1,26 @@
-# LedgerLens
+# DamnLens AI Agent
 
 **AI document extraction with source evidence and explicit review.** A local document-to-Excel agent for the INCUXAI AI Agent Development Challenge 2026.
 
-LedgerLens reads digital PDFs and scanned documents, reconstructs tables, joins continuation pages, detects data problems and exports traceable Excel workbooks. The operational workspace shows the extraction queue, agent stages, page coverage and validation findings. Inspect original pages beside the extracted data, record corrections and complete a snapshot-bound review before labelling an export as reviewed.
+DamnLens AI Agent reads digital PDFs and scanned documents, reconstructs tables, joins continuation pages, detects data problems and exports traceable Excel workbooks. The operational workspace shows the extraction queue, agent stages, page coverage and validation findings. Inspect original pages beside the extracted data, record corrections and complete a snapshot-bound review before labelling an export as reviewed.
 
-![LedgerLens workspace](docs/screenshots/01-workspace.jpg)
+![DamnLens AI Agent workspace](docs/screenshots/01-workspace-desktop.jpg)
 
-## Run in three commands
+## Judges: setup and launch
 
 Requires **64-bit Python 3.12**, 4 GB RAM minimum (8 GB recommended), and network access for the initial Python dependency installation. A CPU is sufficient. No API key, GPU, Tesseract installation, subscription or model download is needed at runtime. The English model is included in `models/`.
 
 ```bash
-git clone https://github.com/rayanakarthikeyan/ledgerlens.git
-cd ledgerlens
+git clone https://github.com/rayanakarthikeyan/damnlens-ai-agent.git
+cd damnlens-ai-agent
 ```
 
-Windows PowerShell:
+**Windows:** extract the complete repository ZIP and double-click **START_DAMNLENS.cmd**. Keep the console open while testing. It checks the bundled model, creates a local environment if needed, installs pinned dependencies once, then opens the workspace. No PowerShell policy change is needed.
+
+Windows command line:
 
 ```powershell
-.\start.ps1
+.\START_DAMNLENS.cmd
 ```
 
 macOS / Linux:
@@ -27,7 +29,11 @@ macOS / Linux:
 sh start.sh
 ```
 
-Open **http://127.0.0.1:8765**. The launcher opens it automatically. Press Ctrl+C to stop.
+The launcher prints and opens the local URL. It starts at **http://127.0.0.1:8765**, choosing the next free port if necessary. The browser opens after server readiness. Press Ctrl+C to stop. Subsequent launches work offline when all dependencies are present.
+
+**One-command judge checks:** `START_DAMNLENS.cmd --judge-test --offline` (Windows) or `sh start.sh --judge-test --offline` (macOS/Linux), after initial setup. This checks all three PDF/Excel pairs against exact ground truth, preserves duplicate records through 50 pages and rejects 51 pages. It returns a nonzero exit code on failure and writes `reports/judge-check-latest.json`. No development libraries are required.
+
+**Diagnostics only:** `START_DAMNLENS.cmd --check --offline`, or `python setup_judges.py --check`. **Install without launching:** `python setup_judges.py --setup-only`. Add `--no-browser` or `--port 8786` to the launcher as needed. The UI's **Text size → Large** setting increases all text by 12.5% and persists on this browser. Standard mode uses 13px minimum secondary labels, 14px data cells and 15px explanatory text with stronger contrast; normal browser zoom also works.
 
 If script execution is restricted on Windows, use the manual commands below rather than changing your system policy. On Linux, OpenCV may require `sudo apt-get install libgl1 libglib2.0-0`; Python virtual environments may require the `python3-venv` package. macOS dependencies are supplied as Python wheels on supported systems. Windows is locally verified; Linux is covered by the included CI workflow when GitHub Actions is available.
 
@@ -57,8 +63,8 @@ Exit code 0 means conversion completed, 1 means a fatal error and 2 means no tab
 ### Docker alternative
 
 ```bash
-docker build -t ledgerlens .
-docker run --rm -p 127.0.0.1:8765:8765 -v ledgerlens-data:/data ledgerlens
+docker build -t damnlens-ai-agent .
+docker run --rm -p 127.0.0.1:8765:8765 -v damnlens-data:/data damnlens-ai-agent
 ```
 
 The container runs as a non-root user. The Dockerfile is supplied for portability; local Windows Python execution is the directly verified setup.
@@ -67,9 +73,9 @@ The container runs as a non-root user. The Dockerfile is supplied for portabilit
 
 1. **Inspect:** validate the file and the 1–50 page limit; inspect each page for usable native text.
 2. **Extract:** detect ruled native tables with PyMuPDF. For borderless text, group headers and anchor columns to their positions. Retry with OCR when native extraction fails or produces no tables.
-3. **Recognize:** rasterize scans at 220 DPI, deskew modest scan angles, recognize text locally using RapidOCR with the English PP-OCRv3 model, reconstruct grid cells using OpenCV, and infer aligned columns when no grid exists.
+3. **Recognize:** rasterize scans at 220 DPI, recover right-angle scan orientation, deskew modest scan angles, recognize text locally using RapidOCR with the English PP-OCRv3 model, reconstruct grid cells using OpenCV, and anchor borderless values to detected headers. Empty grid cells with visible ink get a local OCR retry. PDF rotation is normalized for extraction while evidence stays aligned with the original page. A sparse group heading above real column labels is handled separately.
 4. **Stitch:** match eligible table streams on adjacent pages using conservative header and horizontal-span checks. Two different tables can each continue across the same pair of pages. Headerless continuation requires matching column counts and horizontal spans. Repeated page headers are removed. Identical business rows are preserved and flagged, never silently deduplicated.
-5. **Validate:** check totals/subtotals, quantity × unit price, net + tax, running bank balances, numeric type inconsistencies, empty columns, missing values, sparse rows, duplicate rows, low OCR scores and pages with no detected table. Borderless alignment gets an explicit review finding.
+5. **Validate:** check totals/subtotals, quantity × unit price, net + tax, running bank balances, numeric type inconsistencies, empty columns, missing values, sparse rows, duplicate rows, low OCR scores and pages with no detected table. Financial checks use decimal arithmetic and a half-cent rounding tolerance; large totals do not get a looser relative tolerance. Borderless alignment gets an explicit review finding.
 6. **Review and export:** preserve row evidence, record corrections, rerun validation and maintain a separate human review state. Export Excel, JSON or CSV. Draft exports remain labelled unreviewed; completing review records the exact data fingerprint and any acknowledged findings. A correction invalidates the review and retains its prior decision in history.
 
 This is a bounded agent workflow with an explicit inspect → extract → retry → stitch → validate → review lifecycle. It uses pretrained ML for recognition and deterministic layout/validation logic. It does not call an LLM or claim to train an OCR model.
@@ -91,15 +97,16 @@ This is a bounded agent workflow with an explicit inspect → extract → retry 
 | Deliverable | Location |
 |---|---|
 | Working application and source | `app/`, `web/`, `run.py`, `convert.py` |
-| Setup and run instructions | This README; `start.ps1`, `start.sh`, `Dockerfile` |
+| Setup and run instructions | This README; `START_DAMNLENS.cmd`, `setup_judges.py`, `start.ps1`, `start.sh`, `Dockerfile` |
 | Three original sample PDFs | `samples/01_invoice_register.pdf`, `02_scanned_inventory.pdf`, `03_bank_statement.pdf` |
 | Corresponding Excel workbooks | `samples/converted/` |
 | Accuracy and validation report | [reports/ACCURACY_REPORT.md](reports/ACCURACY_REPORT.md) |
 | Cell-level benchmark output | `reports/benchmark.json`, `reports/01_*.json`, `reports/02_*.json`, `reports/03_*.json` |
 | Ground truth and regeneration | `samples/ground_truth.json`, `scripts/generate_samples.py` |
 | Automated tests | `tests/`, `reports/tests.xml`, `.github/workflows/test.yml` |
-| Short demo | `docs/ledgerlens-demo.mp4`, `docs/DEMO_SCRIPT.md` |
+| Short demo | `docs/damnlens-demo.mp4`, `docs/DEMO_SCRIPT.md` |
 | Requirement mapping | [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) |
+| Judge audit and rubric self-assessment | [reports/JUDGE_EVALUATION.md](reports/JUDGE_EVALUATION.md), `reports/judge-audit-before.json`, `reports/judge-audit-after.json`, `evaluation/pdfs/` |
 | Library/model credits | [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), `models/README.md` |
 
 On the three included English synthetic fixtures, **864 / 864 data cells** and all headers match ground truth. The scanned fixture is image-only: 240 / 240 cells match. A separate automated 50-page test checks 501 rows × 12 columns and 49 removed repeated headers. These results describe this development set, not expected accuracy on arbitrary or hidden PDFs. Timings and raw comparisons are included in the report.
@@ -110,7 +117,7 @@ The bank fixture deliberately contains a wrong debit total, an altered running b
 
 Each workbook contains **Overview**, one sheet per joined **Table**, **Validation**, **Evidence**, **Corrections**, **Page coverage**, and **Run log**. Overview records draft/reviewed status, review time, accepted findings and the review note. Amounts, dates and percentages are typed; identifiers and leading zeros remain text. Source decimal precision is retained. Values exceeding Excel’s 15-digit numeric precision remain text. Tables have filters, frozen headers, readable widths and warning highlights. Row evidence includes the source page and bounding box in PDF points. Source text beginning with `=` is stored as text, never as an executable formula. CSV formula-like values are escaped.
 
-The v1.1 regression suite contains **52 tests**, including same-schema table-position matching, real multi-table PDFs, snapshot-bound review, prior-run recovery and precision-preserving exports.
+The expanded regression suite includes same-schema table-position matching, real multi-table PDFs, snapshot-bound review, prior-run recovery, precision-preserving exports and 15 differently styled document cases. The development audit improved from **5/15 to 15/15 exact cases** after targeted fixes. The new documents are regression fixtures used during development, not an independent hidden set. See the judge evaluation for the evidence and remaining gaps.
 
 ## Reproduce the evaluation
 
@@ -118,6 +125,7 @@ The v1.1 regression suite contains **52 tests**, including same-schema table-pos
 python -m pip install -r requirements-dev.txt
 python scripts/generate_samples.py
 python scripts/benchmark.py
+python scripts/judge_audit.py
 python -m pytest -q --junitxml=reports/tests.xml
 ```
 
@@ -149,12 +157,23 @@ A review is a local workflow record; there is no authenticated reviewer identity
 
 ## Practical limits and recovery
 
-- Complex nested/merged cells, inconsistent schemas, multiple related tables on a single page, handwriting, heavily damaged scans and arbitrary page rotations may require manual review. Predominantly English printed documents are the supported OCR target.
+- Complex nested/merged cells, inconsistent schemas, multi-line or changing headers, handwriting and heavily damaged scans may require manual reconstruction. Right-angle rotations, modest skew and one sparse group-header row are covered by development regressions; this does not establish support for every rotated or merged layout. Predominantly English printed documents are the supported OCR target.
 - Identical schemas on consecutive pages can represent different business sections; verify the joined table. Similar wide tables with different identity columns are kept separate. Multiple compatible table streams can continue independently across consecutive pages. Repeated data rows are never dropped automatically. Split logical rows with complicated page breaks may need manual reconstruction.
 - Borderless detection is heuristic; a structured-looking result is not proof of correct column alignment. Pages without a detected table produce a page-level finding rather than disappearing silently. Unrecognized secondary tables on an otherwise extracted page may still require visual review.
 - Totals are checked only where recognizable labels and numeric columns exist. Quantity, price, net and bank checks require matching headers. Not every business rule is inferable. Section totals sum since the preceding total; an explicitly labelled grand total sums all normal rows. Sparse total rows may themselves receive a sparse-row warning.
 - The queue is single-process and persists source/status/results on disk. On restart, unfinished jobs become interrupted and can be retried from the original. There is no checkpointed mid-page continuation, cross-process locking, cancellation, authentication or hosted multi-user service.
 - Jobs contain local source copies and extracted data until deleted. The app binds to localhost, restricts host/origin, uses generated job paths and does not send documents to cloud services. It is a local judging app, not an internet deployment configuration.
+
+### Setup troubleshooting
+
+- **Python missing:** install 64-bit Python 3.12 from [python.org](https://www.python.org/downloads/), enable the Python launcher/PATH option, reopen the folder and start again. The setup script does not install system software.
+- **Cannot download packages:** initial setup needs internet access to PyPI. Retry the launcher after restoring the connection. An incomplete installation is detected and retried; `--offline` refuses installation explicitly.
+- **Linux OpenCV import error:** install `libgl1` and `libglib2.0-0`; `python3-venv` may also be required. Then rerun setup.
+- **Damaged OCR asset:** download the complete ZIP or clone again. Diagnostics verify model/dictionary SHA-256 hashes before launching.
+- **Port busy:** automatic launch tries ports 8765–8784; choose `--port 8786` if all are occupied. An explicitly requested occupied port produces an actionable error.
+- **Retry after interruption:** restart, open the interrupted document and use Retry OCR. The original is retained locally and prior results are archived. Export is unavailable during processing.
+
+`DAMNLENS_DATA` selects an alternate job folder. The legacy `LEDGERLENS_DATA` variable remains a fallback for existing installations.
 
 ## Authorship and licensing
 

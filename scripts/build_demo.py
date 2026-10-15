@@ -51,7 +51,7 @@ SCENES = [
         "06-validation.jpg",
         "Catch the details that matter.",
         "Validation with row references",
-        "The bank fixture contains intentional mistakes. LedgerLens flags the wrong total, balance transitions, missing values and a sparse total row. Source errors remain visible.",
+        "The bank fixture contains intentional mistakes. DamnLens AI Agent flags the wrong total, balance transitions, missing values and a sparse total row. Source errors remain visible.",
     ),
     (
         "07-review-checkpoint.jpg",
@@ -69,13 +69,13 @@ SCENES = [
         "09-accuracy-report.jpg",
         "Measured, not assumed.",
         "864 data cells compared with ground truth",
-        "All three synthetic development fixtures match their ground truth. A separate 50-page test checks 501 rows. These results are reproducible, and are not a promise of hidden-test accuracy.",
+        "All 864 sample cells match their ground truth. A separate 15-case audit covers rotations, borderless scans, grouped headers and mixed pages. A 50-page test checks 501 rows. These are development checks, not hidden-test predictions.",
     ),
     (
         "10-quick-guide.jpg",
         "A reproducible accuracy workflow",
         "Built for the INCUXAI challenge 2026",
-        "The submission includes source code, setup instructions, three original PDF and Excel pairs, measured reports, tests and this walkthrough. Practical limits and all libraries and models are credited.",
+        "On Windows, double-click START_DAMNLENS.cmd. Setup installs dependencies once and opens the app. Add --judge-test --offline to reproduce the runtime checks. Source, PDF/Excel pairs, measured reports and credits are included.",
     ),
 ]
 
@@ -118,7 +118,10 @@ def main():
         d = ImageDraw.Draw(canvas)
         d.rectangle((0, 0, 1920, 87), fill="#111b31")
         d.text(
-            (40, 23), "LedgerLens / Document AI", font=font(30, True), fill="#edf2ff"
+            (40, 23),
+            "DamnLens AI Agent / Document AI",
+            font=font(30, True),
+            fill="#edf2ff",
         )
         d.text(
             (1275, 34),
@@ -157,7 +160,7 @@ def main():
         + f"file '{paths[-1].as_posix()}'\n",
         encoding="utf-8",
     )
-    out = ROOT / "docs" / "ledgerlens-demo.mp4"
+    out = ROOT / "docs" / "damnlens-demo.mp4"
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
     subprocess.run(
         [

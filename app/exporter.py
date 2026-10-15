@@ -131,7 +131,7 @@ def xlsx(result):
     wb = Workbook()
     summary = wb.active
     summary.title = "Overview"
-    summary.append(["LedgerLens extraction report", "Value"])
+    summary.append(["DamnLens AI Agent extraction report", "Value"])
     quality = assessment(result)
     for item in [
         ("Document", result["filename"]),

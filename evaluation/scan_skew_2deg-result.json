@@ -1,0 +1,332 @@
+{
+  "filename": "scan_skew_2deg.pdf",
+  "sha256": "afd95c202a1ffaafe46a1fcfb06fbb0d664fc7a83a3e0709769273c3da369a9e",
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 1,
+      "method": "ocr",
+      "attempts": [
+        "ocr"
+      ],
+      "status": "extracted",
+      "rows": 8,
+      "seconds": 7.99,
+      "width": 1000.3200073242188,
+      "height": 660.0
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "name": "Table 1",
+      "headers": [
+        "Item ID",
+        "Description",
+        "Quantity",
+        "Unit price",
+        "Net",
+        "Tax",
+        "Total",
+        "Region",
+        "Status",
+        "Category",
+        "Reference",
+        "Currency"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "P001",
+            "Part 1",
+            "1",
+            "20.00",
+            "20.00",
+            "2.00",
+            "22.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-001",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            29.61,
+            128.81,
+            927.05,
+            187.02
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.965,
+          "id": 1
+        },
+        {
+          "cells": [
+            "P002",
+            "Part 2",
+            "2",
+            "20.00",
+            "40.00",
+            "4.00",
+            "44.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-002",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            30.54,
+            155.63,
+            928.0,
+            214.17
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.999,
+          "id": 2
+        },
+        {
+          "cells": [
+            "P003",
+            "Part 3",
+            "3",
+            "20.00",
+            "60.00",
+            "6.00",
+            "66.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-003",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            31.49,
+            182.78,
+            928.95,
+            241.31
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.995,
+          "id": 3
+        },
+        {
+          "cells": [
+            "P004",
+            "Part 4",
+            "4",
+            "20.00",
+            "80.00",
+            "8.00",
+            "88.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-004",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            32.44,
+            209.93,
+            929.89,
+            268.13
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.996,
+          "id": 4
+        },
+        {
+          "cells": [
+            "P005",
+            "Part 5",
+            "5",
+            "20.00",
+            "100.00",
+            "10.00",
+            "110.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-005",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            33.38,
+            236.75,
+            930.83,
+            294.95
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.999,
+          "id": 5
+        },
+        {
+          "cells": [
+            "P006",
+            "Part 6",
+            "6",
+            "20.00",
+            "120.00",
+            "12.00",
+            "132.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-006",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            34.32,
+            263.57,
+            931.78,
+            322.1
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.996,
+          "id": 6
+        },
+        {
+          "cells": [
+            "P007",
+            "Part 7",
+            "7",
+            "20.00",
+            "140.00",
+            "14.00",
+            "154.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-007",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            35.27,
+            290.71,
+            932.73,
+            349.25
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.974,
+          "id": 7
+        },
+        {
+          "cells": [
+            "P008",
+            "Part 8",
+            "8",
+            "20.00",
+            "160.00",
+            "16.00",
+            "176.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-008",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            36.22,
+            317.86,
+            933.67,
+            376.07
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.993,
+          "id": 8
+        }
+      ],
+      "pages": [
+        1
+      ],
+      "headers_removed": 0,
+      "inferred_headers": false
+    }
+  ],
+  "issues": [],
+  "elapsed_seconds": 8.01,
+  "row_count": 8,
+  "headers_removed": 0,
+  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:32:49.826959+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "scan_skew_2deg.pdf"
+    },
+    {
+      "at": "2026-10-15T06:32:49.835265+00:00",
+      "stage": "inspect",
+      "message": "Selected OCR extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:32:49.835265+00:00",
+      "stage": "extract",
+      "message": "Running local OCR and layout reconstruction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:32:57.828259+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "ocr"
+    },
+    {
+      "at": "2026-10-15T06:32:57.828259+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 1
+    },
+    {
+      "at": "2026-10-15T06:32:57.828259+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T06:32:57.828259+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 0,
+      "rows": 8
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 1,
+    "pages_total": 1,
+    "pages_needing_review": [],
+    "rows": 8,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 0,
+    "warnings": 0,
+    "findings": 0,
+    "flagged_rows": 0,
+    "rows_with_evidence": 8,
+    "ocr_rows": 8,
+    "ocr_recognition_mean": 0.9896,
+    "ocr_low_score_rows": 0,
+    "issue_types": {},
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
+}

@@ -21,11 +21,13 @@ from .exporter import xlsx, csv_bytes
 from .quality import enrich, approve, revoke
 
 ROOT = Path(__file__).resolve().parents[1]
-JOBS = Path(os.environ.get("LEDGERLENS_DATA", ROOT / ".jobs"))
+JOBS = Path(
+    os.environ.get("DAMNLENS_DATA", os.environ.get("LEDGERLENS_DATA", ROOT / ".jobs"))
+)
 JOBS.mkdir(parents=True, exist_ok=True)
 POOL = ThreadPoolExecutor(max_workers=1)
 LOCK = threading.RLock()
-app = FastAPI(title="LedgerLens", version="1.1.0", docs_url="/api/docs")
+app = FastAPI(title="DamnLens AI Agent", version="1.2.0", docs_url="/api/docs")
 ALLOWED = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 MAX_BYTES = 40 * 1024 * 1024
 
@@ -273,6 +275,16 @@ def benchmark():
     return load(p) if p.exists() else {"results": None}
 
 
+@app.get("/api/judge-audit")
+def judge_audit():
+    after = ROOT / "reports/judge-audit-after.json"
+    before = ROOT / "reports/judge-audit-before.json"
+    return {
+        "after": load(after) if after.exists() else None,
+        "before": load(before) if before.exists() else None,
+    }
+
+
 @app.post("/api/samples/{name}", status_code=202)
 def run_sample(name: str):
     if name not in {p.stem for p in (ROOT / "samples").glob("*.pdf")}:
@@ -460,7 +472,7 @@ def version_export(job: str, version: str, kind: str):
             xlsx(r),
             media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             headers={
-                "Content-Disposition": 'attachment; filename="ledgerlens-previous-run.xlsx"'
+                "Content-Disposition": 'attachment; filename="damnlens-previous-run.xlsx"'
             },
         )
     if kind == "json":
@@ -468,7 +480,7 @@ def version_export(job: str, version: str, kind: str):
             json.dumps(r, indent=2).encode(),
             media_type="application/json",
             headers={
-                "Content-Disposition": 'attachment; filename="ledgerlens-previous-run.json"'
+                "Content-Disposition": 'attachment; filename="damnlens-previous-run.json"'
             },
         )
     raise HTTPException(404, "Unknown format")
@@ -493,7 +505,7 @@ def export(job: str, kind: str, table: int = 1):
     return Response(
         data,
         media_type=mime,
-        headers={"Content-Disposition": f'attachment; filename="ledgerlens.{kind}"'},
+        headers={"Content-Disposition": f'attachment; filename="damnlens.{kind}"'},
     )
 
 

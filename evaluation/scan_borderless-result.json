@@ -1,0 +1,344 @@
+{
+  "filename": "scan_borderless.pdf",
+  "sha256": "1e5da8f0a99907c6885160118c6fdf093687d5ca89e3772d8dc674f69d9bf0bf",
+  "page_count": 1,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 1,
+      "method": "ocr",
+      "attempts": [
+        "ocr"
+      ],
+      "status": "extracted",
+      "rows": 8,
+      "seconds": 3.85,
+      "width": 1000.3200073242188,
+      "height": 660.0
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "name": "Table 1",
+      "headers": [
+        "Item ID",
+        "Description",
+        "Quantity",
+        "Unit price",
+        "Net",
+        "Tax",
+        "Total",
+        "Region",
+        "Status",
+        "Category",
+        "Reference",
+        "Currency"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "P001",
+            "Part 1",
+            "1",
+            "20.00",
+            "20.00",
+            "2.00",
+            "22.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-001",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.33,
+            151.44,
+            891.55,
+            165.53
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.999,
+          "id": 1
+        },
+        {
+          "cells": [
+            "P002",
+            "Part 2",
+            "2",
+            "20.00",
+            "40.00",
+            "4.00",
+            "44.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-002",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.33,
+            178.11,
+            891.55,
+            193.2
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.998,
+          "id": 2
+        },
+        {
+          "cells": [
+            "P003",
+            "Part 3",
+            "3",
+            "20.00",
+            "60.00",
+            "6.00",
+            "66.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-003",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.33,
+            204.77,
+            892.05,
+            219.87
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.992,
+          "id": 3
+        },
+        {
+          "cells": [
+            "P004",
+            "Part 4",
+            "4",
+            "20.00",
+            "80.00",
+            "8.00",
+            "88.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-004",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.84,
+            232.45,
+            891.05,
+            246.53
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.931,
+          "id": 4
+        },
+        {
+          "cells": [
+            "P005",
+            "Part 5",
+            "5",
+            "20.00",
+            "100.00",
+            "10.00",
+            "110.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-005",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.84,
+            259.11,
+            892.05,
+            274.71
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.999,
+          "id": 5
+        },
+        {
+          "cells": [
+            "P006",
+            "Part 6",
+            "6",
+            "20.00",
+            "120.00",
+            "12.00",
+            "132.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-006",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            38.83,
+            286.28,
+            891.55,
+            300.87
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.998,
+          "id": 6
+        },
+        {
+          "cells": [
+            "P007",
+            "Part 7",
+            "7",
+            "20.00",
+            "140.00",
+            "14.00",
+            "154.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-007",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.84,
+            313.45,
+            891.05,
+            328.04
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.998,
+          "id": 7
+        },
+        {
+          "cells": [
+            "P008",
+            "Part 8",
+            "8",
+            "20.00",
+            "160.00",
+            "16.00",
+            "176.00",
+            "South",
+            "Paid",
+            "Office",
+            "REF-008",
+            "USD"
+          ],
+          "page": 1,
+          "bbox": [
+            39.84,
+            340.12,
+            891.05,
+            355.21
+          ],
+          "method": "OCR \u00b7 inferred columns",
+          "confidence": 0.996,
+          "id": 8
+        }
+      ],
+      "pages": [
+        1
+      ],
+      "headers_removed": 0,
+      "inferred_headers": false
+    }
+  ],
+  "issues": [
+    {
+      "id": 1,
+      "table": 1,
+      "row": null,
+      "column": null,
+      "kind": "alignment_review",
+      "severity": "warning",
+      "message": "Borderless column positions were inferred from aligned text. Verify alignment against the source."
+    }
+  ],
+  "elapsed_seconds": 3.87,
+  "row_count": 8,
+  "headers_removed": 0,
+  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": [],
+  "events": [
+    {
+      "at": "2026-10-15T06:32:45.692523+00:00",
+      "stage": "inspect",
+      "message": "Opened source document",
+      "filename": "scan_borderless.pdf"
+    },
+    {
+      "at": "2026-10-15T06:32:45.695519+00:00",
+      "stage": "inspect",
+      "message": "Selected OCR extraction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:32:45.695519+00:00",
+      "stage": "extract",
+      "message": "Running local OCR and layout reconstruction",
+      "page": 1
+    },
+    {
+      "at": "2026-10-15T06:32:49.548567+00:00",
+      "stage": "extract",
+      "message": "Extracted table fragments",
+      "page": 1,
+      "tables": 1,
+      "method": "ocr"
+    },
+    {
+      "at": "2026-10-15T06:32:49.548567+00:00",
+      "stage": "align",
+      "message": "Matching table schemas and continuation pages",
+      "fragments": 1
+    },
+    {
+      "at": "2026-10-15T06:32:49.548567+00:00",
+      "stage": "validate",
+      "message": "Checking totals, arithmetic, balances and table integrity",
+      "tables": 1
+    },
+    {
+      "at": "2026-10-15T06:32:49.548567+00:00",
+      "stage": "review",
+      "message": "Extraction complete; human review is pending",
+      "findings": 1,
+      "rows": 8
+    }
+  ],
+  "review": {
+    "status": "pending"
+  },
+  "review_history": [],
+  "quality": {
+    "pages_extracted": 1,
+    "pages_total": 1,
+    "pages_needing_review": [],
+    "rows": 8,
+    "tables": 1,
+    "max_columns": 12,
+    "errors": 0,
+    "warnings": 1,
+    "findings": 1,
+    "flagged_rows": 0,
+    "rows_with_evidence": 8,
+    "ocr_rows": 8,
+    "ocr_recognition_mean": 0.9889,
+    "ocr_low_score_rows": 0,
+    "issue_types": {
+      "alignment_review": 1
+    },
+    "review_status": "pending",
+    "can_review": true,
+    "export_label": "Draft \u2014 review pending"
+  }
+}

@@ -1,1 +1,1 @@
-"""LedgerLens: local document intelligence."""
+"""DamnLens AI Agent: local document intelligence."""

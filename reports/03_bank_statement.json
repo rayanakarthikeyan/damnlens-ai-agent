@@ -1,6 +1,6 @@
 {
   "filename": "03_bank_statement.pdf",
-  "sha256": "f87639d73f556fd4039fe771246ad338a2e2907187bf587e1f8d3a1fd5b630af",
+  "sha256": "53cb667641ff8b00ec81da175a11ff5c046bbe7c5b1820dca7b059ebe1ffd063",
   "page_count": 2,
   "pages": [
     {
@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 0.09,
+      "seconds": 0.08,
       "width": 1120.0,
       "height": 700.0
     },
@@ -25,7 +25,7 @@
       ],
       "status": "extracted",
       "rows": 11,
-      "seconds": 0.09,
+      "seconds": 0.08,
       "width": 1120.0,
       "height": 700.0
     }
@@ -663,23 +663,23 @@
   "elapsed_seconds": 0.18,
   "row_count": 21,
   "headers_removed": 1,
-  "engine": "LedgerLens 1.1 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T06:05:51.532756+00:00",
+      "at": "2026-10-15T06:40:06.395638+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "03_bank_statement.pdf"
     },
     {
-      "at": "2026-10-15T06:05:51.537161+00:00",
+      "at": "2026-10-15T06:40:06.408130+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T06:05:51.619635+00:00",
+      "at": "2026-10-15T06:40:06.484141+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -687,13 +687,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T06:05:51.622057+00:00",
+      "at": "2026-10-15T06:40:06.490079+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T06:05:51.706562+00:00",
+      "at": "2026-10-15T06:40:06.570979+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -701,19 +701,19 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T06:05:51.706562+00:00",
+      "at": "2026-10-15T06:40:06.570979+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 2
     },
     {
-      "at": "2026-10-15T06:05:51.707737+00:00",
+      "at": "2026-10-15T06:40:06.570979+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T06:05:51.710740+00:00",
+      "at": "2026-10-15T06:40:06.570979+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 6,

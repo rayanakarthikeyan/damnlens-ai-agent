@@ -20,7 +20,7 @@ def render_pdf(path, title, headers, pages, widths, scanned=False, borderless=Fa
         c.setFillColor(HexColor("#173c37"))
         c.rect(0, HEIGHT - 9, WIDTH, 9, fill=1, stroke=0)
         c.setFont("Helvetica-Bold", 10)
-        c.drawString(44, HEIGHT - 44, "LEDGERLENS / DEMO DOCUMENTS")
+        c.drawString(44, HEIGHT - 44, "DAMNLENS AI AGENT / DEMO DOCUMENTS")
         c.setFont("Helvetica", 8)
         c.setFillColor(HexColor("#8a9980"))
         c.drawRightString(

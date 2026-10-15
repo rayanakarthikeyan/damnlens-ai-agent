@@ -1,6 +1,6 @@
 {
   "filename": "02_scanned_inventory.pdf",
-  "sha256": "18b987c304b7f20ddd13b37c0f4051d74203c9510bde61e8a9e425955feb4d41",
+  "sha256": "ca2b466e8dc8a87bbff3dbaafe7d26f8416393eab1e7d36931a279b6d93d031a",
   "page_count": 2,
   "pages": [
     {
@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 8.19,
+      "seconds": 9.04,
       "width": 1120.0,
       "height": 700.0
     },
@@ -25,7 +25,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 5.61,
+      "seconds": 6.72,
       "width": 1120.0,
       "height": 700.0
     }
@@ -540,7 +540,7 @@
             426.6
           ],
           "method": "OCR \u00b7 grid",
-          "confidence": 0.998,
+          "confidence": 0.997,
           "id": 19
         },
         {
@@ -579,32 +579,32 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 13.82,
+  "elapsed_seconds": 15.78,
   "row_count": 20,
   "headers_removed": 1,
-  "engine": "LedgerLens 1.1 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "engine": "DamnLens AI Agent 1.2 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T06:05:37.562230+00:00",
+      "at": "2026-10-15T06:39:50.490151+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "02_scanned_inventory.pdf"
     },
     {
-      "at": "2026-10-15T06:05:37.564626+00:00",
+      "at": "2026-10-15T06:39:50.500905+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T06:05:37.564626+00:00",
+      "at": "2026-10-15T06:39:50.500905+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 1
     },
     {
-      "at": "2026-10-15T06:05:45.755686+00:00",
+      "at": "2026-10-15T06:39:59.533759+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -612,19 +612,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T06:05:45.755686+00:00",
+      "at": "2026-10-15T06:39:59.543723+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T06:05:45.755686+00:00",
+      "at": "2026-10-15T06:39:59.543723+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 2
     },
     {
-      "at": "2026-10-15T06:05:51.371613+00:00",
+      "at": "2026-10-15T06:40:06.265665+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -632,19 +632,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T06:05:51.372615+00:00",
+      "at": "2026-10-15T06:40:06.265665+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 2
     },
     {
-      "at": "2026-10-15T06:05:51.374615+00:00",
+      "at": "2026-10-15T06:40:06.267247+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T06:05:51.377615+00:00",
+      "at": "2026-10-15T06:40:06.270583+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,
@@ -668,7 +668,7 @@
     "flagged_rows": 0,
     "rows_with_evidence": 20,
     "ocr_rows": 20,
-    "ocr_recognition_mean": 0.9963,
+    "ocr_recognition_mean": 0.9962,
     "ocr_low_score_rows": 0,
     "issue_types": {},
     "review_status": "pending",
