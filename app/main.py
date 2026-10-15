@@ -209,7 +209,7 @@ def create_job(data, name, force=False):
 def health():
     return {
         "status": "ok",
-        "version": "1.1.0",
+        "version": app.version,
         "max_pages": 50,
         "max_upload_mb": 40,
         "ocr": "RapidOCR / ONNX CPU",
