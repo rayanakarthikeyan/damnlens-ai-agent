@@ -1,24 +1,27 @@
-00:00 DamnLens AI Agent
-00:08 Two workflows. One accuracy process.
-00:18 Automatic tables, headers and alignment
-00:29 Click a cell. Inspect the original.
-00:37 Image-only PDF to structured rows
-00:48 Standalone images follow the same workflow
-00:56 The full 50-page boundary, exercised
-01:07 Coverage is visible page by page
-01:14 Nested headers and merged-cell origins
-01:25 One logical row. Two source fragments.
-01:36 Find errors before they enter Excel
-01:47 Corrections are traceable
-01:56 Review is a recorded decision
-02:05 Export with findings and provenance
-02:14 The actual exported workbook
-02:24 Recover without silently starting over
-02:35 Optional Gemini, with bounded requests
-02:48 Independent candidates, explicit fallback
-02:57 Measured results, with ground truth
-03:09 Uncertainty becomes a review task
-03:19 Quality checks judges can inspect
-03:29 Easy to launch. Easy to reproduce.
-03:38 A complete, inspectable submission
-03:45 Why DamnLens stands out
+00:00 Local workflow
+00:08 Invoice extraction
+00:20 Invoice source
+00:28 Invoice coverage
+00:35 Scanned pdf
+00:57 Scan source
+01:05 Image result
+01:13 Fifty pages
+01:25 Fifty coverage
+01:32 Nested headers
+01:39 Merged origin
+01:47 Split row first
+01:53 Split row second
+02:04 Bank extraction
+02:13 Bank validation
+02:21 Inspect total
+02:29 Inspect missing cell
+02:36 Open correction
+02:42 Save correction
+02:50 Correction history
+02:57 Review dialog
+03:03 Complete review
+03:11 Excel export
+03:18 Download excel
+03:23 Gemini workflow
+03:33 Gemini request limit
+03:39 Accuracy report

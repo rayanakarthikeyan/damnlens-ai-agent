@@ -42,7 +42,7 @@ Submission evidence:
   evaluation/pdfs/                  Fifteen varied development audit PDFs
   evaluation/complex/               Sixteen complex PDF/Excel pairs and truth
   evaluation/public/                Pinned public URLs/annotations and license
-  docs/damnlens-demo.mp4            3m52s caption-only walkthrough; no audio
+  docs/damnlens-demo.mp4            3m49s recorded app demonstration with captions
   THIRD_PARTY_NOTICES.md            Libraries, models, licenses and AI assistance
 
 Development results are not a guarantee for hidden PDFs. Printed English is

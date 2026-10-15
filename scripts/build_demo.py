@@ -1,7 +1,8 @@
-"""Build a silent 232-second submission edit from authentic application captures.
+"""Caption the actual browser-session recording. Never substitute still images.
 
-Captions and editorial close-ups explain evidence; no app output is fabricated.
-Use --frames-only to review the edit or --verify-only to check an existing movie.
+The raw recording and its edit timeline are included so the submitted movie can
+be rebuilt. Only idle gaps between steps and a static download pause were cut;
+the captured extraction footage is played at its original speed.
 """
 
 from __future__ import annotations
@@ -14,205 +15,121 @@ import subprocess
 from pathlib import Path
 
 import imageio_ffmpeg
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-TMP = ROOT / "tmp/demo"
-SHOTS = ROOT / "docs/screenshots"
+RAW = ROOT / "docs/recordings/damnlens-app-session.mp4"
 OUTPUT = ROOT / "docs/damnlens-demo.mp4"
-SCENES = json.loads((ROOT / "docs/demo-storyboard.json").read_text(encoding="utf-8"))
-DURATION = sum(scene["seconds"] for scene in SCENES)
-FPS = 24
+TMP = ROOT / "tmp/live-demo"
+TIMELINE = json.loads((ROOT / "docs/demo-timeline.json").read_text(encoding="utf-8"))
+DURATION = TIMELINE["duration_seconds"]
 
 
-def font(size, bold=False):
-    candidates = [
-        Path("C:/Windows/Fonts") / ("segoeuib.ttf" if bold else "segoeui.ttf"),
-        Path("/usr/share/fonts/truetype/dejavu")
-        / ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"),
-        Path("/System/Library/Fonts/Helvetica.ttc"),
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return ImageFont.truetype(str(candidate), size)
-    raise RuntimeError(
-        "Install Segoe UI, DejaVu Sans or Helvetica for legible captions"
-    )
+def timestamp(seconds, srt=False, ass=False):
+    millis = round(seconds * 1000)
+    minutes, remainder = divmod(millis, 60000)
+    second, fraction = divmod(remainder, 1000)
+    if ass:
+        centis = round(seconds * 100)
+        minute, rem = divmod(centis, 6000)
+        sec, centi = divmod(rem, 100)
+        return f"0:{minute:02}:{sec:02}.{centi:02}"
+    if srt:
+        return f"00:{minutes:02}:{second:02},{fraction:03}"
+    return f"{minutes:02}:{second:02}"
 
 
-def lines(draw, text, face, width):
-    result, current = [], ""
+def font():
+    for path in [
+        "C:/Windows/Fonts/segoeui.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/System/Library/Fonts/Helvetica.ttc",
+    ]:
+        if Path(path).exists():
+            return ImageFont.truetype(path, 34)
+    raise RuntimeError("Install Segoe UI, DejaVu Sans or Helvetica for captions")
+
+
+def wrap(text):
+    draw = ImageDraw.Draw(Image.new("RGB", (1, 1)))
+    face = font()
+    lines, current = [], ""
     for word in text.split():
         trial = f"{current} {word}".strip()
-        if draw.textlength(trial, font=face) > width:
-            if not current:
-                raise ValueError(f"Word does not fit: {word}")
-            result.append(current)
+        if draw.textlength(trial, font=face) > 1760:
+            lines.append(current)
             current = word
         else:
             current = trial
-    if current:
-        result.append(current)
-    return result
+    lines.append(current)
+    if len(lines) > 2:
+        raise ValueError(f"Caption exceeds two lines: {text}")
+    return lines
 
 
-def block(draw, text, xy, face, width, color, max_lines, gap=8):
-    content = lines(draw, text, face, width)
-    if len(content) > max_lines:
-        raise ValueError(f"Text overflows its allocated area: {text}")
-    x, y = xy
-    for line in content:
-        draw.text((x, y), line, font=face, fill=color)
-        y += face.size + gap
-
-
-def timestamp(seconds, srt=False):
-    minutes, second = divmod(seconds, 60)
-    return f"00:{minutes:02}:{second:02},000" if srt else f"{minutes:02}:{second:02}"
-
-
-def frame(scene, number, crop, elapsed):
-    canvas = Image.new("RGB", (1920, 1080), "#0b1220")
-    draw = ImageDraw.Draw(canvas)
-    draw.text((48, 22), "DAMNLENS AI AGENT", font=font(19, True), fill="#83dccc")
-    draw.text(
-        (1488, 22),
-        f"{number + 1:02} / {len(SCENES)}   •   SILENT DEMO",
-        font=font(18),
-        fill="#b7c5dc",
-    )
-    block(draw, scene["title"], (48, 61), font(43, True), 1810, "#f5f8ff", 1)
-    draw.line((48, 130, 1872, 130), fill="#273751", width=1)
-    with Image.open(SHOTS / scene["image"]) as original:
-        shot = original.convert("RGB")
-    if crop is not None:
-        if not (
-            0 <= crop[0] < crop[2] <= shot.width
-            and 0 <= crop[1] < crop[3] <= shot.height
-        ):
-            raise ValueError(f"Crop exceeds authentic capture: {scene['image']} {crop}")
-        shot = shot.crop(crop)
-    stage_width = 1824 if scene.get("wide") else 1400
-    shot = ImageOps.contain(shot, (stage_width, 730), Image.Resampling.LANCZOS)
-    draw.rounded_rectangle(
-        (46, 157, 50 + stage_width, 891), 13, fill="#111e32", outline="#304460", width=2
-    )
-    canvas.paste(
-        shot, (48 + (stage_width - shot.width) // 2, 159 + (730 - shot.height) // 2)
-    )
-    if scene.get("wide"):
-        block(
-            draw,
-            "EXPORTED XLSX / TABLE 1 / A1:L12 / 12 DATA COLUMNS",
-            (76, 179),
-            font(20, True),
-            1720,
-            "#83dccc",
-            1,
-        )
-    else:
-        sidebar(draw, scene)
-    draw.rectangle((48, 918, 1872, 920), fill="#304460")
-    caption_lines = lines(draw, scene["caption"], font(31), 1760)
-    if len(caption_lines) > 2:
-        raise ValueError(f"Caption exceeds two lines: {scene['caption']}")
-    for index, line in enumerate(caption_lines):
-        x = (1920 - draw.textlength(line, font=font(31))) / 2
-        draw.text((x, 938 + 42 * index), line, font=font(31), fill="#f4f7ff")
-    footer = "Real screens • Edited close-ups and timing • Development evidence"
-    if number == len(SCENES) - 1:
-        footer = "github.com/rayanakarthikeyan/damnlens-ai-agent"
-    draw.text((48, 1041), footer, font=font(16), fill="#9db0cc")
-    draw.text(
-        (1718, 1041),
-        f"{timestamp(elapsed)} / {timestamp(DURATION)}",
-        font=font(17),
-        fill="#b7c5dc",
-    )
-    draw.rectangle((0, 1074, 1919, 1079), fill="#263750")
-    draw.rectangle(
-        (0, 1074, max(1, int(1920 * elapsed / DURATION)), 1079), fill="#75d7c3"
-    )
-    return canvas
-
-
-def sidebar(draw, scene):
-    block(draw, "JUDGING FOCUS", (1488, 162), font(17, True), 380, "#83dccc", 1)
-    block(draw, scene["category"], (1488, 197), font(23, True), 380, "#e5edfb", 3)
-    for index, (value, label) in enumerate(scene["facts"]):
-        y = 335 + 157 * index
-        draw.line((1488, y - 17, 1872, y - 17), fill="#273751", width=1)
-        block(draw, value, (1488, y), font(34, True), 380, "#ffffff", 1)
-        block(draw, label, (1488, y + 51), font(23), 380, "#c4d2e8", 2)
-    block(
-        draw,
-        scene.get("media", "APPLICATION CAPTURE"),
-        (1488, 841),
-        font(15, True),
-        380,
-        "#8fa5c4",
-        2,
-        gap=3,
-    )
-
-
-def storyboard():
+def captions():
     TMP.mkdir(parents=True, exist_ok=True)
-    entries, subtitles, chapters, script = [], [], [], []
-    elapsed = 0
-    for index, scene in enumerate(SCENES):
-        crops = scene.get("crops", [None])
-        for part, crop in enumerate(crops):
-            path = TMP / f"submission-{index:02}-{part}.png"
-            frame(scene, index, crop, elapsed).save(path)
-            entries.append((path, scene["seconds"] / len(crops)))
-        end = elapsed + scene["seconds"]
-        subtitles.append(
-            f"{index + 1}\n{timestamp(elapsed, True)} --> {timestamp(end, True)}\n{scene['caption']}\n"
+    ass = [
+        "[Script Info]",
+        "ScriptType: v4.00+",
+        "PlayResX: 1920",
+        "PlayResY: 1080",
+        "WrapStyle: 2",
+        "",
+        "[V4+ Styles]",
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+        "Style: Default,Segoe UI,34,&H00FFFFFF,&H00FFFFFF,&H0020120B,&H0020120B,0,0,0,0,100,100,0,0,1,0,0,2,80,80,29,1",
+        "",
+        "[Events]",
+        "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+    ]
+    srt, chapters, rows = [], [], []
+    for index, clip in enumerate(TIMELINE["clips"]):
+        start = clip["start"]
+        end = DURATION if index == len(TIMELINE["clips"]) - 1 else clip["end"]
+        if not (0 <= start < end <= DURATION):
+            raise ValueError("Invalid caption timing")
+        text = clip["caption"]
+        wrapped = wrap(text)
+        ass_text = r"\N".join(wrapped)
+        ass.append(
+            f"Dialogue: 0,{timestamp(start, ass=True)},{timestamp(end, ass=True)},Default,,0,0,0,,{ass_text}"
         )
-        chapters.append(f"{timestamp(elapsed)} {scene['title']}")
-        script.append(
-            f"| {timestamp(elapsed)}–{timestamp(end)} | {scene['title']} | {scene['caption']} |"
+        srt.append(
+            f"{index + 1}\n{timestamp(start, srt=True)} --> {timestamp(end, srt=True)}\n"
+            + "\n".join(wrapped)
+            + "\n"
         )
-        elapsed = end
-    if DURATION != 232 or DURATION > 240:
-        raise ValueError(f"Demo must stay within four minutes: {DURATION}")
-    (ROOT / "docs/damnlens-demo.srt").write_text("\n".join(subtitles), encoding="utf-8")
+        title = clip["name"].replace("-", " ").capitalize()
+        chapters.append(f"{timestamp(start)} {title}")
+        rows.append(f"| {timestamp(start)}–{timestamp(end)} | {title} | {text} |")
+    (TMP / "captions.ass").write_text("\n".join(ass) + "\n", encoding="utf-8")
+    (ROOT / "docs/recordings/damnlens-demo.srt").write_text(
+        "\n".join(srt), encoding="utf-8"
+    )
     (ROOT / "docs/demo-chapters.txt").write_text(
         "\n".join(chapters) + "\n", encoding="utf-8"
     )
     (ROOT / "docs/DEMO_SCRIPT.md").write_text(
-        "# DamnLens AI Agent submission demo\n\n"
-        "**3 minutes 52 seconds. 1920 × 1080. Captions only; no audio.**\n\n"
-        "This edited walkthrough uses authentic browser captures, a read-only render of the actual exported XLSX, and the published CI run. "
-        "Close-ups and display times are editorial; this is not an uncut speed recording. "
-        "All application examples use fictional data. Gemini screens show the recorded live test; making the video sent no new cloud requests.\n\n"
-        "The five rubric labels show **available marks**, not marks awarded. "
-        "The closing case for the project is traceability, explicit uncertainty, optional independent AI checking and reproducibility. "
-        "No win or hidden-PDF accuracy is claimed.\n\n"
-        "| Time | Screen / requirement | Burned-in caption |\n|---|---|---|\n"
-        + "\n".join(script)
-        + "\n\n## Submission files\n\n"
-        "- `damnlens-demo.mp4`: ready-to-submit video with captions burned in.\n"
-        "- `damnlens-demo.srt`: matching optional subtitles; captions are already visible in the movie.\n"
-        "- `demo-chapters.txt`: chapter timestamps.\n"
-        "- `demo-storyboard.json`: edit specification with original capture crops.\n"
-        "- `../reports/demo-verification.json`: codec, duration, silent-stream check, full decode, hashes and source-capture manifest.\n"
-        "- `../reports/demo-extraction-check.json`: fresh 50-page and PNG checks.\n\n"
-        "## Rebuild\n\n"
-        "Install `requirements-dev.txt`, then run `python scripts/build_demo.py`. "
-        "Use `--frames-only` to inspect before encoding, or `--verify-only` to verify an existing movie. "
-        "The XLSX image is a read-only render of `samples/converted/01_invoice_register.xlsx`, `Table 1`, A1:L12, without changes to values or formatting.\n\n"
-        "## Evidence scope\n\n"
-        "The 50-page fixture repeats the first invoice page 50 times to test boundary handling and duplicate preservation; it is not a 50-layout diversity test. "
-        "The PNG is inventory page one rasterized at 180 DPI. The 864-cell sample, 16-case complex and 15-case varied cohorts are separate development results. "
-        "Expanded 10/11 checks include selected checkpoints rather than complete transcription of every public document; one ambiguous header remains flagged. "
-        "The small live Gemini cohort covers three dummy first pages (360 cells, 36 headers), with two earlier provider failures disclosed. "
-        "See the accuracy, expanded evaluation and Gemini reports for comparison policies. "
-        "The CI screen shows source commit `c8d8b2b`, [run 38715554376](https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions/runs/38715554376).\n",
+        "# DamnLens AI Agent application demonstration\n\n"
+        f"**{timestamp(DURATION)}. Application screen recording with captions and no audio.**\n\n"
+        "The video records operating the working browser application: PDF selection and extraction, source inspection, local scanned OCR, an image result, 50-page processing, complex headers and source parts, validation, an explicit correction, review and an actual Excel download. "
+        "It uses timestamped browser frames captured during those operations, rather than the earlier screenshot presentation. "
+        "Idle gaps between steps and one static download pause are removed. Extraction footage is not accelerated. The original browser capture is 1265 × 712 with a variable sampling rate; the final 1920 × 1080 movie encodes at 24 fps. "
+        "Captions sit below the app. No scoring, production banners, sidebars, counters or timers are added.\n\n"
+        "All documents are fictional fixtures. The currency correction is an explicit demonstration edit, preserved in the history; source total and balance errors remain acknowledged findings. "
+        "The Gemini section demonstrates configuration and request limits only. No new cloud request is made or represented as completed. "
+        "The final accuracy screen is the saved development-sample benchmark, not a new hidden-document evaluation.\n\n"
+        "| Time | Operation | Caption |\n|---|---|---|\n"
+        + "\n".join(rows)
+        + "\n\n## Rebuild and evidence\n\n"
+        "Run `python scripts/build_demo.py` after installing `requirements-dev.txt`. "
+        "The builder captions `recordings/damnlens-app-session.mp4` using `demo-timeline.json`; it never falls back to still screenshots. "
+        "Use `--verify-only` to check an existing movie. Optional subtitles are in `recordings/damnlens-demo.srt`, separate from the final movie to prevent duplicate automatic subtitles. "
+        "`recordings/capture-manifest.json` retains source-frame hashes and timestamps. "
+        "`../reports/demo-verification.json` records media checks; `../reports/demo-live-check.json` verifies the actual demonstrated results and downloaded workbook.\n",
         encoding="utf-8",
     )
-    return entries
 
 
 def verify(ffmpeg):
@@ -224,10 +141,12 @@ def verify(ffmpeg):
     if match is None:
         raise ValueError("Cannot read movie duration")
     duration = int(match[1]) * 3600 + int(match[2]) * 60 + float(match[3])
-    if duration != DURATION or "Audio:" in metadata:
-        raise ValueError(
-            "Movie must be exactly 232 seconds and contain no audio stream"
-        )
+    if (
+        abs(duration - DURATION) > 0.05
+        or not 120 <= duration <= 240
+        or "Audio:" in metadata
+    ):
+        raise ValueError("Check the four-minute limit, timeline and absence of audio")
     if (
         "Video: h264" not in metadata
         or "1920x1080" not in metadata
@@ -237,32 +156,29 @@ def verify(ffmpeg):
     subprocess.run(
         [ffmpeg, "-v", "error", "-i", str(OUTPUT), "-f", "null", "-"], check=True
     )
+    manifest = json.loads((ROOT / "docs/recordings/capture-manifest.json").read_text())
     report = {
         "file": "docs/damnlens-demo.mp4",
         "seconds": duration,
         "resolution": [1920, 1080],
         "codec": "H.264",
         "pixel_format": "yuv420p",
-        "fps": FPS,
+        "fps": 24,
         "audio_streams": 0,
         "full_decode": "passed",
-        "scenes": len(SCENES),
+        "recorded_clips": len(TIMELINE["clips"]),
+        "captured_browser_frames": len(manifest["frames"]),
+        "source_capture_resolution": manifest["native_resolution"],
+        "capture_method": "Timestamped browser frames captured while operating the working application",
+        "editing": TIMELINE["editing"],
+        "gemini_scope": TIMELINE["gemini"],
         "burned_in_captions": True,
-        "caption_font_pixels": 31,
+        "caption_font_pixels": 34,
         "max_caption_lines": 2,
-        "layout_overflow_checks": "passed",
+        "presentation": "App screen and captions only; no added scores or production overlays.",
         "bytes": OUTPUT.stat().st_size,
         "sha256": hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),
-        "editing": "Authentic captures with editorial crops, captions and timing; not real-time performance footage.",
-        "capture_sources": [
-            {
-                "file": f"docs/screenshots/{s['image']}",
-                "seconds": s["seconds"],
-                "title": s["title"],
-                "sha256": hashlib.sha256((SHOTS / s["image"]).read_bytes()).hexdigest(),
-            }
-            for s in SCENES
-        ],
+        "raw_recording_sha256": hashlib.sha256(RAW.read_bytes()).hexdigest(),
     }
     (ROOT / "reports/demo-verification.json").write_text(
         json.dumps(report, indent=2) + "\n", encoding="utf-8"
@@ -272,27 +188,15 @@ def verify(ffmpeg):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--frames-only", action="store_true")
     parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args()
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+    if not RAW.is_file():
+        raise FileNotFoundError(
+            "The actual browser recording is required; screenshots are not a substitute"
+        )
     if not args.verify_only:
-        entries = storyboard()
-        print(
-            f"Prepared {len(SCENES)} scenes, {len(entries)} close-ups, {DURATION} seconds",
-            flush=True,
-        )
-        if args.frames_only:
-            return
-        sequence = TMP / "submission-frames.txt"
-        sequence.write_text(
-            "".join(
-                f"file '{path.as_posix()}'\nduration {seconds}\n"
-                for path, seconds in entries
-            )
-            + f"file '{entries[-1][0].as_posix()}'\n",
-            encoding="utf-8",
-        )
+        captions()
         subprocess.run(
             [
                 ffmpeg,
@@ -300,17 +204,21 @@ def main():
                 "-loglevel",
                 "warning",
                 "-y",
-                "-f",
-                "concat",
-                "-safe",
-                "0",
                 "-i",
-                str(sequence),
+                str(RAW),
                 "-t",
                 str(DURATION),
                 "-vf",
-                f"fps={FPS},format=yuv420p",
+                "scale=1920:944:force_original_aspect_ratio=decrease:in_range=pc:out_range=tv,setsar=1,pad=1920:1080:(ow-iw)/2:0:color=0x0b1220,ass=tmp/live-demo/captions.ass,format=yuv420p,fps=24",
                 "-an",
+                "-r",
+                "24",
+                "-fps_mode",
+                "cfr",
+                "-pix_fmt",
+                "yuv420p",
+                "-color_range",
+                "tv",
                 "-c:v",
                 "libx264",
                 "-preset",
@@ -322,10 +230,28 @@ def main():
                 str(OUTPUT),
             ],
             check=True,
+            cwd=ROOT,
+        )
+        subprocess.run(
+            [
+                ffmpeg,
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-y",
+                "-ss",
+                "1",
+                "-i",
+                str(OUTPUT),
+                "-frames:v",
+                "1",
+                str(ROOT / "docs/damnlens-demo-poster.jpg"),
+            ],
+            check=True,
         )
     report = verify(ffmpeg)
     print(
-        f"Verified: {report['seconds']}s, 1080p H.264, no audio, {report['bytes']:,} bytes",
+        f"Verified actual app recording: {timestamp(DURATION)}, no audio, {report['captured_browser_frames']} captured frames",
         flush=True,
     )
 

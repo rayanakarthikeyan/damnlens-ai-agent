@@ -1,0 +1,251 @@
+{
+  "duration_seconds": 229,
+  "recorded_content_seconds": 228.63,
+  "editing": "Recorded browser interactions in chronological case order; idle gaps between steps and one static download pause removed. Extraction footage plays at captured speed.",
+  "gemini": "Configuration controls only; no new cloud requests.",
+  "clips": [
+    {
+      "name": "local-workflow",
+      "start": 0,
+      "end": 8.129,
+      "caption": "DamnLens AI Agent converts PDFs and scans into structured Excel. Start with the keyless Local AI workflow.",
+      "captured_frames": 61,
+      "recorded_seconds": 8.129,
+      "kept_seconds": 8.129
+    },
+    {
+      "name": "invoice-extraction",
+      "start": 8.129,
+      "end": 20.262,
+      "caption": "Upload a digital PDF. The agent detects tables and headers, joins three pages and preserves all 31 rows across 12 columns.",
+      "captured_frames": 77,
+      "recorded_seconds": 12.133,
+      "kept_seconds": 12.133
+    },
+    {
+      "name": "invoice-source",
+      "start": 20.262,
+      "end": 28.314,
+      "caption": "Click an extracted row to open its original source page and highlight the matching location.",
+      "captured_frames": 51,
+      "recorded_seconds": 8.052,
+      "kept_seconds": 8.052
+    },
+    {
+      "name": "invoice-coverage",
+      "start": 28.314,
+      "end": 35.422,
+      "caption": "Inspect page-by-page coverage and extraction routes. Every invoice row retains source evidence.",
+      "captured_frames": 45,
+      "recorded_seconds": 7.108,
+      "kept_seconds": 7.108
+    },
+    {
+      "name": "scanned-pdf",
+      "start": 35.422,
+      "end": 57.447,
+      "caption": "The image-only inventory PDF is read with local English OCR. Watch page progress, table reconstruction and validation complete.",
+      "captured_frames": 143,
+      "recorded_seconds": 22.025,
+      "kept_seconds": 22.025
+    },
+    {
+      "name": "scan-source",
+      "start": 57.447,
+      "end": 65.479,
+      "caption": "Inspect an OCR row against the scanned source. The two pages produce 20 rows and 12 columns.",
+      "captured_frames": 33,
+      "recorded_seconds": 8.032,
+      "kept_seconds": 8.032
+    },
+    {
+      "name": "image-result",
+      "start": 65.479,
+      "end": 73.563,
+      "caption": "Open the standalone PNG result: 10 rows and 12 reconstructed columns, with the original image available beside the data.",
+      "captured_frames": 50,
+      "recorded_seconds": 8.084,
+      "kept_seconds": 8.084
+    },
+    {
+      "name": "fifty-pages",
+      "start": 73.563,
+      "end": 85.675,
+      "caption": "The 50-page document produces 500 rows and 12 columns. Repeated headers are removed; duplicate business rows are preserved and flagged.",
+      "captured_frames": 74,
+      "recorded_seconds": 12.112,
+      "kept_seconds": 12.112
+    },
+    {
+      "name": "fifty-coverage",
+      "start": 85.675,
+      "end": 92.694,
+      "caption": "All 50 pages remain individually accessible, with source evidence retained for all 500 rows.",
+      "captured_frames": 42,
+      "recorded_seconds": 7.019,
+      "kept_seconds": 7.019
+    },
+    {
+      "name": "nested-headers",
+      "start": 92.694,
+      "end": 99.807,
+      "caption": "Expand the detected header structure to inspect parent and child labels in a nested line-item table.",
+      "captured_frames": 44,
+      "recorded_seconds": 7.113,
+      "kept_seconds": 7.113
+    },
+    {
+      "name": "merged-origin",
+      "start": 99.807,
+      "end": 107.834,
+      "caption": "Select a shared order ID to inspect the original merged cell. Inherited values retain their source geometry.",
+      "captured_frames": 51,
+      "recorded_seconds": 8.027,
+      "kept_seconds": 8.027
+    },
+    {
+      "name": "split-row-first",
+      "start": 107.834,
+      "end": 113.882,
+      "caption": "A description continues across pages. The reconstructed row keeps links to both original source fragments.",
+      "captured_frames": 40,
+      "recorded_seconds": 6.048,
+      "kept_seconds": 6.048
+    },
+    {
+      "name": "split-row-second",
+      "start": 113.882,
+      "end": 124.903,
+      "caption": "Switch to the second source part to inspect the continued description on page two.",
+      "captured_frames": 22,
+      "recorded_seconds": 11.021,
+      "kept_seconds": 11.021
+    },
+    {
+      "name": "bank-extraction",
+      "start": 124.903,
+      "end": 133.036,
+      "caption": "The bank statement includes intentional source errors. The agent preserves the values and flags them for review.",
+      "captured_frames": 52,
+      "recorded_seconds": 8.133,
+      "kept_seconds": 8.133
+    },
+    {
+      "name": "bank-validation",
+      "start": 133.036,
+      "end": 141.152,
+      "caption": "Validation identifies missing fields, running-balance errors and a total that does not reconcile.",
+      "captured_frames": 53,
+      "recorded_seconds": 8.116,
+      "kept_seconds": 8.116
+    },
+    {
+      "name": "inspect-total",
+      "start": 141.152,
+      "end": 149.307,
+      "caption": "Open the total finding to inspect its original row. The stated debit total is 2,600; contributing rows sum to 2,500.",
+      "captured_frames": 56,
+      "recorded_seconds": 8.155,
+      "kept_seconds": 8.155
+    },
+    {
+      "name": "inspect-missing-cell",
+      "start": 149.307,
+      "end": 156.328,
+      "caption": "Locate the missing currency field in its source page before making an explicit correction.",
+      "captured_frames": 46,
+      "recorded_seconds": 7.021,
+      "kept_seconds": 7.021
+    },
+    {
+      "name": "open-correction",
+      "start": 156.328,
+      "end": 162.397,
+      "caption": "Open the cell editor. The original extracted value will remain in the correction history.",
+      "captured_frames": 40,
+      "recorded_seconds": 6.069,
+      "kept_seconds": 6.069
+    },
+    {
+      "name": "save-correction",
+      "start": 162.397,
+      "end": 170.488,
+      "caption": "For this demonstration, enter USD from the statement context. Validation reruns and the finding count updates from six to five.",
+      "captured_frames": 52,
+      "recorded_seconds": 8.091,
+      "kept_seconds": 8.091
+    },
+    {
+      "name": "correction-history",
+      "start": 170.488,
+      "end": 177.495,
+      "caption": "The correction history retains the original blank, the entered value, its location and the time of the edit.",
+      "captured_frames": 46,
+      "recorded_seconds": 7.007,
+      "kept_seconds": 7.007
+    },
+    {
+      "name": "review-dialog",
+      "start": 177.495,
+      "end": 183.516,
+      "caption": "Review confirms source checks and requires acknowledgement of outstanding findings.",
+      "captured_frames": 37,
+      "recorded_seconds": 6.021,
+      "kept_seconds": 6.021
+    },
+    {
+      "name": "complete-review",
+      "start": 183.516,
+      "end": 191.609,
+      "caption": "Record a review note. The remaining source errors stay visible and are acknowledged for this export.",
+      "captured_frames": 50,
+      "recorded_seconds": 8.093,
+      "kept_seconds": 8.093
+    },
+    {
+      "name": "excel-export",
+      "start": 191.609,
+      "end": 198.657,
+      "caption": "The Excel export includes structured data, review status, findings, source evidence, corrections, page coverage and the run log.",
+      "captured_frames": 44,
+      "recorded_seconds": 7.048,
+      "kept_seconds": 7.048
+    },
+    {
+      "name": "download-excel",
+      "start": 198.657,
+      "end": 203.533,
+      "caption": "Download the reviewed Excel workbook. Outstanding findings remain included in the file.",
+      "captured_frames": 31,
+      "recorded_seconds": 23.45,
+      "kept_seconds": 4.876
+    },
+    {
+      "name": "gemini-workflow",
+      "start": 203.533,
+      "end": 213.534,
+      "caption": "Optional Gemini assistance adds an independent reading of difficult pages. It requires a configured API key and explicit authorization.",
+      "captured_frames": 62,
+      "recorded_seconds": 10.002,
+      "kept_seconds": 10.001
+    },
+    {
+      "name": "gemini-request-limit",
+      "start": 213.534,
+      "end": 219.557,
+      "caption": "Set a request limit and page scope. Google API plan and quotas apply; Local AI remains available without a key.",
+      "captured_frames": 38,
+      "recorded_seconds": 6.023,
+      "kept_seconds": 6.023
+    },
+    {
+      "name": "accuracy-report",
+      "start": 219.557,
+      "end": 228.63,
+      "caption": "The three bundled sample PDFs have matching Excel outputs and ground truth: 864 matching data cells, with headers checked separately.",
+      "captured_frames": 56,
+      "recorded_seconds": 9.073,
+      "kept_seconds": 9.073
+    }
+  ]
+}

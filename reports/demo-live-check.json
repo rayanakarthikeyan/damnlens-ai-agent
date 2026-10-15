@@ -1,0 +1,63 @@
+{
+  "scope": "Actual jobs operated in the recorded application demonstration, using fictional fixtures. Original bank currency blank was explicitly changed to USD for the correction demonstration; this is not an extraction repair or blind accuracy claim.",
+  "checks": [
+    {
+      "case": "invoice",
+      "rows": 31,
+      "columns": 12,
+      "exact_cells": 372,
+      "headers_exact": true
+    },
+    {
+      "case": "scan",
+      "rows": 20,
+      "columns": 12,
+      "exact_cells": 240,
+      "headers_exact": true
+    },
+    {
+      "case": "image",
+      "rows": 10,
+      "columns": 12,
+      "exact_cells": 120,
+      "headers_exact": true
+    },
+    {
+      "case": "50-page repeated-page stress",
+      "rows": 500,
+      "columns": 12,
+      "exact_cells": 6000,
+      "headers_removed": 49,
+      "duplicates_preserved_and_flagged": 490
+    },
+    {
+      "case": "nested_line_items",
+      "exact_structure_and_cells": true
+    },
+    {
+      "case": "row_split_across_pages",
+      "exact_structure_and_cells": true
+    },
+    {
+      "case": "bank review and downloaded workbook",
+      "rows": 21,
+      "columns": 12,
+      "explicit_edits": 1,
+      "remaining_findings": 5,
+      "reviewed": true,
+      "sheets": [
+        "Overview",
+        "Table 1",
+        "Validation",
+        "Evidence",
+        "Corrections",
+        "Page coverage",
+        "Run log"
+      ],
+      "xlsx_sha256": "e187a2cd76ac00b6c4cf47fab09c406c7fa2eb7c403be6950722073eaa8b7598"
+    }
+  ],
+  "gemini_requests_in_recording": 0,
+  "gemini_shown": "Configuration controls only",
+  "passed": true
+}

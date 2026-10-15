@@ -13,7 +13,7 @@
 | Setup and execution | Double-click Windows launcher, verified bootstrap, offline judge checks, manual setup, CLI, Dockerfile | README; START_DAMNLENS.cmd; setup_judges.py |
 | 3 sample PDFs and Excel | Original fictional invoices, scan and bank statement | `samples/` and `samples/converted/` |
 | Accuracy and validation report | Separate sample, varied, complex and public-reference cohorts; explicit methodology | `reports/JUDGE_EVALUATION.md`, `ACCURACY_REPORT.md`, raw JSON and ground truth |
-| 2–5 minute demo | Captioned walkthrough of real application screens | `docs/damnlens-demo.mp4` (232 seconds; caption-only; all six requirements and five judging categories) |
+| 2–5 minute demo | Recorded application operation with captions | `docs/damnlens-demo.mp4` (229 seconds; caption-only; application workflow and extraction examples) |
 | Library/API credits | Library licenses, OCR model source and hash, AI-assistance disclosure | THIRD_PARTY_NOTICES.md and models/README.md |
 | Public/dummy documents only | Original dummy fixtures plus explicitly downloaded, pinned public reference PDFs | Generators; public URLs/checksums/annotation license; no private data |
 | Solo / team up to 3 | User participation is not registered by this app | Confirm entrant/team details during submission |
