@@ -19,14 +19,14 @@ SHOTS = ROOT / "docs" / "screenshots"
 SCENES = [
     (
         "01-workspace-desktop.jpg",
-        "Less paperwork. More possibility.",
-        "A local AI workflow for documents",
-        "Upload a PDF or image. LedgerLens inspects, extracts, stitches and validates the tables. Files stay on your computer. No cloud API key is required.",
+        "AI document extraction workspace",
+        "Accuracy and review take priority",
+        "The professional workspace shows extraction runs, pending reviews, open findings and recorded decisions. Upload a PDF or scan; the agent selects a local extraction route.",
     ),
     (
         "02-digital-extraction.jpg",
-        "Three pages. One usable table.",
-        "Native PDF extraction",
+        "Structured data with page coverage",
+        "Inspect, extract, align and validate",
         "The invoice register has 12 columns across three pages. The agent preserves 31 rows, removes two repeated headers and keeps page provenance for every row.",
     ),
     (
@@ -37,9 +37,9 @@ SCENES = [
     ),
     (
         "04-agent-activity.jpg",
-        "See what the agent did.",
-        "A visible extraction lifecycle",
-        "Inspect page routing and table fragments in the activity view. Native extraction falls back to OCR. Failed pages become explicit review findings. Duplicate business rows are preserved.",
+        "Recorded execution events",
+        "Observable agent decisions",
+        "The agent run log records routing, table extraction, schema matching and validation with timestamps. Page coverage and source evidence remain separate from measured accuracy.",
     ),
     (
         "05-scanned-extraction.jpg",
@@ -54,16 +54,16 @@ SCENES = [
         "The bank fixture contains intentional mistakes. LedgerLens flags the wrong total, balance transitions, missing values and a sparse total row. Source errors remain visible.",
     ),
     (
-        "07-cell-correction.jpg",
-        "Review. Correct. Keep the history.",
-        "Human oversight is part of the workflow",
-        "Double-click a cell or press Enter to edit it. The original value is retained, the correction is timestamped, and validation reruns. No silent rewriting of source data.",
+        "07-review-checkpoint.jpg",
+        "An explicit review checkpoint",
+        "Source verification and acknowledged findings",
+        "A completed extraction is a draft. Completing review confirms source checks and records a note for outstanding findings. Subsequent corrections invalidate that review and preserve its previous decision.",
     ),
     (
-        "08-reviewed-result.jpg",
-        "Export the context, too.",
-        "Excel, CSV and JSON",
-        "Excel contains typed values, filters, frozen headers, validation findings, row evidence and correction history. Identifiers keep leading zeros. Document text is never executed as a spreadsheet formula.",
+        "08-reviewed-export.jpg",
+        "Export a recorded review decision",
+        "Draft and reviewed states stay distinct",
+        "The workbook retains accepted findings, source evidence, corrections, page coverage and the run log. Numeric precision and identifiers are preserved. OCR retries archive the previous run before replacing it.",
     ),
     (
         "09-accuracy-report.jpg",
@@ -73,7 +73,7 @@ SCENES = [
     ),
     (
         "10-quick-guide.jpg",
-        "Ready for a live demonstration.",
+        "A reproducible accuracy workflow",
         "Built for the INCUXAI challenge 2026",
         "The submission includes source code, setup instructions, three original PDF and Excel pairs, measured reports, tests and this walkthrough. Practical limits and all libraries and models are credited.",
     ),
@@ -114,15 +114,17 @@ def wrapped(draw, text, xy, f, fill, width, line_gap=9):
 def main():
     paths = []
     for i, (image, title, subtitle, body) in enumerate(SCENES):
-        canvas = Image.new("RGB", (1920, 1080), "#f7f9f3")
+        canvas = Image.new("RGB", (1920, 1080), "#f5f7fb")
         d = ImageDraw.Draw(canvas)
-        d.rectangle((0, 0, 1920, 87), fill="#173c37")
-        d.text((40, 23), "LedgerLens.", font=font(30, True), fill="#d6e9bb")
+        d.rectangle((0, 0, 1920, 87), fill="#111b31")
+        d.text(
+            (40, 23), "LedgerLens / Document AI", font=font(30, True), fill="#edf2ff"
+        )
         d.text(
             (1275, 34),
             "INCUXAI 2026  /  APPLICATION WALKTHROUGH",
             font=font(15, True),
-            fill="#afc4ba",
+            fill="#a9bad5",
         )
         shot = Image.open(SHOTS / image).convert("RGB")
         shot.thumbnail((1330, 900), Image.Resampling.LANCZOS)
@@ -131,21 +133,21 @@ def main():
         d.rounded_rectangle(
             (x - 1, y - 1, x + shot.width + 1, y + shot.height + 1),
             radius=8,
-            fill="#e0e7d8",
+            fill="#dce5f3",
         )
         canvas.paste(shot, (x, y))
-        d.text((1400, 150), f"{i + 1:02d} / 10", font=font(18, True), fill="#95ab83")
-        yy = wrapped(d, title, (1400, 205), font(45, serif=True), "#173c37", 470, 10)
-        yy = wrapped(d, subtitle, (1400, yy + 26), font(20, True), "#6e8b59", 465, 9)
-        wrapped(d, body, (1400, yy + 30), font(24), "#73846b", 465, 15)
+        d.text((1400, 150), f"{i + 1:02d} / 10", font=font(18, True), fill="#7895c7")
+        yy = wrapped(d, title, (1400, 205), font(40, bold=True), "#263c5f", 470, 10)
+        yy = wrapped(d, subtitle, (1400, yy + 26), font(20, True), "#5475ac", 465, 9)
+        wrapped(d, body, (1400, yy + 30), font(24), "#657c9f", 465, 15)
         d.text(
             (40, 1039),
             "Captioned walkthrough of actual application screens. Editorial timing; not a real-time recording.",
             font=font(15),
-            fill="#89967f",
+            fill="#879bb9",
         )
-        d.rectangle((1400, 930, 1870, 935), fill="#e1e8d7")
-        d.rectangle((1400, 930, 1400 + int(470 * (i + 1) / 10), 935), fill="#7c9d60")
+        d.rectangle((1400, 930, 1870, 935), fill="#dfe7f4")
+        d.rectangle((1400, 930, 1400 + int(470 * (i + 1) / 10), 935), fill="#678bd1")
         p = TMP / f"frame-{i:02d}.png"
         canvas.save(p)
         paths.append(p)
