@@ -1,0 +1,660 @@
+{
+  "filename": "03_bank_statement.pdf",
+  "sha256": "f87639d73f556fd4039fe771246ad338a2e2907187bf587e1f8d3a1fd5b630af",
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 1,
+      "method": "native",
+      "attempts": [
+        "native"
+      ],
+      "status": "extracted"
+    },
+    {
+      "page": 2,
+      "tables": 1,
+      "method": "native",
+      "attempts": [
+        "native"
+      ],
+      "status": "extracted"
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "name": "Table 1",
+      "headers": [
+        "Date",
+        "Reference",
+        "Description",
+        "Channel",
+        "Branch",
+        "Debit",
+        "Credit",
+        "Balance",
+        "Currency",
+        "Category",
+        "Status",
+        "Notes"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "2026-10-01",
+            "TXN-0001",
+            "Business entry 01",
+            "Online",
+            "Central",
+            "25.00",
+            "0.00",
+            "4975.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            175.0,
+            1025.0,
+            203.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 1
+        },
+        {
+          "cells": [
+            "2026-10-02",
+            "TXN-0002",
+            "Business entry 02",
+            "Online",
+            "Central",
+            "0.00",
+            "160.00",
+            "5135.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            203.0,
+            1025.0,
+            231.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 2
+        },
+        {
+          "cells": [
+            "2026-10-03",
+            "TXN-0003",
+            "Business entry 03",
+            "Online",
+            "Central",
+            "75.00",
+            "0.00",
+            "5060.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            231.0,
+            1025.0,
+            259.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 3
+        },
+        {
+          "cells": [
+            "2026-10-04",
+            "TXN-0004",
+            "Business entry 04",
+            "Online",
+            "Central",
+            "0.00",
+            "320.00",
+            "5380.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            259.0,
+            1025.0,
+            287.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 4
+        },
+        {
+          "cells": [
+            "2026-10-05",
+            "TXN-0005",
+            "Business entry 05",
+            "Online",
+            "Central",
+            "125.00",
+            "0.00",
+            "5255.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            287.0,
+            1025.0,
+            315.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 5
+        },
+        {
+          "cells": [
+            "2026-10-06",
+            "TXN-0006",
+            "Business entry 06",
+            "Online",
+            "Central",
+            "",
+            "480.00",
+            "5735.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            315.0,
+            1025.0,
+            343.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 6
+        },
+        {
+          "cells": [
+            "2026-10-07",
+            "TXN-0007",
+            "Business entry 07",
+            "Online",
+            "Central",
+            "175.00",
+            "0.00",
+            "5560.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            343.0,
+            1025.0,
+            371.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 7
+        },
+        {
+          "cells": [
+            "2026-10-08",
+            "TXN-0008",
+            "Business entry 08",
+            "Online",
+            "Central",
+            "0.00",
+            "640.00",
+            "6200.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            371.0,
+            1025.0,
+            399.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 8
+        },
+        {
+          "cells": [
+            "2026-10-09",
+            "TXN-0009",
+            "Business entry 09",
+            "Online",
+            "Central",
+            "225.00",
+            "0.00",
+            "6050.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            399.0,
+            1025.0,
+            427.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 9
+        },
+        {
+          "cells": [
+            "2026-10-10",
+            "TXN-0010",
+            "Business entry 10",
+            "Online",
+            "Central",
+            "0.00",
+            "800.00",
+            "6775.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 1,
+          "bbox": [
+            44.0,
+            427.0,
+            1025.0,
+            455.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 10
+        },
+        {
+          "cells": [
+            "2026-10-11",
+            "TXN-0011",
+            "Business entry 11",
+            "Online",
+            "Central",
+            "275.00",
+            "0.00",
+            "6500.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            175.0,
+            1025.0,
+            203.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 11
+        },
+        {
+          "cells": [
+            "2026-10-12",
+            "TXN-0012",
+            "Business entry 12",
+            "Online",
+            "Central",
+            "0.00",
+            "960.00",
+            "7460.00",
+            "",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            203.0,
+            1025.0,
+            231.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 12
+        },
+        {
+          "cells": [
+            "2026-10-13",
+            "TXN-0013",
+            "Business entry 13",
+            "Online",
+            "Central",
+            "325.00",
+            "0.00",
+            "7135.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            231.0,
+            1025.0,
+            259.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 13
+        },
+        {
+          "cells": [
+            "2026-10-14",
+            "TXN-0014",
+            "Business entry 14",
+            "Online",
+            "Central",
+            "0.00",
+            "1120.00",
+            "8255.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            259.0,
+            1025.0,
+            287.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 14
+        },
+        {
+          "cells": [
+            "2026-10-15",
+            "TXN-0015",
+            "Business entry 15",
+            "Online",
+            "Central",
+            "375.00",
+            "0.00",
+            "7880.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            287.0,
+            1025.0,
+            315.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 15
+        },
+        {
+          "cells": [
+            "2026-10-16",
+            "TXN-0016",
+            "Business entry 16",
+            "Online",
+            "Central",
+            "0.00",
+            "1280.00",
+            "9160.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            315.0,
+            1025.0,
+            343.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 16
+        },
+        {
+          "cells": [
+            "2026-10-17",
+            "TXN-0017",
+            "Business entry 17",
+            "Online",
+            "Central",
+            "425.00",
+            "0.00",
+            "8735.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            343.0,
+            1025.0,
+            371.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 17
+        },
+        {
+          "cells": [
+            "2026-10-18",
+            "TXN-0018",
+            "Business entry 18",
+            "Online",
+            "Central",
+            "0.00",
+            "1440.00",
+            "10175.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            371.0,
+            1025.0,
+            399.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 18
+        },
+        {
+          "cells": [
+            "2026-10-19",
+            "TXN-0019",
+            "Business entry 19",
+            "Online",
+            "Central",
+            "475.00",
+            "0.00",
+            "9700.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            399.0,
+            1025.0,
+            427.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 19
+        },
+        {
+          "cells": [
+            "2026-10-20",
+            "TXN-0020",
+            "Business entry 20",
+            "Online",
+            "Central",
+            "0.00",
+            "1600.00",
+            "11300.00",
+            "USD",
+            "Operating",
+            "Cleared",
+            "Demo"
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            427.0,
+            1025.0,
+            455.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 20
+        },
+        {
+          "cells": [
+            "TOTAL",
+            "",
+            "",
+            "",
+            "",
+            "2600.00",
+            "8800.00",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "page": 2,
+          "bbox": [
+            44.0,
+            455.0,
+            1025.0,
+            483.0
+          ],
+          "method": "Native PDF \u00b7 grid",
+          "confidence": 1.0,
+          "id": 21
+        }
+      ],
+      "pages": [
+        1,
+        2
+      ],
+      "headers_removed": 1,
+      "inferred_headers": false
+    }
+  ],
+  "issues": [
+    {
+      "id": 1,
+      "table": 1,
+      "row": 6,
+      "column": 6,
+      "kind": "missing_value",
+      "severity": "warning",
+      "message": "Missing value in usually populated column \"Debit\"."
+    },
+    {
+      "id": 2,
+      "table": 1,
+      "row": 9,
+      "column": 8,
+      "kind": "balance_mismatch",
+      "severity": "error",
+      "message": "Expected running balance 5,975.00; found 6,050.00."
+    },
+    {
+      "id": 3,
+      "table": 1,
+      "row": 10,
+      "column": 8,
+      "kind": "balance_mismatch",
+      "severity": "error",
+      "message": "Expected running balance 6,850.00; found 6,775.00."
+    },
+    {
+      "id": 4,
+      "table": 1,
+      "row": 12,
+      "column": 9,
+      "kind": "missing_value",
+      "severity": "warning",
+      "message": "Missing value in usually populated column \"Currency\"."
+    },
+    {
+      "id": 5,
+      "table": 1,
+      "row": 21,
+      "column": null,
+      "kind": "sparse_row",
+      "severity": "warning",
+      "message": "Most cells are empty; possible merged or shifted row."
+    },
+    {
+      "id": 6,
+      "table": 1,
+      "row": 21,
+      "column": 6,
+      "kind": "total_mismatch",
+      "severity": "error",
+      "message": "Debit: stated 2,600.00; preceding rows sum to 2,500.00."
+    }
+  ],
+  "elapsed_seconds": 0.31,
+  "row_count": 21,
+  "headers_removed": 1,
+  "engine": "LedgerLens 1.0 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": []
+}

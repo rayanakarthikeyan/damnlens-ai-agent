@@ -1,0 +1,61 @@
+{
+  "generated": "2026-10-15T05:33:06.449270+00:00",
+  "environment": "Windows-11-10.0.26200-SP0",
+  "methodology": "Compare normalized whitespace in every output cell to independently generated source ground truth in original row order. Cell accuracy divides matching cells by the larger of expected and actual cell counts, penalizing dropped and extra cells. Row recall and precision use exact full-row multiset matches, preserving duplicate multiplicity. Header equality is reported separately. Source errors count as correct only when faithfully preserved.",
+  "limitations": "Only three original, English, synthetic fixtures; clean scans at 150 DPI and consistent layouts. Results do not establish accuracy on unseen PDFs, handwriting, merged cells, nested tables, complex borderless layouts or other languages. No hidden evaluation was performed.",
+  "results": [
+    {
+      "file": "01_invoice_register.pdf",
+      "pages": 3,
+      "expected_rows": 31,
+      "actual_rows": 31,
+      "expected_cells": 372,
+      "actual_cells": 372,
+      "correct_cells": 372,
+      "cell_accuracy": 1.0,
+      "row_recall": 1.0,
+      "row_precision": 1.0,
+      "headers_exact": true,
+      "seconds": 0.22,
+      "findings": 0,
+      "finding_types": {}
+    },
+    {
+      "file": "02_scanned_inventory.pdf",
+      "pages": 2,
+      "expected_rows": 20,
+      "actual_rows": 20,
+      "expected_cells": 240,
+      "actual_cells": 240,
+      "correct_cells": 240,
+      "cell_accuracy": 1.0,
+      "row_recall": 1.0,
+      "row_precision": 1.0,
+      "headers_exact": true,
+      "seconds": 24.02,
+      "findings": 0,
+      "finding_types": {}
+    },
+    {
+      "file": "03_bank_statement.pdf",
+      "pages": 2,
+      "expected_rows": 21,
+      "actual_rows": 21,
+      "expected_cells": 252,
+      "actual_cells": 252,
+      "correct_cells": 252,
+      "cell_accuracy": 1.0,
+      "row_recall": 1.0,
+      "row_precision": 1.0,
+      "headers_exact": true,
+      "seconds": 0.31,
+      "findings": 6,
+      "finding_types": {
+        "missing_value": 2,
+        "balance_mismatch": 2,
+        "sparse_row": 1,
+        "total_mismatch": 1
+      }
+    }
+  ]
+}

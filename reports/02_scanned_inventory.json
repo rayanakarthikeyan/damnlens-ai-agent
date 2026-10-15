@@ -1,0 +1,579 @@
+{
+  "filename": "02_scanned_inventory.pdf",
+  "sha256": "18b987c304b7f20ddd13b37c0f4051d74203c9510bde61e8a9e425955feb4d41",
+  "page_count": 2,
+  "pages": [
+    {
+      "page": 1,
+      "tables": 1,
+      "method": "ocr",
+      "attempts": [
+        "ocr"
+      ],
+      "status": "extracted"
+    },
+    {
+      "page": 2,
+      "tables": 1,
+      "method": "ocr",
+      "attempts": [
+        "ocr"
+      ],
+      "status": "extracted"
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "name": "Table 1",
+      "headers": [
+        "SKU",
+        "Date",
+        "Description",
+        "Location",
+        "Quantity",
+        "Unit price",
+        "Tax %",
+        "Net",
+        "Tax",
+        "Total",
+        "Currency",
+        "Status"
+      ],
+      "rows": [
+        {
+          "cells": [
+            "SKU-0001",
+            "2026-10-01",
+            "Office item 01",
+            "Depot A",
+            "3",
+            "16.00",
+            "10%",
+            "48.00",
+            "4.80",
+            "52.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            174.76,
+            994.58,
+            202.91
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.995,
+          "id": 1
+        },
+        {
+          "cells": [
+            "SKU-0002",
+            "2026-10-02",
+            "Office item 02",
+            "Depot A",
+            "4",
+            "17.00",
+            "10%",
+            "68.00",
+            "6.80",
+            "74.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            202.91,
+            994.58,
+            230.73
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.999,
+          "id": 2
+        },
+        {
+          "cells": [
+            "SKU-0003",
+            "2026-10-03",
+            "Office item 03",
+            "Depot A",
+            "5",
+            "18.00",
+            "10%",
+            "90.00",
+            "9.00",
+            "99.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            230.73,
+            994.58,
+            258.71
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.987,
+          "id": 3
+        },
+        {
+          "cells": [
+            "SKU-0004",
+            "2026-10-04",
+            "Office item 04",
+            "Depot A",
+            "6",
+            "19.00",
+            "10%",
+            "114.00",
+            "11.40",
+            "125.40",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            258.71,
+            994.58,
+            286.69
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.997,
+          "id": 4
+        },
+        {
+          "cells": [
+            "SKU-0005",
+            "2026-10-05",
+            "Office item 05",
+            "Depot A",
+            "7",
+            "20.00",
+            "10%",
+            "140.00",
+            "14.00",
+            "154.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            286.69,
+            994.58,
+            314.67
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 1.0,
+          "id": 5
+        },
+        {
+          "cells": [
+            "SKU-0006",
+            "2026-10-06",
+            "Office item 06",
+            "Depot A",
+            "8",
+            "21.00",
+            "10%",
+            "168.00",
+            "16.80",
+            "184.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            314.67,
+            994.58,
+            342.65
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.998,
+          "id": 6
+        },
+        {
+          "cells": [
+            "SKU-0007",
+            "2026-10-07",
+            "Office item 07",
+            "Depot A",
+            "9",
+            "22.00",
+            "10%",
+            "198.00",
+            "19.80",
+            "217.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            342.65,
+            994.58,
+            370.8
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.999,
+          "id": 7
+        },
+        {
+          "cells": [
+            "SKU-0008",
+            "2026-10-08",
+            "Office item 08",
+            "Depot A",
+            "10",
+            "23.00",
+            "10%",
+            "230.00",
+            "23.00",
+            "253.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            370.8,
+            994.58,
+            398.62
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.993,
+          "id": 8
+        },
+        {
+          "cells": [
+            "SKU-0009",
+            "2026-10-09",
+            "Office item 09",
+            "Depot A",
+            "11",
+            "24.00",
+            "10%",
+            "264.00",
+            "26.40",
+            "290.40",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            398.62,
+            994.58,
+            426.6
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.998,
+          "id": 9
+        },
+        {
+          "cells": [
+            "SKU-0010",
+            "2026-10-10",
+            "Office item 10",
+            "Depot A",
+            "12",
+            "25.00",
+            "10%",
+            "300.00",
+            "30.00",
+            "330.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 1,
+          "bbox": [
+            43.85,
+            426.6,
+            994.58,
+            454.58
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.99,
+          "id": 10
+        },
+        {
+          "cells": [
+            "SKU-0011",
+            "2026-10-11",
+            "Office item 11",
+            "Depot A",
+            "13",
+            "26.00",
+            "10%",
+            "338.00",
+            "33.80",
+            "371.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            174.76,
+            994.58,
+            202.91
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.997,
+          "id": 11
+        },
+        {
+          "cells": [
+            "SKU-0012",
+            "2026-10-12",
+            "Office item 12",
+            "Depot A",
+            "14",
+            "27.00",
+            "10%",
+            "378.00",
+            "37.80",
+            "415.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            202.91,
+            994.58,
+            230.73
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.991,
+          "id": 12
+        },
+        {
+          "cells": [
+            "SKU-0013",
+            "2026-10-13",
+            "Office item 13",
+            "Depot A",
+            "15",
+            "28.00",
+            "10%",
+            "420.00",
+            "42.00",
+            "462.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            230.73,
+            994.58,
+            258.71
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.997,
+          "id": 13
+        },
+        {
+          "cells": [
+            "SKU-0014",
+            "2026-10-14",
+            "Office item 14",
+            "Depot A",
+            "16",
+            "29.00",
+            "10%",
+            "464.00",
+            "46.40",
+            "510.40",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            258.71,
+            994.58,
+            286.69
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.997,
+          "id": 14
+        },
+        {
+          "cells": [
+            "SKU-0015",
+            "2026-10-15",
+            "Office item 15",
+            "Depot A",
+            "17",
+            "30.00",
+            "10%",
+            "510.00",
+            "51.00",
+            "561.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            286.69,
+            994.58,
+            314.67
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 1.0,
+          "id": 15
+        },
+        {
+          "cells": [
+            "SKU-0016",
+            "2026-10-16",
+            "Office item 16",
+            "Depot A",
+            "18",
+            "31.00",
+            "10%",
+            "558.00",
+            "55.80",
+            "613.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            314.67,
+            994.58,
+            342.65
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.995,
+          "id": 16
+        },
+        {
+          "cells": [
+            "SKU-0017",
+            "2026-10-17",
+            "Office item 17",
+            "Depot A",
+            "19",
+            "32.00",
+            "10%",
+            "608.00",
+            "60.80",
+            "668.80",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            342.65,
+            994.58,
+            370.8
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.999,
+          "id": 17
+        },
+        {
+          "cells": [
+            "SKU-0018",
+            "2026-10-18",
+            "Office item 18",
+            "Depot A",
+            "20",
+            "33.00",
+            "10%",
+            "660.00",
+            "66.00",
+            "726.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            370.8,
+            994.58,
+            398.62
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.997,
+          "id": 18
+        },
+        {
+          "cells": [
+            "SKU-0019",
+            "2026-10-19",
+            "Office item 19",
+            "Depot A",
+            "21",
+            "34.00",
+            "10%",
+            "714.00",
+            "71.40",
+            "785.40",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            398.62,
+            994.58,
+            426.6
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.998,
+          "id": 19
+        },
+        {
+          "cells": [
+            "SKU-0020",
+            "2026-10-20",
+            "Office item 20",
+            "Depot A",
+            "22",
+            "35.00",
+            "10%",
+            "770.00",
+            "77.00",
+            "847.00",
+            "USD",
+            "Stock"
+          ],
+          "page": 2,
+          "bbox": [
+            43.85,
+            426.6,
+            994.58,
+            454.58
+          ],
+          "method": "OCR \u00b7 grid",
+          "confidence": 0.999,
+          "id": 20
+        }
+      ],
+      "pages": [
+        1,
+        2
+      ],
+      "headers_removed": 1,
+      "inferred_headers": false
+    }
+  ],
+  "issues": [],
+  "elapsed_seconds": 24.02,
+  "row_count": 20,
+  "headers_removed": 1,
+  "engine": "LedgerLens 1.0 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "edits": []
+}
