@@ -184,6 +184,8 @@ The expanded evaluator returns a failure code for the remaining strict header mi
 
 Tests cover native tables, OCR, borderless multiword headers, page stitching, duplicate preservation, headerless continuations, the 50/51-page boundary, encrypted/corrupt/oversized files, numeric locales, subtotals, line arithmetic, bank errors, typed XLSX, formula injection, evidence, corrections, origin/host protection and restart recovery.
 
+Maintainer checks: install `requirements-dev.txt`, run `npm ci --ignore-scripts`, then `python scripts/check_quality.py`. This checks Python lint/imports/formatting plus JavaScript syntax and frontend formatting. Node.js is needed only for maintenance checks; judges can run the Python app without it. See [CONTRIBUTING.md](CONTRIBUTING.md) for module contracts, isolated testing, Docker verification and release checks. Result tabs support **Left/Right, Home and End** with labelled panels and one selected Tab-stop.
+
 ## Architecture
 
 ```mermaid

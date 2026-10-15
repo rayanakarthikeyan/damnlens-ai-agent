@@ -1,0 +1,52 @@
+{
+  "scope": "Actual browser review of the original dummy invoice; no cloud calls",
+  "observed": {
+    "panels": [
+      {
+        "hidden": true,
+        "id": "data-panel",
+        "labelledBy": "tab-data"
+      },
+      {
+        "hidden": false,
+        "id": "issues-panel",
+        "labelledBy": "tab-issues"
+      },
+      {
+        "hidden": true,
+        "id": "coverage-panel",
+        "labelledBy": "tab-coverage"
+      },
+      {
+        "hidden": true,
+        "id": "activity-panel",
+        "labelledBy": "tab-activity"
+      },
+      {
+        "hidden": true,
+        "id": "gemini-panel",
+        "labelledBy": "tab-gemini"
+      },
+      {
+        "hidden": true,
+        "id": "corrections-panel",
+        "labelledBy": "tab-corrections"
+      }
+    ],
+    "selected": [
+      "issues"
+    ],
+    "tabStops": 1,
+    "textSize": "large"
+  },
+  "manual_actions_verified": [
+    "ArrowRight selects Validation",
+    "End selects Corrections",
+    "Home selects Data & source",
+    "ArrowLeft wraps to Corrections",
+    "ArrowRight wraps to Data & source",
+    "Tab moves from the selected tab to JSON instead of other tabs"
+  ],
+  "console_errors": [],
+  "screenshot": "docs/screenshots/33-keyboard-review.png"
+}

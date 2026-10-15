@@ -1,7 +1,7 @@
 """Bounded, local second-model checks for short ambiguous scan labels."""
 
-from pathlib import Path
 import re
+from pathlib import Path
 from threading import Lock
 
 import cv2

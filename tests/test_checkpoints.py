@@ -2,8 +2,9 @@ import json
 from pathlib import Path
 
 import pytest
-from app.engine import extract
+
 from app.checkpoints import PageCheckpoints
+from app.engine import extract
 
 ROOT = Path(__file__).resolve().parents[1]
 

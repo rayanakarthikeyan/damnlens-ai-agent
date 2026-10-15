@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.fixture
 def client(tmp_path, monkeypatch):
-    monkeypatch.setenv("LEDGERLENS_DATA", str(tmp_path / "jobs"))
+    # Override the current variable even if a maintainer has real job data configured.
+    monkeypatch.setenv("DAMNLENS_DATA", str(tmp_path / "jobs"))
     import app.main as module
 
     module = importlib.reload(module)
@@ -64,6 +65,7 @@ def test_gemini_opted_in_upload_keeps_baseline_and_findings_after_edit(
     client, monkeypatch
 ):
     import json
+
     from app import gemini
 
     monkeypatch.setenv("GEMINI_API_KEY", "test-key-never-expose")
@@ -334,8 +336,8 @@ def test_progress_write_recovers_from_transient_windows_file_locks(
 
 
 def test_interrupted_job_resumes_verified_pages_and_original_route(client, monkeypatch):
-    import app.main as module
     import app.engine as engine
+    import app.main as module
 
     job = completed(client)
     assert client.post(f"/api/jobs/{job}/retry?resume=true").status_code == 409

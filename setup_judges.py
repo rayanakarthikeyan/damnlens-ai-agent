@@ -3,11 +3,11 @@
 import argparse
 import hashlib
 import os
-from pathlib import Path
 import struct
 import subprocess
 import sys
 import venv
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 PYTHON = ROOT / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
@@ -153,6 +153,6 @@ if __name__ == "__main__":
             f"\nSETUP FAILED: {exc}\nSee README.md for manual setup and troubleshooting.",
             file=sys.stderr,
         )
-        raise SystemExit(1)
+        raise SystemExit(1) from None
     except KeyboardInterrupt:
-        raise SystemExit(130)
+        raise SystemExit(130) from None

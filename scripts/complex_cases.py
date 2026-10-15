@@ -1,8 +1,9 @@
 """Original challenge fixtures with explicit ground truth, unrelated to the OCR code."""
 
 import io
+
 from reportlab.pdfgen import canvas
-import pymupdf as fitz
+
 from scripts.judge_audit import raster
 
 WIDTHS = [75, 145, 65, 75, 75, 65, 75, 72, 72, 72, 90, 70]
@@ -170,7 +171,6 @@ def cases():
     stream = io.BytesIO()
     c = canvas.Canvas(stream, pagesize=(500, 500))
     xs = [35, 140, 245, 350, 455]
-    ys = [430, 402, 374, 344, 314]
     c.setFont("Helvetica-Bold", 11)
     c.drawString(40, 412, "2025")
     c.drawString(250, 412, "2026")

@@ -321,7 +321,7 @@ def prepare_fragment(fragment, is_header, numeric):
             and not any(p in spanning_parents for p in path[:-1])
         )
         else leaf
-        for path, leaf in zip(paths, leaves)
+        for path, leaf in zip(paths, leaves, strict=False)
     ]
     counts = Counter()
     for i, name in enumerate(names):

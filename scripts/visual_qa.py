@@ -1,10 +1,11 @@
 """Render source fixtures and inspect exported workbook structure."""
 
-from pathlib import Path
 import io
+from pathlib import Path
+
 import pymupdf as fitz
-from PIL import Image, ImageDraw
 from openpyxl import load_workbook
+from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 out = ROOT / "tmp" / "visual"

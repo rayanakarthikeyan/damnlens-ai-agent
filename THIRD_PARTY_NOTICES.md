@@ -18,6 +18,7 @@ DamnLens AI Agent uses the open-source libraries and pretrained models listed be
 | Pillow | Fixture/demo rendering | HPND; https://python-pillow.org |
 | ReportLab | Original dummy PDFs | BSD; https://www.reportlab.com |
 | pytest / HTTPX | Verification | MIT / BSD-3-Clause; https://pytest.org / https://www.python-httpx.org |
+| Ruff / Prettier | Maintainer lint, import ordering and formatting | MIT; https://github.com/astral-sh/ruff / https://github.com/prettier/prettier |
 | imageio-ffmpeg / FFmpeg | Demo encoding | BSD wrapper / build-dependent FFmpeg licensing; https://github.com/imageio/imageio-ffmpeg |
 | Google Gemini API (optional) | Independent cloud reading of explicitly authorized pages | Proprietary hosted service; user-supplied key; https://ai.google.dev/gemini-api/terms |
 

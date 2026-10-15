@@ -2,12 +2,11 @@
 
 import io
 import json
-import sys
 from pathlib import Path
 
 import pymupdf as fitz
-from reportlab.pdfgen import canvas
 from reportlab.lib.colors import HexColor
+from reportlab.pdfgen import canvas
 
 ROOT = Path(__file__).resolve().parents[1]
 WIDTH, HEIGHT = 1120, 700
@@ -51,7 +50,7 @@ def render_pdf(path, title, headers, pages, widths, scanned=False, borderless=Fa
                 "Helvetica-Bold" if ri == 0 else "Helvetica", 10 if scanned else 9
             )
             xx = x
-            for text, w in zip(row, widths):
+            for text, w in zip(row, widths, strict=False):
                 c.drawString(xx + 7, y - 18, str(text))
                 xx += w
         if not borderless:

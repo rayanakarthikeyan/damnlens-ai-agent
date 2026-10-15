@@ -10,10 +10,10 @@ from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, TableStyle
 
+from app import ocr_verify
 from app.engine import extract, record, stitch, validate
 from app.exporter import xlsx
 from app.layout import reading_order
-from app import ocr_verify
 
 
 def pdf_table(data, styles=()):
@@ -85,7 +85,9 @@ def test_external_header_words_are_not_clipped(tmp_path):
     stream = io.BytesIO()
     c = canvas.Canvas(stream, pagesize=(600, 400))
     c.setFont("Helvetica", 12)
-    for x, value in zip((59.6, 225.8, 392), ("Hello", "Goodbye", "World")):
+    for x, value in zip(
+        (59.6, 225.8, 392), ("Hello", "Goodbye", "World"), strict=False
+    ):
         c.drawString(x, 330, value)
     for i, row in enumerate(
         [
@@ -95,7 +97,7 @@ def test_external_header_words_are_not_clipped(tmp_path):
             ["4", "Chonk", "Bonk"],
         ]
     ):
-        for x, value in zip((56.8, 223, 389.2), row):
+        for x, value in zip((56.8, 223, 389.2), row, strict=False):
             c.drawString(x, 313 - i * 14, value)
     c.save()
     result = extract(save_document(tmp_path, stream.getvalue()))

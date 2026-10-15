@@ -1,6 +1,5 @@
 import io
 import json
-from pathlib import Path
 
 import pymupdf as fitz
 import pytest
@@ -8,7 +7,7 @@ from openpyxl import load_workbook
 
 from app.engine import extract, record, stitch, validate
 from app.exporter import xlsx
-from scripts.complex_cases import cases, additional_cases
+from scripts.complex_cases import additional_cases, cases
 
 CASES = list(cases()) + list(additional_cases())
 

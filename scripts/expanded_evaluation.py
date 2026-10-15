@@ -1,21 +1,22 @@
 """Source-frozen public layout checkpoints; partial audits are labelled explicitly."""
 
 import argparse
-from collections import Counter
-from datetime import datetime, timezone
 import hashlib
 import itertools
 import json
-from pathlib import Path
 import re
 import sys
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
 from urllib.request import urlopen
 
 import pymupdf as fitz
 
 ROOT = Path(__file__).resolve().parents[1]
+
 sys.path.insert(0, str(ROOT))
-from app.engine import clean, extract
+from app.engine import clean, extract  # noqa: E402 - direct script entry point
 
 
 def compare_table(actual, expected):
@@ -182,12 +183,15 @@ def main():
         f"{sum(r['passed'] for r in measurements)}/{len(measurements)} exact checkpoint cases",
         flush=True,
     )
-    accepted_review = (
-        lambda r: r["checks_passed"] == r["checks"] - 1
-        and r.get("ocr_disagreements", 0) > 0
-        and len(r["failures"]) == 1
-        and r["failures"][0].startswith("headers ")
-    )
+
+    def accepted_review(r):
+        return (
+            r["checks_passed"] == r["checks"] - 1
+            and r.get("ocr_disagreements", 0) > 0
+            and len(r["failures"]) == 1
+            and r["failures"][0].startswith("headers ")
+        )
+
     if args.check_review_routing:
         review_cases = [
             r for r in measurements if not r["passed"] and accepted_review(r)

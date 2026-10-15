@@ -8,9 +8,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
 sys.path.insert(0, str(ROOT))
-from app.engine import extract, clean
-from app.exporter import xlsx
+from app.engine import clean, extract  # noqa: E402 - direct script entry point
+from app.exporter import xlsx  # noqa: E402 - direct script entry point
 
 
 def benchmark():

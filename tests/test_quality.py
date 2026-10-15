@@ -1,5 +1,7 @@
 from pathlib import Path
+
 import pytest
+
 from app.engine import extract
 from app.quality import approve, enrich
 

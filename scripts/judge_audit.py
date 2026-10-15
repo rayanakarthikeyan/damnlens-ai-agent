@@ -1,19 +1,21 @@
 """Varied synthetic development audit. Failures are measured, never hidden."""
 
 import argparse
-from collections import Counter
-from datetime import datetime, timezone
 import io
 import json
-from pathlib import Path
 import sys
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
 import pymupdf as fitz
 from PIL import Image, ImageEnhance, ImageFilter
 from reportlab.pdfgen import canvas
-from app.engine import extract, clean
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from app.engine import clean, extract  # noqa: E402 - direct script entry point
 
 HEADERS = [
     "Item ID",
@@ -66,7 +68,7 @@ def digital(borderless=False, merged=False):
         top -= 24
     for ri, row in enumerate([HEADERS] + ROWS):
         x = 36
-        for ci, (value, width) in enumerate(zip(row, WIDTHS)):
+        for ci, (value, width) in enumerate(zip(row, WIDTHS, strict=False)):
             c.setFont("Helvetica-Bold" if ri == 0 else "Helvetica", 10)
             if ri > 0 and 2 <= ci <= 6:
                 c.drawRightString(x + width - 5, top - ri * 27 - 18, value)

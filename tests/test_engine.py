@@ -1,6 +1,5 @@
 import io
 import json
-from copy import deepcopy
 from pathlib import Path
 
 import pymupdf as fitz
@@ -8,7 +7,7 @@ import pytest
 from openpyxl import load_workbook
 
 from app.engine import extract, number, record, stitch, validate
-from app.exporter import xlsx, typed, csv_bytes
+from app.exporter import csv_bytes, typed, xlsx
 from scripts.generate_samples import invoice_fixture, render_pdf
 
 ROOT = Path(__file__).resolve().parents[1]

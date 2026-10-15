@@ -1,0 +1,10 @@
+{
+  "name": "damnlens-maintenance",
+  "private": true,
+  "scripts": {
+    "check": "node --check web/app.js && prettier --check web"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}

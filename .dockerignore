@@ -1,4 +1,7 @@
 .git
+.env
+.env.*
+!.env.example
 .venv
 .jobs
 tmp
@@ -6,3 +9,5 @@ __pycache__
 .pytest_cache
 docs/screenshots
 submission
+node_modules
+.ruff_cache

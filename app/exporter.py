@@ -9,7 +9,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-from .engine import number, norm
+from .engine import norm, number
 from .quality import assessment
 
 NAVY = "182D35"
@@ -221,7 +221,9 @@ def xlsx(result):
         )
         for r in t["rows"]:
             row = ws.max_row + 1
-            for i, (h, value) in enumerate(zip(t["headers"], r["cells"]), 1):
+            for i, (h, value) in enumerate(
+                zip(t["headers"], r["cells"], strict=False), 1
+            ):
                 cell = safe_cell(ws.cell(row, i), typed(value, h))
                 if isinstance(cell.value, datetime):
                     cell.number_format = "yyyy-mm-dd"

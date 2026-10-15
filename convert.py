@@ -3,9 +3,10 @@
 import argparse
 import json
 from pathlib import Path
-from app.workflow import run, options
-from app.gemini import load_environment, save_ledger
+
 from app.exporter import xlsx
+from app.gemini import load_environment, save_ledger
+from app.workflow import options, run
 
 
 def main():
@@ -33,16 +34,19 @@ def main():
     out = args.output or args.input.with_suffix(".xlsx")
     if out.resolve() == args.input.resolve():
         p.error("Output must differ from input")
+    if out.suffix.lower() != ".xlsx":
+        p.error("Excel output must use the .xlsx extension")
+    sidecar = out.with_suffix(".json") if args.json else None
+    ledger = args.gemini_ledger or out.with_suffix(out.suffix + ".gemini-ledger.json")
+    if args.workflow == "gemini" and ledger.resolve() in {
+        path.resolve() for path in (args.input, out, sidecar) if path is not None
+    }:
+        p.error("Gemini ledger must differ from input, Excel output and JSON output")
     try:
         load_environment(Path(__file__).resolve().parent)
         workflow = options(
             args.workflow, args.allow_cloud, args.gemini_scope, args.max_requests
         )
-        ledger = args.gemini_ledger or out.with_suffix(
-            out.suffix + ".gemini-ledger.json"
-        )
-        if ledger.resolve() in {args.input.resolve(), out.resolve()}:
-            p.error("Gemini ledger must differ from input and output")
         r = run(
             args.input,
             workflow=workflow,
@@ -62,7 +66,7 @@ def main():
         )
         if not r["tables"]:
             raise SystemExit(2)
-    except (ValueError, RuntimeError, FileNotFoundError) as exc:
+    except (ValueError, RuntimeError, OSError) as exc:
         p.exit(1, f"Conversion failed: {exc}\n")
 
 

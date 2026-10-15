@@ -1,16 +1,17 @@
 """Measure complex-table reconstruction against explicit source ground truth."""
 
 import argparse
+import json
+import sys
 from collections import Counter
 from datetime import datetime, timezone
-import json
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+
 sys.path.insert(0, str(ROOT))
-from app.engine import extract, clean
-from app.exporter import xlsx
+from app.engine import clean, extract  # noqa: E402 - direct script entry point
+from app.exporter import xlsx  # noqa: E402 - direct script entry point
 
 
 def main():
@@ -57,7 +58,8 @@ def main():
             "cell_accuracy": round(correct / denominator, 6) if denominator else 1,
             "headers_exact": len(actual) == len(expected["tables"])
             and all(
-                a["headers"] == b["headers"] for a, b in zip(actual, expected["tables"])
+                a["headers"] == b["headers"]
+                for a, b in zip(actual, expected["tables"], strict=False)
             ),
             "exact": actual == expected["tables"],
             "findings": dict(Counter(i["kind"] for i in result["issues"])),

@@ -2,17 +2,19 @@
 
 import io
 import json
-from pathlib import Path
 import sys
 import tempfile
 import time
+from pathlib import Path
+
+import pymupdf as fitz
+from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-import pymupdf as fitz
-from openpyxl import load_workbook
-from app.engine import extract
-from app.exporter import xlsx
+
+from app.engine import extract  # noqa: E402 - direct script entry point
+from app.exporter import xlsx  # noqa: E402 - direct script entry point
 
 
 def main():

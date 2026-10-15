@@ -4,23 +4,23 @@ import json
 import os
 import shutil
 import threading
-import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pymupdf as fitz
-from fastapi import FastAPI, HTTPException, Request, UploadFile, File
+from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from .engine import validate
-from .workflow import run, options
+from .exporter import csv_bytes, xlsx
 from .gemini import configuration, load_environment
-from .exporter import xlsx, csv_bytes
-from .quality import enrich, approve, revoke
+from .quality import approve, enrich, revoke
+from .storage import atomic_json
+from .workflow import options, run
 
 ROOT = Path(__file__).resolve().parents[1]
 load_environment(ROOT)
@@ -39,7 +39,7 @@ def job_dir(job):
     try:
         uuid.UUID(job)
     except ValueError:
-        raise HTTPException(404, "Job not found")
+        raise HTTPException(404, "Job not found") from None
     path = JOBS / job
     if not path.is_dir():
         raise HTTPException(404, "Job not found")
@@ -48,27 +48,7 @@ def job_dir(job):
 
 def save(path, data):
     with LOCK:
-        temp = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
-        temp.write_text(
-            json.dumps(data, ensure_ascii=False, allow_nan=False), encoding="utf-8"
-        )
-        # Windows indexers/antivirus can briefly hold the destination without
-        # delete sharing. Retry atomic replacement; never truncate live JSON.
-        try:
-            for attempt in range(7):
-                try:
-                    temp.replace(path)
-                    return
-                except PermissionError:
-                    if attempt == 6:
-                        raise
-                    time.sleep(0.02 * (2**attempt))
-        finally:
-            if temp.exists():
-                try:
-                    temp.unlink()
-                except OSError:
-                    pass
+        atomic_json(path, data)
 
 
 def load(path):
@@ -188,7 +168,7 @@ def create_job(data, name, force=False, workflow=None):
             if not 1 <= len(doc) <= 50:
                 raise ValueError("Documents must contain 1–50 pages.")
     except Exception as exc:
-        raise HTTPException(422, f"Cannot open document: {exc}")
+        raise HTTPException(422, f"Cannot open document: {exc}") from None
     job = str(uuid.uuid4())
     directory = JOBS / job
     directory.mkdir()
@@ -277,7 +257,7 @@ async def upload(
     try:
         chosen = options(workflow, cloud_consent, gemini_scope, max_requests)
     except ValueError as exc:
-        raise HTTPException(422, str(exc))
+        raise HTTPException(422, str(exc)) from None
     data = await file.read(MAX_BYTES + 1)
     return create_job(data, file.filename or "document.pdf", force_ocr, chosen)
 
@@ -428,7 +408,7 @@ def correct(job: str, edit: Correction):
             row = table["rows"][edit.row - 1]
             before = row["cells"][edit.column - 1]
         except IndexError:
-            raise HTTPException(404, "Cell not found")
+            raise HTTPException(404, "Cell not found") from None
         if before == edit.value:
             return r
         row["cells"][edit.column - 1] = edit.value
@@ -482,7 +462,7 @@ def complete_review(job: str, review: Review):
         try:
             approve(r, review.note, review.accept_findings)
         except ValueError as exc:
-            raise HTTPException(409, str(exc))
+            raise HTTPException(409, str(exc)) from None
         r.setdefault("events", []).append(
             {
                 "at": r["review"]["at"],
@@ -519,7 +499,7 @@ def version_export(job: str, version: str, kind: str):
     try:
         uuid.UUID(version)
     except ValueError:
-        raise HTTPException(404, "Saved run not found")
+        raise HTTPException(404, "Saved run not found") from None
     p = job_dir(job) / "versions" / f"{version}.json"
     if not p.exists():
         raise HTTPException(404, "Saved run not found")

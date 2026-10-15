@@ -1,10 +1,10 @@
 """Cloud contract/recovery tests use mocked responses, never a live API key."""
 
-from copy import deepcopy
 import io
 import json
-from pathlib import Path
 import urllib.error
+from copy import deepcopy
+from pathlib import Path
 
 import pymupdf as fitz
 import pytest

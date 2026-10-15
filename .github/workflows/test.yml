@@ -3,10 +3,28 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: python -m pip install ruff==0.14.0
+      - run: npm ci --ignore-scripts
+      - name: Python lint, formatting and frontend checks
+        run: python scripts/check_quality.py
   test:
+    needs: quality
+    timeout-minutes: 25
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -39,3 +57,34 @@ jobs:
             reports/tests.xml
             reports/public-evaluation-final.json
             reports/expanded-after.json
+  container:
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build image with excluded credential canary
+        run: |
+          printf 'GEMINI_API_KEY=container-exclusion-canary\n' > .env
+          docker build -t damnlens-ci .
+      - name: Run the image as its non-root user
+        run: |
+          docker run -d --name damnlens-ci -p 127.0.0.1:8765:8765 damnlens-ci
+          test "$(docker exec damnlens-ci id -u)" != "0"
+          docker exec damnlens-ci test ! -e /app/.env
+      - name: Extract all three dummy documents through the container API
+        run: python scripts/container_check.py
+      - name: Container diagnostics
+        if: always()
+        run: docker logs damnlens-ci || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: container-results
+          path: reports/container-check.json
+      - name: Stop test container
+        if: always()
+        run: docker rm -f damnlens-ci || true

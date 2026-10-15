@@ -6,7 +6,6 @@ import pytest
 from app.engine import extract, record, stitch, validate
 from scripts.judge_audit import cases
 
-
 AUDIT_CASES = list(cases())
 
 

@@ -23,7 +23,7 @@ def main():
     except ImportError:
         raise SystemExit(
             "Install dependencies first: python -m pip install -r requirements.txt"
-        )
+        ) from None
     listener = None
     ports = [args.port] if args.port is not None else range(8765, 8785)
     for port in ports:

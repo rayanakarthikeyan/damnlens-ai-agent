@@ -5,11 +5,11 @@ The first ten ground-truth rows are page 1 in all three bundled generators.
 """
 
 import argparse
-from datetime import datetime, timezone
 import json
 import os
-from pathlib import Path
 import sys
+from datetime import datetime, timezone
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -32,8 +32,8 @@ def evaluate_result(sample, result):
 
     matching = sum(
         normalize(a) == normalize(b)
-        for ar, er in zip(actual, expected)
-        for a, b in zip(ar, er)
+        for ar, er in zip(actual, expected, strict=False)
+        for a, b in zip(ar, er, strict=False)
     )
     denominator = max(sum(map(len, actual)), sum(map(len, expected)))
     report = {

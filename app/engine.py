@@ -13,21 +13,21 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from threading import Lock
 
-from .quality import enrich
-from .checkpoints import PageCheckpoints
-from .ocr_verify import verify_labels
-from .layout import (
-    grid_records,
-    prepare_fragment,
-    append_continuation,
-    aligned_fragments,
-    native_cell_text,
-    reading_order,
-)
-
 import cv2
 import numpy as np
 import pymupdf as fitz
+
+from .checkpoints import PageCheckpoints
+from .layout import (
+    aligned_fragments,
+    append_continuation,
+    grid_records,
+    native_cell_text,
+    prepare_fragment,
+    reading_order,
+)
+from .ocr_verify import verify_labels
+from .quality import enrich
 
 OCR_LOCK = Lock()
 _ocr = None
@@ -224,7 +224,9 @@ def native_tables(page, page_no):
         if external:
             words = page.get_text("words")
             names = []
-            for box, original in zip(table.header.cells, table.header.names):
+            for box, original in zip(
+                table.header.cells, table.header.names, strict=False
+            ):
                 if not box:
                     names.append(original)
                     continue
@@ -599,7 +601,7 @@ def scan_tables(page, page_no, dpi=220):
         ):
             continue
         vertical_spans = {}
-        for col, (left, right) in enumerate(zip(xs, xs[1:])):
+        for col, (left, right) in enumerate(zip(xs, xs[1:], strict=False)):
             start = 0
             for end in range(1, len(ys)):
                 boundary = h[
@@ -642,7 +644,7 @@ def scan_tables(page, page_no, dpi=220):
                                 }
                 start = end
         rows = []
-        for band_index, (top, bottom) in enumerate(zip(ys, ys[1:])):
+        for band_index, (top, bottom) in enumerate(zip(ys, ys[1:], strict=False)):
             separators = [0]
             reconstructed_edges = []
             for col, edge in enumerate(xs[1:-1], 1):
@@ -689,7 +691,7 @@ def scan_tables(page, page_no, dpi=220):
             spans = []
             recognition_retries = []
             disagreements = []
-            for start_col, end_col in zip(separators, separators[1:]):
+            for start_col, end_col in zip(separators, separators[1:], strict=False):
                 left, right = xs[start_col], xs[end_col]
                 selected = [
                     a
@@ -850,7 +852,7 @@ def scan_tables(page, page_no, dpi=220):
                 if inherited:
                     row["inherited_cells"] = inherited
                 if rows and band_index > 0:
-                    for col, (left, right) in enumerate(zip(xs, xs[1:])):
+                    for col, (left, right) in enumerate(zip(xs, xs[1:], strict=False)):
                         if (
                             cells[col]
                             or not rows[-1]["cells"][col]
@@ -975,7 +977,7 @@ def stitch(fragments):
             if has_header:
                 matches = sum(
                     SequenceMatcher(None, norm(a), norm(b)).ratio() > 0.82
-                    for a, b in zip(candidate["headers"], headers)
+                    for a, b in zip(candidate["headers"], headers, strict=False)
                 )
                 if (
                     matches / len(headers) < 0.9

@@ -8,12 +8,12 @@ import base64
 import hashlib
 import json
 import os
-from pathlib import Path
 import re
 import urllib.error
 import urllib.request
-import time
-import uuid
+from pathlib import Path
+
+from .storage import atomic_json
 
 DEFAULT_MODEL = "gemini-3.8-flash"
 MAX_OUTPUT_TOKENS = 8192
@@ -88,22 +88,7 @@ class GeminiError(RuntimeError):
 
 def save_ledger(path, data):
     """CLI/live-evaluator persistence; the web API uses its existing atomic save."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
-    try:
-        temp.write_text(
-            json.dumps(data, ensure_ascii=False, allow_nan=False), encoding="utf-8"
-        )
-        for attempt in range(7):
-            try:
-                temp.replace(path)
-                return
-            except PermissionError:
-                if attempt == 6:
-                    raise
-                time.sleep(0.02 * 2**attempt)
-    finally:
-        temp.unlink(missing_ok=True)
+    atomic_json(path, data)
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -281,10 +266,12 @@ def compare_page(result, page, candidates):
         ):
             structural = True
             continue
-        for row, values in zip(rows, candidate["rows"]):
+        for row, values in zip(rows, candidate["rows"], strict=False):
             before = [normalized(c) for c in row["cells"]]
             after = [normalized(c) for c in values]
-            diffs = [i for i, (a, b) in enumerate(zip(before, after)) if a != b]
+            diffs = [
+                i for i, (a, b) in enumerate(zip(before, after, strict=False)) if a != b
+            ]
             if not diffs:
                 continue
             if len(diffs) != 1 or len(before) < 3:
@@ -292,8 +279,10 @@ def compare_page(result, page, candidates):
                 continue
             column = diffs[0]
 
-            def anchor(cells):
-                return tuple(normalized(c) for i, c in enumerate(cells) if i != column)
+            def anchor(cells, excluded=column):
+                return tuple(
+                    normalized(c) for i, c in enumerate(cells) if i != excluded
+                )
 
             signature = anchor(row["cells"])
             if (

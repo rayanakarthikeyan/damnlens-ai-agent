@@ -4,8 +4,8 @@ import hashlib
 import importlib.metadata
 import json
 from pathlib import Path
-import time
-import uuid
+
+from .storage import atomic_json
 
 
 class PageCheckpoints:
@@ -74,16 +74,4 @@ class PageCheckpoints:
             "payload": payload,
         }
         path = self.directory / f"page-{page:03}.json"
-        temp = self.directory / f"{path.name}.{uuid.uuid4().hex}.tmp"
-        try:
-            temp.write_text(json.dumps(envelope, ensure_ascii=False), encoding="utf-8")
-            for attempt in range(7):
-                try:
-                    temp.replace(path)
-                    break
-                except PermissionError:
-                    if attempt == 6:
-                        raise
-                    time.sleep(0.02 * 2**attempt)
-        finally:
-            temp.unlink(missing_ok=True)
+        atomic_json(path, envelope)

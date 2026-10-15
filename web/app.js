@@ -644,11 +644,37 @@ function setTab(tab) {
   $$("[data-tab]").forEach((b) => {
     b.classList.toggle("active", b.dataset.tab === tab);
     b.setAttribute("aria-selected", String(b.dataset.tab === tab));
+    b.tabIndex = b.dataset.tab === tab ? 0 : -1;
+    b.id = "tab-" + b.dataset.tab;
+    b.setAttribute("aria-controls", b.dataset.tab + "-panel");
+    const panel = $("#" + b.dataset.tab + "-panel");
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", b.id);
   });
   ["data", "issues", "coverage", "activity", "corrections", "gemini"].forEach(
     (name) => ($("#" + name + "-panel").hidden = name !== tab),
   );
 }
+$(".result-tabs").addEventListener("keydown", (event) => {
+  const current = event.target.closest('[role="tab"]');
+  if (
+    !current ||
+    !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)
+  )
+    return;
+  event.preventDefault();
+  const tabs = $$(".result-tabs [role='tab']");
+  const index = tabs.indexOf(current);
+  const next =
+    event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) %
+          tabs.length;
+  setTab(tabs[next].dataset.tab);
+  tabs[next].focus();
+});
 function renderGemini() {
   const assist = currentResult.gemini;
   if (!assist) {
