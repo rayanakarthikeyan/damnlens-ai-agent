@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-15T09:13:11.887263+00:00",
+  "kind": "live browser upload, original dummy scan, first page only",
+  "sample": "02_scanned_inventory",
+  "model": "gemini-3.8-flash",
+  "request_limit": 1,
+  "requests_used": 1,
+  "input_mime_type": "application/pdf",
+  "provider_status": "failed",
+  "message": "Gemini HTTP 503; local results retained. No automatic retry.",
+  "usage": {},
+  "candidate_tables": 0,
+  "matching_data_cells": 0,
+  "checked_cell_denominator": 120,
+  "expected_shape": [
+    10,
+    12
+  ],
+  "actual_shape": [
+    0,
+    0
+  ],
+  "headers_exact": false,
+  "local_rows_preserved": 20,
+  "scope": "Single non-blind dummy page. No hidden-PDF, cost invoice or general accuracy claim.",
+  "source_sha256": "ca2b466e8dc8a87bbff3dbaafe7d26f8416393eab1e7d36931a279b6d93d031a"
+}

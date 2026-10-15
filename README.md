@@ -1,14 +1,14 @@
 # DamnLens AI Agent
 
-**AI document extraction with source evidence and explicit review.** A local document-to-Excel agent for the INCUXAI AI Agent Development Challenge 2026.
+**Two AI workflows. One source-verified spreadsheet.** A document-to-Excel agent for the INCUXAI AI Agent Development Challenge 2026: keyless local AI, plus optional Gemini assistance for difficult pages.
 
 DamnLens AI Agent reads digital PDFs and scanned documents, reconstructs tables, joins continuation pages, detects data problems and exports traceable Excel workbooks. The operational workspace shows the extraction queue, agent stages, page coverage and validation findings. Inspect original pages beside the extracted data, record corrections and complete a snapshot-bound review before labelling an export as reviewed.
 
-![DamnLens AI Agent workspace](docs/screenshots/01-workspace-desktop.jpg)
+![DamnLens AI Agent: Local AI and Gemini-assisted workflows](docs/screenshots/25-two-workflows.png)
 
 ## Judges: setup and launch
 
-Requires **64-bit Python 3.12**, 4 GB RAM minimum (8 GB recommended), and network access for the initial Python dependency installation. A CPU is sufficient. No API key, GPU, Tesseract installation, subscription or model download is needed at runtime. The English model is included in `models/`.
+Requires **64-bit Python 3.12**, 4 GB RAM minimum (8 GB recommended), and network access for initial dependency installation. A CPU is sufficient. Default **Local AI** needs no API key, GPU, Tesseract installation, subscription or runtime model download. English OCR models are included in `models/`. Optional Gemini needs your own key and internet connection.
 
 ```bash
 git clone https://github.com/rayanakarthikeyan/damnlens-ai-agent.git
@@ -78,7 +78,37 @@ The container runs as a non-root user. The Dockerfile is supplied for portabilit
 5. **Validate:** check totals/subtotals, quantity × unit price, net + tax, running bank balances, numeric type inconsistencies, empty columns, missing values, sparse rows, duplicate rows, low OCR scores and pages with no detected table. Financial checks use decimal arithmetic and a half-cent rounding tolerance; large totals do not get a looser relative tolerance. Borderless alignment gets an explicit review finding.
 6. **Review and export:** preserve row evidence, record corrections, rerun validation and maintain a separate human review state. Export Excel, JSON or CSV. Draft exports remain labelled unreviewed; completing review records the exact data fingerprint and any acknowledged findings. A correction invalidates the review and retains its prior decision in history.
 
-This is a bounded agent workflow with an explicit inspect → extract → retry → stitch → validate → review lifecycle. It uses pretrained ML for recognition and deterministic layout/validation logic. It does not call an LLM or claim to train an OCR model.
+This is a bounded inspect → extract → retry → stitch → validate → review workflow. Local AI uses pretrained ML recognition and deterministic layout/validation. Gemini-assisted AI adds an independent multimodal LLM reading; it never silently replaces local values. No OCR or language model is trained by this project.
+
+## Choose your workflow
+
+| | Local AI — default | Gemini-assisted AI — optional |
+|---|---|---|
+| Processing | Native PDF + local ML OCR → stitch → validate | Same local baseline → select difficult pages → Gemini second reading → compare |
+| Cost | No API key, per-page API charges or provider quota | Google's free/paid tier, availability and quotas apply; may incur charges |
+| Connectivity | Offline after dependencies are installed | Internet and server-side `GEMINI_API_KEY` required |
+| Documents | Stay on this device | Selected full pages sent to Google after explicit authorization |
+| Integrity | Geometry, source evidence, decimal checks, review findings | Same controls, plus independent candidate tables and conservative discrepancy mapping |
+| Recovery | Native/OCR fallback, verified checkpoints | Local result retained; failed/unknown calls never automatically resent |
+
+Local is free of API charges, with hardware, storage and the **50-page / 40 MB** web limit still applying. Gemini offers limited free access to eligible models and paid usage; check [pricing](https://ai.google.dev/gemini-api/docs/pricing), [quotas](https://ai.google.dev/gemini-api/docs/rate-limits) and [data terms](https://ai.google.dev/gemini-api/terms). No bundled API credits or free-tier entitlement are assumed.
+
+### Optional Gemini setup
+
+1. Obtain your own key from [Google AI Studio](https://aistudio.google.com/apikey). Copy `.env.example` to `.env` in the project folder and set `GEMINI_API_KEY`; alternatively set it in the launch environment. `.env` is ignored by Git. Never commit or share a key.
+2. Restart DamnLens. Select **Gemini-assisted AI**, **Difficult pages first** (default) or **Every page, within limit**, a request limit (default 3, maximum 50), and cloud authorization.
+3. Upload a dummy/public document. Every page first receives local extraction. Difficult-page selection includes scans, uncovered pages, validation findings and inferred/hierarchical headers. No qualifying pages means zero API requests. The heuristic can miss clean-looking extraction errors; all-pages mode offers broader checking.
+4. Open **AI workflow** on the result. Inspect coverage, token usage, separate candidate tables, structural disagreements and mapped cell proposals. **Inspect & edit** opens source-linked correction; saving preserves the original, reruns validation and resets review. Sample buttons always run locally.
+
+`GEMINI_MODEL` defaults to `gemini-3.8-flash`, documented as a stable PDF/structured-output model at integration time; use a compatible model available to your account. Availability can change. The HTTPS `generateContent` integration sends a one-page PDF for native pages or a 180-DPI PNG for OCR-routed pages, requesting structured JSON. No SDK dependency, model tools or URL retrieval. Documents, including embedded prompts, are data.
+
+```bash
+python convert.py samples/01_invoice_register.pdf -o assisted.xlsx --json --workflow gemini --allow-cloud --gemini-scope all --max-requests 3
+```
+
+Each request allows at most 8,192 output tokens and a 60-second socket timeout. Web jobs persist a reservation before sending; the CLI saves a `.gemini-ledger.json` beside its output (override with `--gemini-ledger`). Reusing a ledger never grants a fresh budget. Failures stop cloud processing; no automatic retries. Resume reuses completed readings, counts unknown/failed attempts and never resends them. A changed baseline needs a new opted-in extraction with a new ledger. **Retry OCR** explicitly runs locally. The request limit is **not a currency cap**: failed requests may incur unreported charges. Provider token counts are not a billing invoice. Run one process per ledger.
+
+**Verification:** live Gemini readings matched **360/360 data cells and all 36 headers across three original dummy first pages** (native invoice, rendered scan and bank statement). Two earlier scan-PDF requests returned HTTP 503; both failures are preserved and local output remained exact. These are small development checks, not hidden/general accuracy or an uplift measurement. See [live Gemini results](reports/GEMINI_EVALUATION.md), the local cohorts below and [architecture/requirement mapping](docs/WORKFLOWS.md).
 
 ## Review workspace
 
@@ -156,19 +186,24 @@ Tests cover native tables, OCR, borderless multiword headers, page stitching, du
 
 ## Architecture
 
-```text
-Browser review UI ── FastAPI local API ── persistent job queue (single worker)
-                                           │
-                       inspect → native extraction → OCR fallback
-                                           │
-                         table fragments → schema stitching
-                                           │
-                      validation + row evidence + corrections
-                                           │
-                                  XLSX / CSV / JSON
+```mermaid
+flowchart TD
+    UI[Upload: choose workflow] --> Q[Local queue: 1–50 pages / 40 MB]
+    Q --> E[Native PDF or local ML OCR]
+    E --> S[Align and stitch continuation tables]
+    S --> V[Deterministic validation + source evidence]
+    V --> W{Selected workflow}
+    W -->|Local AI| R[Source review and corrections]
+    W -->|Gemini + authorization| P[Select pages and enforce request limit]
+    P --> G[Page PDF / scan PNG → Gemini structured extraction]
+    G --> C[Validate schema and compare independent reading]
+    G -->|Failure / quota / timeout| F[Keep local data and flag incomplete assistance]
+    C --> R
+    F --> R
+    R --> X[Draft or reviewed Excel / CSV / JSON]
 ```
 
-`app/quality.py` computes observed quality facts and snapshot-bound human review; `app/engine.py` contains extraction, layout, stitching and checks; `app/exporter.py` contains typed/safe export; `app/main.py` owns file limits, jobs, persistence and API routes. `web/` is plain HTML/CSS/JavaScript, served locally with no CDN or frontend build step. API documentation is at `/api/docs`.
+`app/workflow.py` orchestrates both paths; `app/gemini.py` handles bounded cloud reading, schema checks, comparison and usage. `app/quality.py` computes observed facts and snapshot-bound review; `app/engine.py` handles local extraction/stitching/validation; `app/exporter.py` handles safe typed export; `app/main.py` owns limits, jobs and persistence. `web/` is plain HTML/CSS/JavaScript without a CDN or build step. API docs: `/api/docs`.
 
 ## Accuracy workflow (v1.1)
 
@@ -183,7 +218,7 @@ A review is a local workflow record; there is no authenticated reviewer identity
 - Borderless detection is heuristic; a structured-looking result is not proof of correct column alignment. Pages without a detected table produce a page-level finding rather than disappearing silently. Unrecognized secondary tables on an otherwise extracted page may still require visual review.
 - Totals are checked only where recognizable labels and numeric columns exist. Quantity, price, net and bank checks require matching headers. Not every business rule is inferable. Section totals sum since the preceding total; an explicitly labelled grand total sums all normal rows. Sparse total rows may themselves receive a sparse-row warning.
 - The queue is single-process and persists source/status/results and completed-page checkpoints. On restart, unfinished jobs become interrupted. Resume reuses only pages verified against source, code, OCR mode/assets and library signatures; corrupt or mismatched checkpoints are recomputed. An interrupted current page restarts. There is no mid-page continuation, cross-process locking, cancellation, authentication or hosted multi-user service.
-- Jobs contain local source copies and extracted data until deleted. The app binds to localhost, restricts host/origin, uses generated job paths and does not send documents to cloud services. It is a local judging app, not an internet deployment configuration.
+- Jobs contain source copies and results until deleted. Local AI makes no cloud document requests. Opted-in Gemini sends selected full pages to Google under its API terms. Keys remain server-side in the launch environment or ignored `.env`, excluded from jobs, exports, logs and browser storage. The app binds to localhost and restricts host/origin; it is a local judging application.
 
 ### Setup troubleshooting
 

@@ -29,6 +29,9 @@ const labels = {
   merged_total_review: "Merged values affect the total",
   ocr_retry_review: "OCR recovery or verification",
   ocr_disagreement: "OCR candidates disagree",
+  gemini_disagreement: "Gemini reading differs",
+  gemini_structure: "Gemini structure differs",
+  gemini_coverage: "Gemini second-reading coverage",
 };
 const suggestions = {
   total_mismatch:
@@ -71,6 +74,30 @@ let jobs = [],
   pollTimer = null,
   toastTimer = null,
   sourceToken = 0;
+let geminiConfig = null;
+function workflowMode() {
+  return $('input[name="workflow"]:checked').value;
+}
+function workflowLabel(job) {
+  return job.workflow?.mode === "gemini" ? "Gemini-assisted AI" : "Local AI";
+}
+function newExtraction() {
+  go("workspace");
+  $("#workflow-choice").scrollIntoView({ behavior: "smooth", block: "center" });
+  $('input[name="workflow"]:checked').focus();
+  toast(
+    "Choose your workflow, then browse or drop a document. Sample buttons always run locally.",
+  );
+}
+function updateWorkflow() {
+  const cloud = workflowMode() === "gemini";
+  $("#gemini-options").hidden = !cloud;
+  if (!cloud) $("#cloud-consent").checked = false;
+  $("#gemini-status").textContent =
+    geminiConfig?.configured && geminiConfig?.model_valid
+      ? `Key configured on server · ${geminiConfig.model} · Live dummy-page checks recorded; unseen accuracy unestablished`
+      : "Setup needed: copy .env.example to .env, set GEMINI_API_KEY, then restart. Local AI is ready without a key. Live check results: reports/GEMINI_EVALUATION.md.";
+}
 async function api(url, options = {}) {
   const response = await fetch(url, options);
   if (!response.ok) {
@@ -221,7 +248,7 @@ function jobBadge(j) {
 function jobTable(list) {
   if (!list.length)
     return `<div class="empty-state">${icon("file")}<strong>No documents in this view</strong>Upload a document or run an evaluation fixture to start an extraction.</div>`;
-  return `<div class="table-container"><table class="document-table"><thead><tr><th>Document</th><th class="doc-date-col">Created</th><th class="doc-shape-col">Extraction</th><th class="doc-scope-col">Page coverage</th><th>Review status</th><th></th></tr></thead><tbody>${list.map((j) => `<tr><td><button class="doc-open" data-job="${esc(j.id)}"><span class="file-tile">${icon("file")}</span><span><span class="doc-name">${esc(j.filename)}</span><span class="doc-meta">${j.force_ocr ? "OCR only" : "Automatic routing"}${j.attempt > 1 ? " · attempt " + j.attempt : ""}</span></span></button></td><td class="doc-date-col">${dateText(j.created)}</td><td class="doc-shape-col">${j.rows ?? "—"} rows <span class="muted">/</span> ${j.tables ?? "—"} table${j.tables === 1 ? "" : "s"}</td><td class="doc-scope-col">${j.quality ? j.quality.pages_extracted + " / " + j.quality.pages_total : "—"}</td><td>${jobBadge(j)}</td><td><div class="doc-actions"><button class="text-button" data-job="${esc(j.id)}">${j.status === "complete" ? "Open" : "View"}</button><button class="delete-doc" data-delete="${esc(j.id)}" aria-label="Delete ${esc(j.filename)}">${icon("close")}</button></div></td></tr>`).join("")}</tbody></table></div>`;
+  return `<div class="table-container"><table class="document-table"><thead><tr><th>Document</th><th class="doc-date-col">Created</th><th class="doc-shape-col">Extraction</th><th class="doc-scope-col">Page coverage</th><th>Review status</th><th></th></tr></thead><tbody>${list.map((j) => `<tr><td><button class="doc-open" data-job="${esc(j.id)}"><span class="file-tile">${icon("file")}</span><span><span class="doc-name">${esc(j.filename)}</span><span class="doc-meta">${workflowLabel(j)} · ${j.force_ocr ? "OCR only" : "Automatic routing"}${j.attempt > 1 ? " · attempt " + j.attempt : ""}</span></span></button></td><td class="doc-date-col">${dateText(j.created)}</td><td class="doc-shape-col">${j.rows ?? "—"} rows <span class="muted">/</span> ${j.tables ?? "—"} table${j.tables === 1 ? "" : "s"}</td><td class="doc-scope-col">${j.quality ? j.quality.pages_extracted + " / " + j.quality.pages_total : "—"}</td><td>${jobBadge(j)}</td><td><div class="doc-actions"><button class="text-button" data-job="${esc(j.id)}">${j.status === "complete" ? "Open" : "View"}</button><button class="delete-doc" data-delete="${esc(j.id)}" aria-label="Delete ${esc(j.filename)}">${icon("close")}</button></div></td></tr>`).join("")}</tbody></table></div>`;
 }
 function renderJobs() {
   const search = $("#job-search").value.toLowerCase(),
@@ -326,10 +353,28 @@ async function upload(file) {
   const body = new FormData();
   body.append("file", file);
   try {
-    const j = await api(
-      "/api/jobs?force_ocr=" + ($("#extraction-mode").value === "ocr"),
-      { method: "POST", body },
-    );
+    const params = new URLSearchParams({
+      force_ocr: $("#extraction-mode").value === "ocr",
+      workflow: workflowMode(),
+    });
+    if (workflowMode() === "gemini") {
+      if (!geminiConfig?.configured || !geminiConfig?.model_valid)
+        throw Error(
+          "Configure Gemini on the server and restart, or select Local AI.",
+        );
+      if (!$("#cloud-consent").checked)
+        throw Error(
+          "Select the cloud authorization checkbox before using Gemini.",
+        );
+      const limit = Number($("#gemini-limit").value);
+      if (!Number.isInteger(limit) || limit < 1 || limit > 50)
+        throw Error("Request limit must be an integer from 1 to 50.");
+      params.set("cloud_consent", "true");
+      params.set("gemini_scope", $("#gemini-scope").value);
+      params.set("max_requests", limit);
+    }
+    const j = await api("/api/jobs?" + params, { method: "POST", body });
+    $("#cloud-consent").checked = false;
     await openJob(j.id);
   } catch (error) {
     fail(error);
@@ -409,7 +454,7 @@ async function pollJob() {
       "badge " +
       (["failed", "interrupted"].includes(j.status) ? "error" : "blue");
     $("#result-subtitle").textContent =
-      `${dateText(j.created)} · ${j.force_ocr ? "OCR only" : "Automatic routing"} · Run ${id.slice(0, 8)}${j.attempt > 1 ? " · Attempt " + j.attempt : ""}`;
+      `${dateText(j.created)} · ${workflowLabel(j)} · ${j.force_ocr ? "OCR only" : "Automatic routing"} · Run ${id.slice(0, 8)}${j.attempt > 1 ? " · Attempt " + j.attempt : ""}`;
     $("#progress-label").textContent = j.message;
     $("#progress-bar").style.width = j.progress + "%";
     $("#progress-text").textContent = j.progress + "%";
@@ -536,6 +581,7 @@ function renderResult(preserveTab = false) {
   renderCoverage();
   renderActivity();
   renderCorrections();
+  renderGemini();
   setTab(preserveTab ? activeTab : "data");
   if (!preserveTab) {
     $("#data-table").scrollTo({ top: 0, left: 0 });
@@ -599,9 +645,22 @@ function setTab(tab) {
     b.classList.toggle("active", b.dataset.tab === tab);
     b.setAttribute("aria-selected", String(b.dataset.tab === tab));
   });
-  ["data", "issues", "coverage", "activity", "corrections"].forEach(
+  ["data", "issues", "coverage", "activity", "corrections", "gemini"].forEach(
     (name) => ($("#" + name + "-panel").hidden = name !== tab),
   );
+}
+function renderGemini() {
+  const assist = currentResult.gemini;
+  if (!assist) {
+    $("#gemini-panel").innerHTML =
+      '<div class="panel-tools"><div><h2>Local AI workflow</h2><p>No document pages were sent to an external AI API in this run.</p></div><span class="badge success">No API charges</span></div><div class="workflow-route">Inspect → Native PDF / local ML OCR → Align & stitch → Validate → Source review → Excel</div><p class="report-note">No API key or cloud quota required. Compute and storage depend on this device; the 50-page / 40 MB limit still applies. Start a new extraction and explicitly select Gemini-assisted AI to request a cloud second reading.</p>';
+    return;
+  }
+  const pages = assist.pages || [],
+    checked = pages.filter((p) => p.status === "checked").length;
+  const proposals = pages.flatMap((p) => p.proposals || []);
+  $("#gemini-panel").innerHTML =
+    `<div class="panel-tools"><div><h2>Gemini-assisted AI workflow</h2><p>Independent second reading. Original local values remain in the main data table.</p></div><span class="badge ${checked < (assist.selected_pages || []).length || assist.status === "unavailable" ? "warning" : "blue"}">${checked} page${checked === 1 ? "" : "s"} checked</span></div><div class="workflow-route">Local baseline → Select difficult pages → Gemini extraction → Compare → Source review → Validated Excel</div><div class="quality-detail"><div><strong>${esc(assist.model || currentResult.workflow?.model || "Unavailable")}</strong><span>Configured model</span></div><div><strong>${assist.requests_used || 0} / ${assist.max_requests || currentResult.workflow?.max_requests || 0}</strong><span>Request attempts / authorized limit</span></div><div><strong>${assist.reported_tokens?.totalTokenCount || 0}</strong><span>Provider-reported total tokens</span></div></div><p class="report-note">${esc(assist.billing_note || assist.message || "Local results retained.")}<br>Agreement is not proof of accuracy. Gemini never silently edits cells. Skipped, failed or uncertain pages still require source review. Cloud candidates are included in JSON and the separate Excel candidates sheet.</p><h3>Discrepancies to review · ${proposals.length}</h3>${proposals.length ? proposals.map((p, index) => `<article class="gemini-proposal"><div><strong>Table ${p.table} · Row ${p.row} · Column ${p.column} · Page ${p.page}</strong><p>Local: <code>${esc(p.before) || "Empty"}</code> → Gemini proposal: <code>${esc(p.suggested) || "Empty"}</code></p><small>Current value: ${esc(currentResult.tables[p.table - 1]?.rows[p.row - 1]?.cells[p.column - 1])}</small></div><button class="secondary" data-proposal="${index}">Inspect & edit</button></article>`).join("") : '<p class="muted">No safely mapped cell proposals. Inspect page candidates and structural findings; no differences found does not prove correctness.</p>'}<h3>Cloud page coverage</h3>${pages.length ? pages.map((p) => `<details class="gemini-page"><summary>Page ${p.page} · ${esc(p.status)}${p.structural_disagreement ? " · structure differs" : ""}</summary><button class="secondary" data-source-page="${p.page}">Inspect source page</button><p>${esc(p.message || "Independent candidate transcription; verify against the source.")}</p>${(p.tables || []).map((t, i) => `<h4>Candidate table ${i + 1} · ${t.rows.length} rows × ${t.headers.length} columns</h4><div class="table-scroll"><table class="data-table"><thead><tr>${t.headers.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${t.rows.map((row) => `<tr>${row.map((v) => `<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`).join("")}</details>`).join("") : `<p class="muted">${esc(assist.message || "No pages met the difficult-page selection rules. Zero API requests.")}</p>`}`;
 }
 function renderIssues() {
   const q = quality(),
@@ -946,6 +1005,17 @@ document.addEventListener("click", async (event) => {
   }
   if (button.dataset.sourcePage)
     locate(0, 0, Number(button.dataset.sourcePage));
+  if (button.dataset.proposal !== undefined) {
+    const proposals = currentResult.gemini.pages.flatMap(
+      (p) => p.proposals || [],
+    );
+    const p = proposals[Number(button.dataset.proposal)];
+    locate(p.table, p.row, p.page);
+    startEdit(p.row - 1, p.column - 1);
+    $("#edit-value").value = p.suggested;
+    $("#edit-label").textContent +=
+      " · Unverified Gemini proposal — compare with source before saving";
+  }
   if (button.dataset.delete) {
     try {
       await api("/api/jobs/" + button.dataset.delete, { method: "DELETE" });
@@ -978,8 +1048,10 @@ $("#job-search").oninput = $("#document-search").oninput = renderJobs;
 $("#row-filter").onchange = renderTable;
 $("#issue-severity").onchange = renderIssues;
 $("#inbox-severity").onchange = renderInbox;
-$("#new-document").onclick = $("#list-upload").onclick = () =>
-  $("#file-input").click();
+$("#new-document").onclick = $("#list-upload").onclick = newExtraction;
+$$('input[name="workflow"]').forEach(
+  (input) => (input.onchange = updateWorkflow),
+);
 $("#file-input").onchange = (event) => upload(event.target.files[0]);
 $("#dropzone").onclick = () => $("#file-input").click();
 $("#dropzone").onkeydown = (event) => {
@@ -1050,12 +1122,14 @@ $("#confirm-retry").onclick = async () => {
 document.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
     event.preventDefault();
-    $("#file-input").click();
+    newExtraction();
   }
 });
 async function init() {
   try {
-    await api("/api/health");
+    const health = await api("/api/health");
+    geminiConfig = health.gemini;
+    updateWorkflow();
     $("#engine-status").textContent = "Local engine ready";
     await Promise.all([refreshJobs(), loadSamples()]);
     const hash = location.hash.slice(1);

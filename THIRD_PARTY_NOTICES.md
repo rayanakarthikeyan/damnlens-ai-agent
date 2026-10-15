@@ -19,6 +19,7 @@ DamnLens AI Agent uses the open-source libraries and pretrained models listed be
 | ReportLab | Original dummy PDFs | BSD; https://www.reportlab.com |
 | pytest / HTTPX | Verification | MIT / BSD-3-Clause; https://pytest.org / https://www.python-httpx.org |
 | imageio-ffmpeg / FFmpeg | Demo encoding | BSD wrapper / build-dependent FFmpeg licensing; https://github.com/imageio/imageio-ffmpeg |
+| Google Gemini API (optional) | Independent cloud reading of explicitly authorized pages | Proprietary hosted service; user-supplied key; https://ai.google.dev/gemini-api/terms |
 
 Application source is licensed under AGPL-3.0-or-later, compatible with the selected PyMuPDF licensing path. Dependencies and model weights retain their licenses. No third-party artwork from the competition poster is incorporated. System fonts are used; no font files are redistributed.
 

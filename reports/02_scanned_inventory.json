@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 8.54,
+      "seconds": 7.65,
       "width": 1120.0,
       "height": 700.0
     },
@@ -25,7 +25,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 6.69,
+      "seconds": 6.05,
       "width": 1120.0,
       "height": 700.0
     }
@@ -859,32 +859,32 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 15.24,
+  "elapsed_seconds": 13.71,
   "row_count": 20,
   "headers_removed": 1,
   "engine": "DamnLens AI Agent 1.4 \u00b7 PyMuPDF + RapidOCR (PP-OCRv3/v5 / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T08:42:19.057941+00:00",
+      "at": "2026-10-15T09:24:51.814817+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "02_scanned_inventory.pdf"
     },
     {
-      "at": "2026-10-15T08:42:19.059720+00:00",
+      "at": "2026-10-15T09:24:51.818135+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T08:42:19.059720+00:00",
+      "at": "2026-10-15T09:24:51.818135+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 1
     },
     {
-      "at": "2026-10-15T08:42:27.599816+00:00",
+      "at": "2026-10-15T09:24:59.468029+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -892,19 +892,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T08:42:27.601819+00:00",
+      "at": "2026-10-15T09:24:59.470034+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T08:42:27.601819+00:00",
+      "at": "2026-10-15T09:24:59.470034+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 2
     },
     {
-      "at": "2026-10-15T08:42:34.283842+00:00",
+      "at": "2026-10-15T09:25:05.516151+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -912,19 +912,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T08:42:34.283842+00:00",
+      "at": "2026-10-15T09:25:05.516151+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 2
     },
     {
-      "at": "2026-10-15T08:42:34.283842+00:00",
+      "at": "2026-10-15T09:25:05.519626+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T08:42:34.294107+00:00",
+      "at": "2026-10-15T09:25:05.522900+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,

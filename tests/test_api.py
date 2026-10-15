@@ -42,6 +42,93 @@ def test_health_and_frontend(client):
     assert client.get("/api/health").headers["X-Content-Type-Options"] == "nosniff"
 
 
+def test_gemini_requires_key_and_separate_cloud_authorization(client, monkeypatch):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    data = (ROOT / "samples/01_invoice_register.pdf").read_bytes()
+    endpoint = "/api/jobs?workflow=gemini&gemini_scope=all"
+    assert client.post(endpoint, files={"file": ("dummy.pdf", data)}).status_code == 422
+    assert (
+        client.post(
+            endpoint + "&cloud_consent=true", files={"file": ("dummy.pdf", data)}
+        ).status_code
+        == 422
+    )
+    assert client.get("/api/jobs").json() == []
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key-never-expose")
+    config = client.get("/api/health").json()["gemini"]
+    assert config["configured"] and "test-key" not in str(config)
+    assert client.post(endpoint, files={"file": ("dummy.pdf", data)}).status_code == 422
+
+
+def test_gemini_opted_in_upload_keeps_baseline_and_findings_after_edit(
+    client, monkeypatch
+):
+    import json
+    from app import gemini
+
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key-never-expose")
+    monkeypatch.setenv("GEMINI_MODEL", gemini.DEFAULT_MODEL)
+    original = json.loads(
+        (ROOT / "reports/01_invoice_register.json").read_text(encoding="utf-8")
+    )
+    tables = [
+        {
+            "headers": original["tables"][0]["headers"],
+            "rows": [
+                row["cells"][:]
+                for row in original["tables"][0]["rows"]
+                if row["page"] == 1
+            ],
+        }
+    ]
+    tables[0]["rows"][0][7] = "999.00"
+    calls = []
+
+    def provider(*args):
+        calls.append(1)
+        return {
+            "candidates": [
+                {
+                    "finishReason": "STOP",
+                    "content": {"parts": [{"text": json.dumps({"tables": tables})}]},
+                }
+            ]
+        }
+
+    monkeypatch.setattr(gemini, "request_page", provider)
+    data = (ROOT / "samples/01_invoice_register.pdf").read_bytes()
+    response = client.post(
+        "/api/jobs?workflow=gemini&cloud_consent=true&gemini_scope=all&max_requests=1",
+        files={"file": ("dummy.pdf", data)},
+    )
+    assert response.status_code == 202
+    job = response.json()["id"]
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:
+        state = client.get(f"/api/jobs/{job}").json()
+        if state["status"] in {"complete", "failed"}:
+            break
+        time.sleep(0.05)
+    assert state["status"] == "complete"
+    result = client.get(f"/api/jobs/{job}/result").json()
+    assert result["tables"][0]["rows"][0]["cells"][7] == "44.00"
+    assert result["gemini"]["requests_used"] == len(calls) == 1
+    assert "test-key" not in json.dumps(result) + json.dumps(state)
+    patch = client.patch(
+        f"/api/jobs/{job}/cells",
+        json={"table": 1, "row": 1, "column": 8, "value": "999.00"},
+    )
+    assert patch.status_code == 200
+    assert "gemini_disagreement" in {i["kind"] for i in patch.json()["issues"]}
+    # Retry OCR intentionally switches to local and needs a fresh cloud opt-in later.
+    import app.main as module
+
+    monkeypatch.setattr(module.POOL, "submit", lambda *a: None)
+    retried = client.post(f"/api/jobs/{job}/retry?force_ocr=true").json()
+    assert retried["workflow"] == {"mode": "local"}
+    assert len(calls) == 1
+
+
 def test_job_export_correct_delete_and_history(client):
     job = completed(client)
     assert len(client.get("/api/jobs").json()) == 1

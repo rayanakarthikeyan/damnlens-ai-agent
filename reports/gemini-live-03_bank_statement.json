@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-15T09:11:25.600550+00:00",
+  "kind": "live API, original dummy fixture, first page only",
+  "sample": "03_bank_statement",
+  "model": "gemini-3.8-flash",
+  "request_limit": 1,
+  "requests_used": 1,
+  "provider_status": "checked",
+  "message": "",
+  "usage": {
+    "promptTokenCount": 684,
+    "candidatesTokenCount": 730,
+    "thoughtsTokenCount": 840,
+    "totalTokenCount": 2254
+  },
+  "candidate_tables": 1,
+  "matching_data_cells": 120,
+  "checked_cell_denominator": 120,
+  "expected_shape": [
+    10,
+    12
+  ],
+  "actual_shape": [
+    10,
+    12
+  ],
+  "headers_exact": true,
+  "local_rows_preserved": 21,
+  "scope": "Single non-blind dummy page. No hidden-PDF, cost invoice or general accuracy claim.",
+  "source_sha256": "53cb667641ff8b00ec81da175a11ff5c046bbe7c5b1820dca7b059ebe1ffd063"
+}

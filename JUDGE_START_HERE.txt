@@ -1,16 +1,23 @@
 DamnLens AI Agent | INCUXAI Challenge 2026
 
 1. Install 64-bit Python 3.12 from https://www.python.org/downloads/
-   if it is not already installed. A CPU is sufficient; no API key is needed.
+   if it is not already installed. Local AI uses a CPU and needs no API key.
 2. Extract the full project ZIP to a writable folder.
 3. Windows: double-click START_DAMNLENS.cmd.
    macOS/Linux: open a terminal in this folder and run: sh start.sh
-   First setup needs internet for pinned Python packages. Later runs are offline.
+   First setup needs internet for pinned Python packages. Later local runs work offline.
 4. The local browser workspace opens after server readiness. Keep the terminal
    open. If port 8765 is occupied, the launcher chooses another and prints it.
-5. Run an Evaluation fixture, or upload your own PDF/image (50 pages / 40 MB).
+5. Choose Local AI (default), then upload a PDF/image (50 pages / 40 MB), or
+   run an Evaluation fixture. Sample buttons always run locally.
    Inspect Data & source, Validation and Page coverage. Use Text size > Large
    for a larger interface. Review source values before exporting real data.
+6. Optional: copy .env.example to .env, set GEMINI_API_KEY and restart.
+   Select Gemini-assisted AI, a page scope and request limit, then authorize
+   sending selected full pages to Google. Free/paid API tiers and quotas apply.
+   Inspect AI workflow for candidates, usage, proposals and skipped pages.
+   Main values are never overwritten automatically. Live dummy-page results: reports/GEMINI_EVALUATION.md.
+   See docs/WORKFLOWS.md for architecture, costs, limitations and recovery.
 
 Reproducible judge checks (after first setup):
   Windows: START_DAMNLENS.cmd --judge-test --offline

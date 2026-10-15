@@ -9,7 +9,8 @@ from statistics import mean
 
 def fingerprint(result):
     payload = {
-        k: result.get(k) for k in ("sha256", "tables", "issues", "pages", "edits")
+        k: result.get(k)
+        for k in ("sha256", "tables", "issues", "pages", "edits", "workflow", "gemini")
     }
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()

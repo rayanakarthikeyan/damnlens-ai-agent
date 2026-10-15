@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 0.12,
+      "seconds": 0.11,
       "width": 1120.0,
       "height": 700.0
     },
@@ -38,7 +38,7 @@
       ],
       "status": "extracted",
       "rows": 11,
-      "seconds": 0.12,
+      "seconds": 0.11,
       "width": 1120.0,
       "height": 700.0
     }
@@ -879,26 +879,26 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 0.35,
+  "elapsed_seconds": 0.34,
   "row_count": 31,
   "headers_removed": 2,
   "engine": "DamnLens AI Agent 1.4 \u00b7 PyMuPDF + RapidOCR (PP-OCRv3/v5 / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T08:42:18.538856+00:00",
+      "at": "2026-10-15T09:24:51.319348+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "01_invoice_register.pdf"
     },
     {
-      "at": "2026-10-15T08:42:18.546889+00:00",
+      "at": "2026-10-15T09:24:51.324186+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T08:42:18.655971+00:00",
+      "at": "2026-10-15T09:24:51.431584+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -906,13 +906,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T08:42:18.655971+00:00",
+      "at": "2026-10-15T09:24:51.434129+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T08:42:18.766267+00:00",
+      "at": "2026-10-15T09:24:51.540372+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -920,13 +920,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T08:42:18.768922+00:00",
+      "at": "2026-10-15T09:24:51.542537+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 3
     },
     {
-      "at": "2026-10-15T08:42:18.884915+00:00",
+      "at": "2026-10-15T09:24:51.651703+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 3,
@@ -934,19 +934,19 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T08:42:18.884915+00:00",
+      "at": "2026-10-15T09:24:51.651703+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 3
     },
     {
-      "at": "2026-10-15T08:42:18.888397+00:00",
+      "at": "2026-10-15T09:24:51.654806+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T08:42:18.888397+00:00",
+      "at": "2026-10-15T09:24:51.658159+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,

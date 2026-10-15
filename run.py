@@ -42,7 +42,7 @@ def main():
         )
     url = f"http://127.0.0.1:{listener.getsockname()[1]}"
     print(
-        f"\nDamnLens AI Agent is starting at {url}\nYour documents are processed locally. Press Ctrl+C to stop.\n"
+        f"\nDamnLens AI Agent is starting at {url}\nLocal processing is the default. Optional Gemini sends selected pages to Google after opt-in. Press Ctrl+C to stop.\n"
     )
     config = uvicorn.Config(
         "app.main:app",

@@ -7,7 +7,6 @@ from datetime import datetime
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
 from .engine import number, norm
@@ -143,6 +142,21 @@ def xlsx(result):
         ("Processing seconds", result["elapsed_seconds"]),
         ("Source SHA-256", result["sha256"]),
         ("Engine", result["engine"]),
+        ("Workflow", result.get("workflow", {}).get("mode", "local")),
+        ("Gemini model", result.get("workflow", {}).get("model", "Not used")),
+        ("Gemini request attempts", result.get("gemini", {}).get("requests_used", 0)),
+        (
+            "Gemini reported total tokens",
+            result.get("gemini", {})
+            .get("reported_tokens", {})
+            .get("totalTokenCount", 0),
+        ),
+        (
+            "Gemini interpretation",
+            "Independent unverified proposals; original data retained. Request cap is not a currency cap."
+            if result.get("gemini")
+            else "No external AI API requests.",
+        ),
         ("Review status", quality["export_label"]),
         (
             "Pages with extracted tables",
@@ -166,6 +180,39 @@ def xlsx(result):
     style(summary)
     summary.column_dimensions["A"].width = 32
     summary.column_dimensions["B"].width = 85
+    if result.get("gemini"):
+        candidates = wb.create_sheet("Gemini candidates")
+        candidates.append(
+            [
+                "Page",
+                "Table on page",
+                "Row (0 = header)",
+                "Column",
+                "Header",
+                "Unverified Gemini reading",
+            ]
+        )
+        for page in result["gemini"].get("pages", []):
+            for table_index, table in enumerate(page.get("tables", []), 1):
+                for row_index, values in enumerate([table["headers"], *table["rows"]]):
+                    for column, value in enumerate(values, 1):
+                        candidates.append(
+                            [
+                                page["page"],
+                                table_index,
+                                row_index,
+                                column,
+                                table["headers"][column - 1],
+                                None,
+                            ]
+                        )
+                        safe_cell(
+                            candidates.cell(candidates.max_row, 5),
+                            table["headers"][column - 1],
+                        )
+                        safe_cell(candidates.cell(candidates.max_row, 6), value)
+        style(candidates)
+        candidates.column_dimensions["F"].width = 60
     for t in result["tables"]:
         ws = wb.create_sheet(f"Table {t['id']}")
         ws.append(

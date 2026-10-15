@@ -1,0 +1,32 @@
+{
+  "at": "2026-10-15T09:16:27.018075+00:00",
+  "kind": "live browser upload, original dummy scan, first page only",
+  "sample": "02_scanned_inventory",
+  "model": "gemini-3.8-flash",
+  "request_limit": 1,
+  "requests_used": 1,
+  "input_mime_type": "image/png",
+  "provider_status": "checked",
+  "message": "",
+  "usage": {
+    "promptTokenCount": 1254,
+    "candidatesTokenCount": 804,
+    "thoughtsTokenCount": 939,
+    "totalTokenCount": 2997
+  },
+  "candidate_tables": 1,
+  "matching_data_cells": 120,
+  "checked_cell_denominator": 120,
+  "expected_shape": [
+    10,
+    12
+  ],
+  "actual_shape": [
+    10,
+    12
+  ],
+  "headers_exact": true,
+  "local_rows_preserved": 20,
+  "scope": "Single non-blind dummy page. No hidden-PDF, cost invoice or general accuracy claim.",
+  "source_sha256": "ca2b466e8dc8a87bbff3dbaafe7d26f8416393eab1e7d36931a279b6d93d031a"
+}

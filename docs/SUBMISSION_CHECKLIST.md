@@ -8,12 +8,12 @@
 | Automatic table/header detection | Native ruled tables, aligned text headers, OCR grid and borderless fallback | Native, borderless and scanned regression tests |
 | Multi-page joining | Independent streams, context/schema/span matching, repeated header removal, conservative description continuation with both source parts | 3-page invoice; 50-page stress; split-row and distinct-account cases |
 | Errors and validation | Totals, arithmetic, balance transitions, empty/missing/type/sparse/duplicate/low-score/page checks | Deliberately faulty bank statement; raw JSON findings |
-| Working application | Local FastAPI + offline browser workspace | `python run.py`; screenshots and demo |
+| Working application | Local FastAPI/browser workspace; default keyless local AI plus optional Gemini assistance | `python run.py`; `docs/WORKFLOWS.md`; screenshots and demo |
 | Complete source | Public GitHub repository + downloadable archive | https://github.com/rayanakarthikeyan/damnlens-ai-agent |
 | Setup and execution | Double-click Windows launcher, verified bootstrap, offline judge checks, manual setup, CLI, Dockerfile | README; START_DAMNLENS.cmd; setup_judges.py |
 | 3 sample PDFs and Excel | Original fictional invoices, scan and bank statement | `samples/` and `samples/converted/` |
 | Accuracy and validation report | Separate sample, varied, complex and public-reference cohorts; explicit methodology | `reports/JUDGE_EVALUATION.md`, `ACCURACY_REPORT.md`, raw JSON and ground truth |
-| 2–5 minute demo | Captioned walkthrough of real application screens | `docs/damnlens-demo.mp4` (150 seconds; includes v1.3 complex structure/recovery) |
+| 2–5 minute demo | Captioned walkthrough of real application screens | `docs/damnlens-demo.mp4` (150 seconds; includes two-workflow setup and complex structure/recovery) |
 | Library/API credits | Library licenses, OCR model source and hash, AI-assistance disclosure | THIRD_PARTY_NOTICES.md and models/README.md |
 | Public/dummy documents only | Original dummy fixtures plus explicitly downloaded, pinned public reference PDFs | Generators; public URLs/checksums/annotation license; no private data |
 | Solo / team up to 3 | User participation is not registered by this app | Confirm entrant/team details during submission |
@@ -31,6 +31,7 @@ No claim is made about winning, hidden-test accuracy, eligibility beyond the sup
 5. Export Excel. Open Overview, Table 1, Validation, Evidence, Corrections, Page coverage and Run log.
 6. Open Accuracy report and show the ground-truth methodology. Run the automated suite for 50-page and integrity evidence if time permits.
 7. In Accuracy & coverage, run a complex example: nested line items or a split row. Inspect Header groups, shared-cell source geometry or Part 2. The optional Excel Structure sheet preserves the reconstruction. An interrupted run exposes Resume extraction; the offline judge command demonstrates verified-page recovery.
+8. Open Workflow guide to compare Local AI with Gemini-assisted AI. Optional cloud testing needs the judge's own key, explicit authorization and request limit. Inspect AI workflow for independent candidates, usage, discrepancies and skipped pages; the main data is never silently overwritten.
 
 ## v1.3 additional evidence
 

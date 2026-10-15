@@ -126,7 +126,9 @@
           <div>
             <span class="status-dot"></span><strong>Local inference</strong>
           </div>
-          <p>Native PDF + English OCR<br />Documents remain on this device.</p>
+          <p>
+            Native PDF + English OCR<br />Optional Gemini with explicit opt-in.
+          </p>
           <span class="engine-version">RapidOCR / ONNX · CPU</span>
         </div>
         <div class="sidebar-footer">
@@ -183,7 +185,64 @@
                     route.
                   </p>
                 </div>
-                <span class="badge blue">Local OCR</span>
+                <span class="badge blue">Two workflows</span>
+              </div>
+              <fieldset class="workflow-choice" id="workflow-choice">
+                <legend>Choose your AI workflow</legend>
+                <label class="workflow-option"
+                  ><input
+                    type="radio"
+                    name="workflow"
+                    value="local"
+                    checked
+                  /><span
+                    ><strong>Local AI</strong
+                    ><small
+                      >No API key · No API charges<br />On-device OCR and
+                      validation</small
+                    ></span
+                  ><b>Default</b></label
+                >
+                <label class="workflow-option"
+                  ><input type="radio" name="workflow" value="gemini" /><span
+                    ><strong>Gemini-assisted AI</strong
+                    ><small
+                      >Local baseline + cloud second reading<br />Unverified
+                      suggestions for source review</small
+                    ></span
+                  ><b>Optional</b></label
+                >
+              </fieldset>
+              <div id="gemini-options" class="cloud-options" hidden>
+                <p id="gemini-status" role="status">
+                  Checking server configuration…
+                </p>
+                <div class="cloud-controls">
+                  <label
+                    >Pages to check<select id="gemini-scope">
+                      <option value="flagged">Difficult pages first</option>
+                      <option value="all">Every page, within limit</option>
+                    </select></label
+                  ><label
+                    >Request limit<input
+                      id="gemini-limit"
+                      type="number"
+                      min="1"
+                      max="50"
+                      value="3"
+                  /></label>
+                </div>
+                <p>
+                  One page per request · 8,192 output tokens maximum · No
+                  automatic retries. Free or paid Google tier and quotas apply;
+                  this is a request cap, not a currency cap.
+                </p>
+                <label class="checkbox-row"
+                  ><input id="cloud-consent" type="checkbox" /><span
+                    >I authorize sending selected document pages to Google
+                    Gemini. I understand my API plan and data terms apply.</span
+                  ></label
+                >
               </div>
               <div
                 class="dropzone"
@@ -224,7 +283,7 @@
                   ><svg><use href="#i-check" /></svg>Page continuation
                   matching</span
                 ><span
-                  ><svg><use href="#i-check" /></svg>Local processing</span
+                  ><svg><use href="#i-check" /></svg>Source-linked review</span
                 >
               </div>
             </section>
@@ -249,7 +308,8 @@
                   <div>
                     <strong>Extract & align</strong>
                     <p>
-                      Detect tables and headers. Reconstruct column positions.
+                      Detect tables and headers locally. Optional Gemini
+                      independently reads selected difficult pages.
                     </p>
                   </div>
                 </li>
@@ -257,7 +317,10 @@
                   <span>03</span>
                   <div>
                     <strong>Join & validate</strong>
-                    <p>Match continuation pages and check data integrity.</p>
+                    <p>
+                      Match continuation pages, check integrity and flag
+                      disagreements. Original values stay available.
+                    </p>
                   </div>
                 </li>
                 <li>
@@ -462,6 +525,7 @@
                   Validation <span id="finding-count">0</span></button
                 ><button data-tab="coverage" role="tab">Page coverage</button
                 ><button data-tab="activity" role="tab">Agent run log</button
+                ><button data-tab="gemini" role="tab">AI workflow</button
                 ><button data-tab="corrections" role="tab">
                   Corrections <span id="edit-count">0</span>
                 </button>
@@ -565,6 +629,7 @@
               </div>
               <div id="coverage-panel" class="tab-panel" hidden></div>
               <div id="activity-panel" class="tab-panel" hidden></div>
+              <div id="gemini-panel" class="tab-panel" hidden></div>
               <div id="corrections-panel" class="tab-panel" hidden></div>
             </div>
             <div class="export-footnote">
@@ -578,7 +643,7 @@
           <span
             >DamnLens AI Agent <span class="footer-divider">/</span> AI document
             extraction agent</span
-          ><span>Local processing · English OCR · v1.4</span>
+          ><span>Local AI + optional Gemini · English OCR · v1.5</span>
         </footer>
       </main>
     </div>
@@ -595,6 +660,25 @@
       </button>
       <div class="eyebrow">Agent workflow</div>
       <h2>From source document to reviewed workbook</h2>
+      <div class="workflow-comparison">
+        <article>
+          <h3>Local AI · default</h3>
+          <p>
+            Inspect → native PDF / local ML OCR → align → stitch → validate →
+            source review → Excel. No API key or per-page API charges. Hardware,
+            storage and the 50-page / 40 MB limit still apply.
+          </p>
+        </article>
+        <article>
+          <h3>Gemini-assisted AI · opt-in</h3>
+          <p>
+            Same local baseline → select difficult pages (or all within limit) →
+            independent Gemini extraction → compare → review discrepancies →
+            validated Excel. Cloud candidates are kept separately; no automatic
+            overwrite.
+          </p>
+        </article>
+      </div>
       <ol class="guide-steps">
         <li>
           <strong>Inspect & route.</strong>
@@ -628,8 +712,11 @@
         </li>
       </ol>
       <div class="notice">
-        Always check critical figures. The included synthetic benchmarks do not
-        establish accuracy on unseen documents.
+        Gemini is optional and needs a server-side key. Request attempts, token
+        usage and skipped pages are recorded. Errors retain local results. API
+        free/paid tiers and data terms depend on Google. Live dummy-page checks
+        and provider failures are recorded in the Gemini evaluation report.
+        These checks do not establish unseen-document accuracy.
       </div>
     </dialog>
     <dialog id="edit-dialog">

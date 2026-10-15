@@ -1,6 +1,6 @@
 {
   "application": "DamnLens AI Agent",
-  "seconds": 21.66,
+  "seconds": 29.88,
   "scope": "Bundled synthetic samples, complex structure, source parts, XLSX readability, page boundaries and checkpoint recovery. This is a reproducible smoke check, not a hidden-PDF accuracy guarantee.",
   "checks": [
     {

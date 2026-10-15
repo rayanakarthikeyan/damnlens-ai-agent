@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-15T09:10:04.062383+00:00",
+  "kind": "live API, original dummy fixture, first page only",
+  "sample": "01_invoice_register",
+  "model": "gemini-3.8-flash",
+  "request_limit": 1,
+  "requests_used": 1,
+  "provider_status": "checked",
+  "message": "",
+  "usage": {
+    "promptTokenCount": 684,
+    "candidatesTokenCount": 837,
+    "thoughtsTokenCount": 814,
+    "totalTokenCount": 2335
+  },
+  "candidate_tables": 1,
+  "matching_data_cells": 120,
+  "checked_cell_denominator": 120,
+  "expected_shape": [
+    10,
+    12
+  ],
+  "actual_shape": [
+    10,
+    12
+  ],
+  "headers_exact": true,
+  "local_rows_preserved": 31,
+  "scope": "Single non-blind dummy page. No hidden-PDF, cost invoice or general accuracy claim.",
+  "source_sha256": "2504d1c047c23512733b3e08a8af778c51b57b8a50ee7d6353c075566ebb3fc2"
+}

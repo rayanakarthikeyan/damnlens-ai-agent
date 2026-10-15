@@ -4,9 +4,7 @@ Not a real-time screen recording. Screenshots must be captured from the working
 app; the script never fabricates UI output or measured extraction results.
 """
 
-import json
 import subprocess
-import textwrap
 from pathlib import Path
 
 import imageio_ffmpeg
@@ -18,10 +16,10 @@ TMP.mkdir(parents=True, exist_ok=True)
 SHOTS = ROOT / "docs" / "screenshots"
 SCENES = [
     (
-        "01-workspace-desktop.jpg",
-        "AI document extraction workspace",
-        "Accuracy and review take priority",
-        "The professional workspace shows extraction runs, pending reviews, open findings and recorded decisions. Upload a PDF or scan; the agent selects a local extraction route.",
+        "30-workflow-selector.png",
+        "Two AI workflows. Shared integrity.",
+        "Local AI by default; optional Gemini second reading",
+        "Local AI needs no key and has no API charges. Gemini-assisted AI independently reads selected difficult pages, within a request limit and after explicit cloud authorization. Both converge on source review and validated Excel.",
     ),
     (
         "02-digital-extraction.jpg",
@@ -42,10 +40,10 @@ SCENES = [
         "After interruption, Resume extraction reuses matching, checksum-verified pages. This run resumed page one and extracted page two. A changed source, mode, engine or model invalidates the checkpoint.",
     ),
     (
-        "05-scanned-extraction.jpg",
-        "Scans become spreadsheets.",
-        "Local machine-learning OCR",
-        "This inventory PDF contains images only. RapidOCR recognizes English text, OpenCV reconstructs the grid, and both pages are joined into one 20-row table.",
+        "32-gemini-live-summary.png",
+        "A live cloud second reading",
+        "Bounded usage, independent candidates and explicit coverage",
+        "Local OCR joins all 20 inventory rows. Gemini reads the first scanned page as a PNG and matches 120 checked cells and 12 headers. The one-request limit skips page two. Earlier HTTP 503 failures remain in the report; local data stayed available.",
     ),
     (
         "06-validation.jpg",
@@ -72,10 +70,10 @@ SCENES = [
         "All 16 complex development cases match 962 cells. Three public digital fixtures match 261 cells under disclosed policies. These cases helped repair the engine; they are not a blind hidden-PDF evaluation. This nested example highlights the shared order ID origin.",
     ),
     (
-        "10-quick-guide.jpg",
+        "29-workflow-guide.png",
         "A reproducible accuracy workflow",
         "Built for the INCUXAI challenge 2026",
-        "On Windows, double-click START_DAMNLENS.cmd. Setup installs dependencies once and opens the app. Add --judge-test --offline to reproduce the runtime checks. Source, PDF/Excel pairs, measured reports and credits are included.",
+        "Double-click START_DAMNLENS.cmd; Local AI runs without a key after setup. Optional Gemini uses your own key. Three live dummy first pages match 360 cells; two earlier provider failures are disclosed. These are development checks, not hidden accuracy or an official score.",
     ),
 ]
 

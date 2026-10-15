@@ -3,7 +3,8 @@
 import argparse
 import json
 from pathlib import Path
-from app.engine import extract
+from app.workflow import run, options
+from app.gemini import load_environment, save_ledger
 from app.exporter import xlsx
 
 
@@ -15,15 +16,40 @@ def main():
     p.add_argument("-o", "--output", type=Path)
     p.add_argument("--force-ocr", action="store_true")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--workflow", choices=["local", "gemini"], default="local")
+    p.add_argument(
+        "--allow-cloud",
+        action="store_true",
+        help="Authorize selected source pages being sent to Google",
+    )
+    p.add_argument("--gemini-scope", choices=["flagged", "all"], default="flagged")
+    p.add_argument("--max-requests", type=int, default=3)
+    p.add_argument(
+        "--gemini-ledger",
+        type=Path,
+        help="Cloud reservation/candidate ledger; defaults beside output. Reusing it never grants a fresh budget.",
+    )
     args = p.parse_args()
     out = args.output or args.input.with_suffix(".xlsx")
     if out.resolve() == args.input.resolve():
         p.error("Output must differ from input")
     try:
-        r = extract(
+        load_environment(Path(__file__).resolve().parent)
+        workflow = options(
+            args.workflow, args.allow_cloud, args.gemini_scope, args.max_requests
+        )
+        ledger = args.gemini_ledger or out.with_suffix(
+            out.suffix + ".gemini-ledger.json"
+        )
+        if ledger.resolve() in {args.input.resolve(), out.resolve()}:
+            p.error("Gemini ledger must differ from input and output")
+        r = run(
             args.input,
-            lambda d, t, m: print(f"[{d}/{t}] {m}", flush=True),
-            args.force_ocr,
+            workflow=workflow,
+            ledger_path=ledger if args.workflow == "gemini" else None,
+            save=save_ledger,
+            progress=lambda d, t, m: print(f"[{d}/{t}] {m}", flush=True),
+            force_ocr=args.force_ocr,
         )
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_bytes(xlsx(r))

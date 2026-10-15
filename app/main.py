@@ -12,22 +12,25 @@ from pathlib import Path
 
 import pymupdf as fitz
 from fastapi import FastAPI, HTTPException, Request, UploadFile, File
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from .engine import extract, validate
+from .engine import validate
+from .workflow import run, options
+from .gemini import configuration, load_environment
 from .exporter import xlsx, csv_bytes
 from .quality import enrich, approve, revoke
 
 ROOT = Path(__file__).resolve().parents[1]
+load_environment(ROOT)
 JOBS = Path(
     os.environ.get("DAMNLENS_DATA", os.environ.get("LEDGERLENS_DATA", ROOT / ".jobs"))
 )
 JOBS.mkdir(parents=True, exist_ok=True)
 POOL = ThreadPoolExecutor(max_workers=1)
 LOCK = threading.RLock()
-app = FastAPI(title="DamnLens AI Agent", version="1.4.0", docs_url="/api/docs")
+app = FastAPI(title="DamnLens AI Agent", version="1.5.0", docs_url="/api/docs")
 ALLOWED = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 MAX_BYTES = 40 * 1024 * 1024
 
@@ -142,9 +145,12 @@ def work(job):
                 ]
             save(directory / "status.json", state)
 
-        result = extract(
+        result = run(
             directory / state["stored"],
-            progress,
+            workflow=state.get("workflow", {"mode": "local"}),
+            ledger_path=directory / "gemini-ledger.json",
+            save=save,
+            progress=progress,
             force_ocr=state.get("force_ocr", False),
             event=event,
             checkpoint_dir=directory / "checkpoints",
@@ -169,7 +175,7 @@ def work(job):
     save(directory / "status.json", state)
 
 
-def create_job(data, name, force=False):
+def create_job(data, name, force=False, workflow=None):
     ext = Path(name).suffix.lower()
     if ext not in ALLOWED:
         raise HTTPException(415, "Use PDF, PNG, JPEG, TIFF, BMP or WebP.")
@@ -197,6 +203,7 @@ def create_job(data, name, force=False):
         "created": datetime.now(timezone.utc).isoformat(),
         "message": "Waiting for extraction",
         "force_ocr": force,
+        "workflow": workflow or {"mode": "local"},
         "stage": "queued",
         "events": [],
         "attempt": 1,
@@ -215,6 +222,7 @@ def health():
         "max_pages": 50,
         "max_upload_mb": 40,
         "ocr": "RapidOCR / ONNX CPU",
+        "gemini": configuration(),
     }
 
 
@@ -258,9 +266,20 @@ def review_inbox():
 
 
 @app.post("/api/jobs", status_code=202)
-async def upload(file: UploadFile = File(...), force_ocr: bool = False):
+async def upload(
+    file: UploadFile = File(...),
+    force_ocr: bool = False,
+    workflow: str = "local",
+    cloud_consent: bool = False,
+    gemini_scope: str = "flagged",
+    max_requests: int = 3,
+):
+    try:
+        chosen = options(workflow, cloud_consent, gemini_scope, max_requests)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc))
     data = await file.read(MAX_BYTES + 1)
-    return create_job(data, file.filename or "document.pdf", force_ocr)
+    return create_job(data, file.filename or "document.pdf", force_ocr, chosen)
 
 
 @app.get("/api/samples")
@@ -346,6 +365,9 @@ def retry(job: str, force_ocr: bool = False, resume: bool = False):
             )
         if resume:
             force_ocr = state.get("force_ocr", False)
+        else:
+            # Retry OCR is explicitly local. A new cloud run needs fresh opt-in.
+            state["workflow"] = {"mode": "local"}
         if (directory / "result.json").exists():
             versions = directory / "versions"
             versions.mkdir(exist_ok=True)
@@ -419,8 +441,12 @@ def correct(job: str, edit: Correction):
             }
         )
         r["issues"] = validate(r["tables"]) + [
-            i for i in r["issues"] if i["kind"] == "page_review"
+            i
+            for i in r["issues"]
+            if i["kind"] == "page_review" or i["kind"].startswith("gemini_")
         ]
+        for i, issue in enumerate(r["issues"], 1):
+            issue["id"] = i
         revoke(r, "Data changed; review must be completed again.")
         r.setdefault("events", []).append(
             {
