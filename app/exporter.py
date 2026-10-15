@@ -181,7 +181,12 @@ def xlsx(result):
                 elif isinstance(cell.value, (float, int)):
                     cell.number_format = source_number_format(value)
             for i, v in enumerate(
-                [r["page"], r["id"], r["method"], r["confidence"]],
+                [
+                    r["page"],
+                    r["id"],
+                    r["method"],
+                    r["confidence"] if r["method"].startswith("OCR") else None,
+                ],
                 len(t["headers"]) + 1,
             ):
                 safe_cell(ws.cell(row, i), v)
@@ -239,7 +244,7 @@ def xlsx(result):
                     r["page"],
                     str(r["bbox"]),
                     r["method"],
-                    r["confidence"],
+                    r["confidence"] if r["method"].startswith("OCR") else None,
                 ]
             )
     style(evidence)

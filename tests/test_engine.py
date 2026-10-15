@@ -200,6 +200,7 @@ def test_excel_types_formats_evidence_and_injection():
     assert ws["C2"].data_type == "s" and ws["C2"].value.startswith("=")
     assert ws.freeze_panes == "A2" and len(ws.tables) == 1
     assert wb["Evidence"].max_row == 32
+    assert ws["P2"].value is None and wb["Evidence"]["F2"].value is None
     assert all(c.data_type != "f" for sheet in wb for row in sheet for c in row)
 
 
