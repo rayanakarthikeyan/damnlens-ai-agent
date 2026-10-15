@@ -131,7 +131,11 @@ Each request allows at most 8,192 output tokens and a 60-second socket timeout. 
 | Setup and run instructions | [Judge quick start](JUDGE_START_HERE.txt) · [Detailed setup](#judges-setup-and-launch) |
 | At least three sample PDFs with Excel outputs | [Matched PDF → Excel files](#sample-pdfs-and-excel-outputs) below |
 | Accuracy and validation report | [Sample accuracy and findings](reports/ACCURACY_REPORT.md) · [Complex/public evaluation and limits](reports/JUDGE_EVALUATION.md) |
-| Demo video, 2–5 minutes | [Watch the demo — 2 minutes 30 seconds](docs/damnlens-demo.mp4) |
+| Demo video, 2–5 minutes | [Watch the demo — 3 minutes 52 seconds](docs/damnlens-demo.mp4) |
+
+[![Watch the caption-only submission demo](docs/damnlens-demo-poster.jpg)](docs/damnlens-demo.mp4)
+
+The 1080p demo has captions burned in and no audio. It maps all six extraction requirements and five judging categories to actual screens, including a fresh 50-page run, standalone image OCR, complex tables, review and the exported XLSX. [Chapter guide](docs/DEMO_SCRIPT.md) · [Optional subtitles](docs/damnlens-demo.srt) · [Video verification](reports/demo-verification.json). Screen timing and close-ups are edited; this is not a real-time speed recording.
 
 [Requirement checklist](docs/SUBMISSION_CHECKLIST.md) · [Library and AI-assistance credits](THIRD_PARTY_NOTICES.md) · [OCR model credits](models/README.md)
 

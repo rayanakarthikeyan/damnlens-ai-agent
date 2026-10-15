@@ -1,0 +1,175 @@
+{
+  "file": "docs/damnlens-demo.mp4",
+  "seconds": 232.0,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "codec": "H.264",
+  "pixel_format": "yuv420p",
+  "fps": 24,
+  "audio_streams": 0,
+  "full_decode": "passed",
+  "scenes": 24,
+  "burned_in_captions": true,
+  "caption_font_pixels": 31,
+  "max_caption_lines": 2,
+  "layout_overflow_checks": "passed",
+  "bytes": 5566748,
+  "sha256": "3cb4b4476f109eadfd4f155863408dd43ab20e397d45118735e49399a5421701",
+  "editing": "Authentic captures with editorial crops, captions and timing; not real-time performance footage.",
+  "capture_sources": [
+    {
+      "file": "docs/screenshots/34-demo-workspace.png",
+      "seconds": 8,
+      "title": "DamnLens AI Agent",
+      "sha256": "fba5f2dcde2da246d1b1481048d816e049192ae0772bb522a848cf9caa92bce1"
+    },
+    {
+      "file": "docs/screenshots/30-workflow-selector.png",
+      "seconds": 10,
+      "title": "Two workflows. One accuracy process.",
+      "sha256": "e2d167c4d35374e9bd99c0a3e2f101a60de3383d2cec43d96acf522395afc8e2"
+    },
+    {
+      "file": "docs/screenshots/02-digital-extraction.jpg",
+      "seconds": 11,
+      "title": "Automatic tables, headers and alignment",
+      "sha256": "447b5a92c2b7e8222f76221459f96b54ab537f269e67e8b07d9d55478acb63d5"
+    },
+    {
+      "file": "docs/screenshots/47-demo-source-highlight.png",
+      "seconds": 8,
+      "title": "Click a cell. Inspect the original.",
+      "sha256": "e936a1ef32aa663bea905018e2904fa952711db21db4da77a0efd3a701ce1c7e"
+    },
+    {
+      "file": "docs/screenshots/05-scanned-extraction.jpg",
+      "seconds": 11,
+      "title": "Image-only PDF to structured rows",
+      "sha256": "91addcf6ea5e484a1e27416f6a2cf9de42160c7cbfcf280a8b8f1c2185cb7edc"
+    },
+    {
+      "file": "docs/screenshots/44-demo-image-input.png",
+      "seconds": 8,
+      "title": "Standalone images follow the same workflow",
+      "sha256": "3b87ac479974a1ba4162c080ad850428321cf2f560302e41e2821ad7cf16bcca"
+    },
+    {
+      "file": "docs/screenshots/35-demo-50-pages.png",
+      "seconds": 11,
+      "title": "The full 50-page boundary, exercised",
+      "sha256": "05bccf9ea24291c1f828aed1a1c57f50467458645b51a08b420b60887d1bd945"
+    },
+    {
+      "file": "docs/screenshots/36-demo-50-coverage.png",
+      "seconds": 7,
+      "title": "Coverage is visible page by page",
+      "sha256": "4acfcf9d4bac61c8c9008b8b286c4a4e72de41b46583ddcc563a15159fec8f43"
+    },
+    {
+      "file": "docs/screenshots/22-nested-header-groups.jpg",
+      "seconds": 11,
+      "title": "Nested headers and merged-cell origins",
+      "sha256": "4c93437faea638ca95651a7ad063d4d9059704994621ad1ed9670931c1df3995"
+    },
+    {
+      "file": "docs/screenshots/20-cross-page-source-parts.jpg",
+      "seconds": 11,
+      "title": "One logical row. Two source fragments.",
+      "sha256": "8e126296d2f4fcc7dba1925b7c17e8c823f0130b2277f62354467d0b9417f02f"
+    },
+    {
+      "file": "docs/screenshots/41-demo-validation.png",
+      "seconds": 11,
+      "title": "Find errors before they enter Excel",
+      "sha256": "ef2395f6817a0b4d2bf820e093e78ff7cef1cd22a4e0250c08215281e2a768af"
+    },
+    {
+      "file": "docs/screenshots/07-cell-correction.jpg",
+      "seconds": 9,
+      "title": "Corrections are traceable",
+      "sha256": "d19489167a6e2ec73acc127cb0568590497cd988cdbb7ef4bf4b6d17e4987c08"
+    },
+    {
+      "file": "docs/screenshots/07-review-checkpoint.jpg",
+      "seconds": 9,
+      "title": "Review is a recorded decision",
+      "sha256": "071e5dfbbf7eac25dcf1711b4d3bde7dc6052d3b4aef15f9f70a99966ce15508"
+    },
+    {
+      "file": "docs/screenshots/08-reviewed-export.jpg",
+      "seconds": 9,
+      "title": "Export with findings and provenance",
+      "sha256": "39807d97ad80b9fcb21ad2a5b69fedfa8672ae7a282668d26a07264e0c45604f"
+    },
+    {
+      "file": "docs/screenshots/40-demo-exported-sheet.png",
+      "seconds": 10,
+      "title": "The actual exported workbook",
+      "sha256": "870ebd05fb5fe25e0e1cdcd9d5675c3cb25d879898ded98710eca7c7ee91d34e"
+    },
+    {
+      "file": "docs/screenshots/19-resumed-run-log.jpg",
+      "seconds": 11,
+      "title": "Recover without silently starting over",
+      "sha256": "69e47c03af983c8a9161db64b4ca6ba36a678a580fb8314327427a0fb092e10e"
+    },
+    {
+      "file": "docs/screenshots/32-gemini-live-summary.png",
+      "seconds": 13,
+      "title": "Optional Gemini, with bounded requests",
+      "sha256": "e377aff8772dfc5d2b3073e894360132fe19b76d0e819cea22dd987949013a3f"
+    },
+    {
+      "file": "docs/screenshots/27-gemini-live-scan.png",
+      "seconds": 9,
+      "title": "Independent candidates, explicit fallback",
+      "sha256": "166102befa9537b239a79c65a23e1abbbaee8106a73b2e31de97c33d30eb7889"
+    },
+    {
+      "file": "docs/screenshots/42-demo-accuracy.png",
+      "seconds": 12,
+      "title": "Measured results, with ground truth",
+      "sha256": "a882b192a3dbc50f97e7962184360bfab211185298aad05b220637316b0daa67"
+    },
+    {
+      "file": "docs/screenshots/24-ocr-disagreement-review.jpg",
+      "seconds": 10,
+      "title": "Uncertainty becomes a review task",
+      "sha256": "680a77f9e4bcb917f55a0ead9fdbf9ab10be73ca6ff4b2bb693477a4231c29cd"
+    },
+    {
+      "file": "docs/screenshots/43-demo-ci.png",
+      "seconds": 10,
+      "title": "Quality checks judges can inspect",
+      "sha256": "18f5640ba6ab0e6aa187b848493bbc325648a77ebb9921a08ccd43f9e6785a87"
+    },
+    {
+      "file": "docs/screenshots/45-demo-setup.png",
+      "seconds": 9,
+      "title": "Easy to launch. Easy to reproduce.",
+      "sha256": "cbe9be7794f782aef20a071e69949202a38c5cf4c4af66004e97170e7e0bcc84"
+    },
+    {
+      "file": "docs/screenshots/09-accuracy-report.jpg",
+      "seconds": 7,
+      "title": "A complete, inspectable submission",
+      "sha256": "949859659b77b490e85dab7d5e0fbd76ff92e6a23b48cfd779dc95863dc37a00"
+    },
+    {
+      "file": "docs/screenshots/34-demo-workspace.png",
+      "seconds": 7,
+      "title": "Why DamnLens stands out",
+      "sha256": "fba5f2dcde2da246d1b1481048d816e049192ae0772bb522a848cf9caa92bce1"
+    }
+  ],
+  "encoded_scene_checks": {
+    "close_ups_checked": 27,
+    "correct_order_and_pixels": "passed",
+    "max_mean_channel_difference_0_to_255": 1.5392,
+    "threshold": 3,
+    "caption_end_seconds": 232,
+    "visual_review": "All 27 close-ups reviewed as a contact sheet; full-size spreadsheet, validation, source and closing frames inspected."
+  }
+}

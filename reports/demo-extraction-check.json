@@ -1,0 +1,22 @@
+{
+  "scope": "Fresh local API verification for captioned demo. Synthetic fixtures; not held-out accuracy.",
+  "fifty_page": {
+    "input_sha256": "2417a38ae140e98eb065f779016975428cc5ecf71d29349c2c0d230158b0f3e6",
+    "pages": 50,
+    "rows": 500,
+    "columns": 12,
+    "headers_removed": 49,
+    "data_cells_exact": 6000,
+    "duplicate_rows_preserved_and_flagged": 490
+  },
+  "png_input": {
+    "input_sha256": "ae35e2fb3599723654b84985fcb56b1d138e2c231b1dc256c820dd8c992c3315",
+    "derived_from": "samples/02_scanned_inventory.pdf page 1 rendered at 180 DPI",
+    "pages": 1,
+    "rows": 10,
+    "columns": 12,
+    "data_cells_exact": 120,
+    "headers_exact": 12
+  },
+  "gemini_new_requests": 0
+}

@@ -1,198 +1,333 @@
-"""Build a 150-second captioned walkthrough from real browser QA captures.
+"""Build a silent 232-second submission edit from authentic application captures.
 
-Not a real-time screen recording. Screenshots must be captured from the working
-app; the script never fabricates UI output or measured extraction results.
+Captions and editorial close-ups explain evidence; no app output is fabricated.
+Use --frames-only to review the edit or --verify-only to check an existing movie.
 """
 
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
 import subprocess
 from pathlib import Path
 
 import imageio_ffmpeg
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
-TMP = ROOT / "tmp" / "demo"
-TMP.mkdir(parents=True, exist_ok=True)
-SHOTS = ROOT / "docs" / "screenshots"
-SCENES = [
-    (
-        "30-workflow-selector.png",
-        "Two AI workflows. Shared integrity.",
-        "Local AI by default; optional Gemini second reading",
-        "Local AI needs no key and has no API charges. Gemini-assisted AI independently reads selected difficult pages, within a request limit and after explicit cloud authorization. Both converge on source review and validated Excel.",
-    ),
-    (
-        "02-digital-extraction.jpg",
-        "Structured data with page coverage",
-        "Inspect, extract, align and validate",
-        "The invoice register has 12 columns across three pages. The agent preserves 31 rows, removes two repeated headers and keeps page provenance for every row.",
-    ),
-    (
-        "20-cross-page-source-parts.jpg",
-        "Two source parts. One logical row.",
-        "Cross-page descriptions keep their evidence",
-        "A description continues on page two. The agent retains six logical rows and all 12 columns. Part buttons show each original fragment. The reconstructed row remains flagged for source review.",
-    ),
-    (
-        "19-resumed-run-log.jpg",
-        "Resume verified completed pages",
-        "Recovery is recorded in the agent log",
-        "After interruption, Resume extraction reuses matching, checksum-verified pages. This run resumed page one and extracted page two. A changed source, mode, engine or model invalidates the checkpoint.",
-    ),
-    (
-        "32-gemini-live-summary.png",
-        "A live cloud second reading",
-        "Bounded usage, independent candidates and explicit coverage",
-        "Local OCR joins all 20 inventory rows. Gemini reads the first scanned page as a PNG and matches 120 checked cells and 12 headers. The one-request limit skips page two. Earlier HTTP 503 failures remain in the report; local data stayed available.",
-    ),
-    (
-        "06-validation.jpg",
-        "Catch the details that matter.",
-        "Validation with row references",
-        "The bank fixture contains intentional mistakes. DamnLens AI Agent flags the wrong total, balance transitions, missing values and a sparse total row. Source errors remain visible.",
-    ),
-    (
-        "07-review-checkpoint.jpg",
-        "An explicit review checkpoint",
-        "Source verification and acknowledged findings",
-        "A completed extraction is a draft. Completing review confirms source checks and records a note for outstanding findings. Subsequent corrections invalidate that review and preserve its previous decision.",
-    ),
-    (
-        "08-reviewed-export.jpg",
-        "Export a recorded review decision",
-        "Draft and reviewed states stay distinct",
-        "The workbook retains accepted findings, source evidence, corrections, page coverage and the run log. Numeric precision and identifiers are preserved. OCR retries archive the previous run before replacing it.",
-    ),
-    (
-        "22-nested-header-groups.jpg",
-        "Structure survives extraction.",
-        "Header paths and merged-cell origins stay visible",
-        "All 16 complex development cases match 962 cells. Three public digital fixtures match 261 cells under disclosed policies. These cases helped repair the engine; they are not a blind hidden-PDF evaluation. This nested example highlights the shared order ID origin.",
-    ),
-    (
-        "29-workflow-guide.png",
-        "A reproducible accuracy workflow",
-        "Built for the INCUXAI challenge 2026",
-        "Double-click START_DAMNLENS.cmd; Local AI runs without a key after setup. Optional Gemini uses your own key. Three live dummy first pages match 360 cells; two earlier provider failures are disclosed. These are development checks, not hidden accuracy or an official score.",
-    ),
-]
+TMP = ROOT / "tmp/demo"
+SHOTS = ROOT / "docs/screenshots"
+OUTPUT = ROOT / "docs/damnlens-demo.mp4"
+SCENES = json.loads((ROOT / "docs/demo-storyboard.json").read_text(encoding="utf-8"))
+DURATION = sum(scene["seconds"] for scene in SCENES)
+FPS = 24
 
 
-def font(size, bold=False, serif=False):
-    base = Path("C:/Windows/Fonts")
-    name = "georgia.ttf" if serif else "segoeuib.ttf" if bold else "segoeui.ttf"
-    if (base / name).exists():
-        return ImageFont.truetype(str(base / name), size)
-    for p in [
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/System/Library/Fonts/Helvetica.ttc",
-    ]:
-        if Path(p).exists():
-            return ImageFont.truetype(p, size)
-    return ImageFont.load_default(size=size)
+def font(size, bold=False):
+    candidates = [
+        Path("C:/Windows/Fonts") / ("segoeuib.ttf" if bold else "segoeui.ttf"),
+        Path("/usr/share/fonts/truetype/dejavu")
+        / ("DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"),
+        Path("/System/Library/Fonts/Helvetica.ttc"),
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return ImageFont.truetype(str(candidate), size)
+    raise RuntimeError(
+        "Install Segoe UI, DejaVu Sans or Helvetica for legible captions"
+    )
 
 
-def wrapped(draw, text, xy, f, fill, width, line_gap=9):
-    x, y = xy
-    line = ""
+def lines(draw, text, face, width):
+    result, current = [], ""
     for word in text.split():
-        trial = (line + " " + word).strip()
-        if draw.textlength(trial, font=f) > width and line:
-            draw.text((x, y), line, font=f, fill=fill)
-            y += f.size + line_gap
-            line = word
+        trial = f"{current} {word}".strip()
+        if draw.textlength(trial, font=face) > width:
+            if not current:
+                raise ValueError(f"Word does not fit: {word}")
+            result.append(current)
+            current = word
         else:
-            line = trial
-    if line:
-        draw.text((x, y), line, font=f, fill=fill)
-        y += f.size + line_gap
-    return y
+            current = trial
+    if current:
+        result.append(current)
+    return result
+
+
+def block(draw, text, xy, face, width, color, max_lines, gap=8):
+    content = lines(draw, text, face, width)
+    if len(content) > max_lines:
+        raise ValueError(f"Text overflows its allocated area: {text}")
+    x, y = xy
+    for line in content:
+        draw.text((x, y), line, font=face, fill=color)
+        y += face.size + gap
+
+
+def timestamp(seconds, srt=False):
+    minutes, second = divmod(seconds, 60)
+    return f"00:{minutes:02}:{second:02},000" if srt else f"{minutes:02}:{second:02}"
+
+
+def frame(scene, number, crop, elapsed):
+    canvas = Image.new("RGB", (1920, 1080), "#0b1220")
+    draw = ImageDraw.Draw(canvas)
+    draw.text((48, 22), "DAMNLENS AI AGENT", font=font(19, True), fill="#83dccc")
+    draw.text(
+        (1488, 22),
+        f"{number + 1:02} / {len(SCENES)}   •   SILENT DEMO",
+        font=font(18),
+        fill="#b7c5dc",
+    )
+    block(draw, scene["title"], (48, 61), font(43, True), 1810, "#f5f8ff", 1)
+    draw.line((48, 130, 1872, 130), fill="#273751", width=1)
+    with Image.open(SHOTS / scene["image"]) as original:
+        shot = original.convert("RGB")
+    if crop is not None:
+        if not (
+            0 <= crop[0] < crop[2] <= shot.width
+            and 0 <= crop[1] < crop[3] <= shot.height
+        ):
+            raise ValueError(f"Crop exceeds authentic capture: {scene['image']} {crop}")
+        shot = shot.crop(crop)
+    stage_width = 1824 if scene.get("wide") else 1400
+    shot = ImageOps.contain(shot, (stage_width, 730), Image.Resampling.LANCZOS)
+    draw.rounded_rectangle(
+        (46, 157, 50 + stage_width, 891), 13, fill="#111e32", outline="#304460", width=2
+    )
+    canvas.paste(
+        shot, (48 + (stage_width - shot.width) // 2, 159 + (730 - shot.height) // 2)
+    )
+    if scene.get("wide"):
+        block(
+            draw,
+            "EXPORTED XLSX / TABLE 1 / A1:L12 / 12 DATA COLUMNS",
+            (76, 179),
+            font(20, True),
+            1720,
+            "#83dccc",
+            1,
+        )
+    else:
+        sidebar(draw, scene)
+    draw.rectangle((48, 918, 1872, 920), fill="#304460")
+    caption_lines = lines(draw, scene["caption"], font(31), 1760)
+    if len(caption_lines) > 2:
+        raise ValueError(f"Caption exceeds two lines: {scene['caption']}")
+    for index, line in enumerate(caption_lines):
+        x = (1920 - draw.textlength(line, font=font(31))) / 2
+        draw.text((x, 938 + 42 * index), line, font=font(31), fill="#f4f7ff")
+    footer = "Real screens • Edited close-ups and timing • Development evidence"
+    if number == len(SCENES) - 1:
+        footer = "github.com/rayanakarthikeyan/damnlens-ai-agent"
+    draw.text((48, 1041), footer, font=font(16), fill="#9db0cc")
+    draw.text(
+        (1718, 1041),
+        f"{timestamp(elapsed)} / {timestamp(DURATION)}",
+        font=font(17),
+        fill="#b7c5dc",
+    )
+    draw.rectangle((0, 1074, 1919, 1079), fill="#263750")
+    draw.rectangle(
+        (0, 1074, max(1, int(1920 * elapsed / DURATION)), 1079), fill="#75d7c3"
+    )
+    return canvas
+
+
+def sidebar(draw, scene):
+    block(draw, "JUDGING FOCUS", (1488, 162), font(17, True), 380, "#83dccc", 1)
+    block(draw, scene["category"], (1488, 197), font(23, True), 380, "#e5edfb", 3)
+    for index, (value, label) in enumerate(scene["facts"]):
+        y = 335 + 157 * index
+        draw.line((1488, y - 17, 1872, y - 17), fill="#273751", width=1)
+        block(draw, value, (1488, y), font(34, True), 380, "#ffffff", 1)
+        block(draw, label, (1488, y + 51), font(23), 380, "#c4d2e8", 2)
+    block(
+        draw,
+        scene.get("media", "APPLICATION CAPTURE"),
+        (1488, 841),
+        font(15, True),
+        380,
+        "#8fa5c4",
+        2,
+        gap=3,
+    )
+
+
+def storyboard():
+    TMP.mkdir(parents=True, exist_ok=True)
+    entries, subtitles, chapters, script = [], [], [], []
+    elapsed = 0
+    for index, scene in enumerate(SCENES):
+        crops = scene.get("crops", [None])
+        for part, crop in enumerate(crops):
+            path = TMP / f"submission-{index:02}-{part}.png"
+            frame(scene, index, crop, elapsed).save(path)
+            entries.append((path, scene["seconds"] / len(crops)))
+        end = elapsed + scene["seconds"]
+        subtitles.append(
+            f"{index + 1}\n{timestamp(elapsed, True)} --> {timestamp(end, True)}\n{scene['caption']}\n"
+        )
+        chapters.append(f"{timestamp(elapsed)} {scene['title']}")
+        script.append(
+            f"| {timestamp(elapsed)}–{timestamp(end)} | {scene['title']} | {scene['caption']} |"
+        )
+        elapsed = end
+    if DURATION != 232 or DURATION > 240:
+        raise ValueError(f"Demo must stay within four minutes: {DURATION}")
+    (ROOT / "docs/damnlens-demo.srt").write_text("\n".join(subtitles), encoding="utf-8")
+    (ROOT / "docs/demo-chapters.txt").write_text(
+        "\n".join(chapters) + "\n", encoding="utf-8"
+    )
+    (ROOT / "docs/DEMO_SCRIPT.md").write_text(
+        "# DamnLens AI Agent submission demo\n\n"
+        "**3 minutes 52 seconds. 1920 × 1080. Captions only; no audio.**\n\n"
+        "This edited walkthrough uses authentic browser captures, a read-only render of the actual exported XLSX, and the published CI run. "
+        "Close-ups and display times are editorial; this is not an uncut speed recording. "
+        "All application examples use fictional data. Gemini screens show the recorded live test; making the video sent no new cloud requests.\n\n"
+        "The five rubric labels show **available marks**, not marks awarded. "
+        "The closing case for the project is traceability, explicit uncertainty, optional independent AI checking and reproducibility. "
+        "No win or hidden-PDF accuracy is claimed.\n\n"
+        "| Time | Screen / requirement | Burned-in caption |\n|---|---|---|\n"
+        + "\n".join(script)
+        + "\n\n## Submission files\n\n"
+        "- `damnlens-demo.mp4`: ready-to-submit video with captions burned in.\n"
+        "- `damnlens-demo.srt`: matching optional subtitles; captions are already visible in the movie.\n"
+        "- `demo-chapters.txt`: chapter timestamps.\n"
+        "- `demo-storyboard.json`: edit specification with original capture crops.\n"
+        "- `../reports/demo-verification.json`: codec, duration, silent-stream check, full decode, hashes and source-capture manifest.\n"
+        "- `../reports/demo-extraction-check.json`: fresh 50-page and PNG checks.\n\n"
+        "## Rebuild\n\n"
+        "Install `requirements-dev.txt`, then run `python scripts/build_demo.py`. "
+        "Use `--frames-only` to inspect before encoding, or `--verify-only` to verify an existing movie. "
+        "The XLSX image is a read-only render of `samples/converted/01_invoice_register.xlsx`, `Table 1`, A1:L12, without changes to values or formatting.\n\n"
+        "## Evidence scope\n\n"
+        "The 50-page fixture repeats the first invoice page 50 times to test boundary handling and duplicate preservation; it is not a 50-layout diversity test. "
+        "The PNG is inventory page one rasterized at 180 DPI. The 864-cell sample, 16-case complex and 15-case varied cohorts are separate development results. "
+        "Expanded 10/11 checks include selected checkpoints rather than complete transcription of every public document; one ambiguous header remains flagged. "
+        "The small live Gemini cohort covers three dummy first pages (360 cells, 36 headers), with two earlier provider failures disclosed. "
+        "See the accuracy, expanded evaluation and Gemini reports for comparison policies. "
+        "The CI screen shows source commit `c8d8b2b`, [run 38715554376](https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions/runs/38715554376).\n",
+        encoding="utf-8",
+    )
+    return entries
+
+
+def verify(ffmpeg):
+    probe = subprocess.run(
+        [ffmpeg, "-hide_banner", "-i", str(OUTPUT)], capture_output=True, text=True
+    )
+    metadata = probe.stderr
+    match = re.search(r"Duration: (\d+):(\d+):(\d+\.\d+)", metadata)
+    if match is None:
+        raise ValueError("Cannot read movie duration")
+    duration = int(match[1]) * 3600 + int(match[2]) * 60 + float(match[3])
+    if duration != DURATION or "Audio:" in metadata:
+        raise ValueError(
+            "Movie must be exactly 232 seconds and contain no audio stream"
+        )
+    if (
+        "Video: h264" not in metadata
+        or "1920x1080" not in metadata
+        or "24 fps" not in metadata
+    ):
+        raise ValueError("Movie must be full-HD H.264 at 24 fps")
+    subprocess.run(
+        [ffmpeg, "-v", "error", "-i", str(OUTPUT), "-f", "null", "-"], check=True
+    )
+    report = {
+        "file": "docs/damnlens-demo.mp4",
+        "seconds": duration,
+        "resolution": [1920, 1080],
+        "codec": "H.264",
+        "pixel_format": "yuv420p",
+        "fps": FPS,
+        "audio_streams": 0,
+        "full_decode": "passed",
+        "scenes": len(SCENES),
+        "burned_in_captions": True,
+        "caption_font_pixels": 31,
+        "max_caption_lines": 2,
+        "layout_overflow_checks": "passed",
+        "bytes": OUTPUT.stat().st_size,
+        "sha256": hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),
+        "editing": "Authentic captures with editorial crops, captions and timing; not real-time performance footage.",
+        "capture_sources": [
+            {
+                "file": f"docs/screenshots/{s['image']}",
+                "seconds": s["seconds"],
+                "title": s["title"],
+                "sha256": hashlib.sha256((SHOTS / s["image"]).read_bytes()).hexdigest(),
+            }
+            for s in SCENES
+        ],
+    }
+    (ROOT / "reports/demo-verification.json").write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
+    return report
 
 
 def main():
-    paths = []
-    for i, (image, title, subtitle, body) in enumerate(SCENES):
-        canvas = Image.new("RGB", (1920, 1080), "#f5f7fb")
-        d = ImageDraw.Draw(canvas)
-        d.rectangle((0, 0, 1920, 87), fill="#111b31")
-        d.text(
-            (40, 23),
-            "DamnLens AI Agent / Document AI",
-            font=font(30, True),
-            fill="#edf2ff",
-        )
-        d.text(
-            (1275, 34),
-            "INCUXAI 2026  /  APPLICATION WALKTHROUGH",
-            font=font(15, True),
-            fill="#a9bad5",
-        )
-        shot = Image.open(SHOTS / image).convert("RGB")
-        shot.thumbnail((1330, 900), Image.Resampling.LANCZOS)
-        x = 30 + (1330 - shot.width) // 2
-        y = 112 + (900 - shot.height) // 2
-        d.rounded_rectangle(
-            (x - 1, y - 1, x + shot.width + 1, y + shot.height + 1),
-            radius=8,
-            fill="#dce5f3",
-        )
-        canvas.paste(shot, (x, y))
-        d.text((1400, 150), f"{i + 1:02d} / 10", font=font(18, True), fill="#7895c7")
-        yy = wrapped(d, title, (1400, 205), font(40, bold=True), "#263c5f", 470, 10)
-        yy = wrapped(d, subtitle, (1400, yy + 26), font(20, True), "#5475ac", 465, 9)
-        wrapped(d, body, (1400, yy + 30), font(24), "#657c9f", 465, 15)
-        d.text(
-            (40, 1039),
-            "Captioned walkthrough of actual application screens. Editorial timing; not a real-time recording.",
-            font=font(15),
-            fill="#879bb9",
-        )
-        d.rectangle((1400, 930, 1870, 935), fill="#dfe7f4")
-        d.rectangle((1400, 930, 1400 + int(470 * (i + 1) / 10), 935), fill="#678bd1")
-        p = TMP / f"frame-{i:02d}.png"
-        canvas.save(p)
-        paths.append(p)
-    sequence = TMP / "frames.txt"
-    sequence.write_text(
-        "".join(f"file '{p.as_posix()}'\nduration 15\n" for p in paths)
-        + f"file '{paths[-1].as_posix()}'\n",
-        encoding="utf-8",
-    )
-    out = ROOT / "docs" / "damnlens-demo.mp4"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--frames-only", action="store_true")
+    parser.add_argument("--verify-only", action="store_true")
+    args = parser.parse_args()
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
-    subprocess.run(
-        [
-            ffmpeg,
-            "-y",
-            "-f",
-            "concat",
-            "-safe",
-            "0",
-            "-i",
-            str(sequence),
-            "-t",
-            "150",
-            "-vf",
-            "fps=12,format=yuv420p",
-            "-c:v",
-            "libx264",
-            "-preset",
-            "fast",
-            "-crf",
-            "22",
-            "-movflags",
-            "+faststart",
-            str(out),
-        ],
-        check=True,
-    )
-    probe = subprocess.run([ffmpeg, "-i", str(out)], capture_output=True, text=True)
+    if not args.verify_only:
+        entries = storyboard()
+        print(
+            f"Prepared {len(SCENES)} scenes, {len(entries)} close-ups, {DURATION} seconds",
+            flush=True,
+        )
+        if args.frames_only:
+            return
+        sequence = TMP / "submission-frames.txt"
+        sequence.write_text(
+            "".join(
+                f"file '{path.as_posix()}'\nduration {seconds}\n"
+                for path, seconds in entries
+            )
+            + f"file '{entries[-1][0].as_posix()}'\n",
+            encoding="utf-8",
+        )
+        subprocess.run(
+            [
+                ffmpeg,
+                "-hide_banner",
+                "-loglevel",
+                "warning",
+                "-y",
+                "-f",
+                "concat",
+                "-safe",
+                "0",
+                "-i",
+                str(sequence),
+                "-t",
+                str(DURATION),
+                "-vf",
+                f"fps={FPS},format=yuv420p",
+                "-an",
+                "-c:v",
+                "libx264",
+                "-preset",
+                "fast",
+                "-crf",
+                "18",
+                "-movflags",
+                "+faststart",
+                str(OUTPUT),
+            ],
+            check=True,
+        )
+    report = verify(ffmpeg)
     print(
-        probe.stderr.split("Duration:")[1].splitlines()[0]
-        if "Duration:" in probe.stderr
-        else probe.stderr
+        f"Verified: {report['seconds']}s, 1080p H.264, no audio, {report['bytes']:,} bytes",
+        flush=True,
     )
-    print(out, out.stat().st_size, "bytes")
 
 
 if __name__ == "__main__":
