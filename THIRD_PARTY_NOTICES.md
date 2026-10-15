@@ -1,6 +1,6 @@
 # Third-party acknowledgments
 
-DamnLens AI Agent uses existing open-source tools and pretrained models. The orchestration, table stitching, validation rules, review interface, evidence model, sample generation and benchmark harness were written for this project with AI coding assistance. The announcement permits AI APIs but does not explicitly define AI-authored code eligibility; authorship and eligibility must be represented honestly.
+DamnLens AI Agent uses the open-source libraries and pretrained models listed below. Its extraction workflow, table stitching, validation, review interface, evidence model and evaluation tools were developed for this project with AI coding assistance.
 
 | Component | Purpose | License / upstream |
 |---|---|---|

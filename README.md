@@ -193,6 +193,6 @@ A review is a local workflow record; there is no authenticated reviewer identity
 
 ## Authorship and licensing
 
-Created for **Rayan Karthikeyan**. Repository commits use **rayanakarthikeyan@gmail.com** as author and committer email. Coding assistance and all upstream libraries/models are credited in `THIRD_PARTY_NOTICES.md`; do not describe AI-assisted code as wholly unaided work. The application uses AGPL-3.0-or-later, with separately licensed upstream dependencies and model weights.
+A project by **[Rayan Karthikeyan](https://github.com/rayanakarthikeyan)** for the INCUXAI AI Agent Development Challenge 2026.
 
-Competition deadline supplied in the brief: **16 October 2026, 7:00 PM**. The brief does not specify a timezone. The submission URL and organizer contact are placeholders; obtain the actual submission link and confirm the deadline timezone with the organizer. This repository does not submit to the competition automatically.
+Licensed under [AGPL-3.0-or-later](LICENSE). Third-party libraries and model weights retain their respective licenses. Development acknowledgments and dependency credits are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
