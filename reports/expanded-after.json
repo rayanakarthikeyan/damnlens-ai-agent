@@ -1,0 +1,223 @@
+{
+  "generated": "2026-10-15T08:43:43.336782+00:00",
+  "manifest_sha256": "0a25dcf7b1810998c736af4021790f6eacef509d99212a795e513741fdc30529",
+  "engine_sha256": "d98cb430bc74f80895076cd1f5867f671fbd0e1e9e59428a78e2548e513b180a",
+  "scope": "Seven previously unevaluated public aggregate/dummy PDFs and four image-only derivatives rasterized at 180 DPI. Background cells use independent upstream annotations; remaining checkpoints were source-transcribed and visually reviewed before first agent extraction, with two subsequently corrected annotation errors disclosed below. Some cases audit selected columns/rows only; these must not be represented as whole-document cell accuracy. Table and column counts are checked; ordered full-row counts are checked except for the selected-row survey audit. After repairs this is development evidence, not held-out hidden performance. The individual medical record image.pdf was excluded before testing to honor the no-personal-data rule.",
+  "comparison": "Whole-table shape and ordered selected source-cell checkpoints; dotted leaders removed only for selected row-label matching. Partial checks are NOT whole-document cell accuracy. Table assignment is one-to-one; extra/missing tables fail.",
+  "results": [
+    {
+      "case": "background_lines_1_native",
+      "passed": true,
+      "checks_passed": 60,
+      "checks": 60,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 8,
+          "rows": 7
+        }
+      ],
+      "seconds": 0.26,
+      "findings": {
+        "merged_cell_review": 7,
+        "merged_total_review": 6
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "column_span_1_native",
+      "passed": true,
+      "checks_passed": 380,
+      "checks": 380,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 8,
+          "rows": 47
+        }
+      ],
+      "seconds": 0.62,
+      "findings": {},
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "row_span_2_native",
+      "passed": true,
+      "checks_passed": 57,
+      "checks": 57,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 10,
+          "rows": 6
+        }
+      ],
+      "seconds": 0.48,
+      "findings": {
+        "merged_cell_review": 4
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "row_span_3_native",
+      "passed": true,
+      "checks_passed": 57,
+      "checks": 57,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 10,
+          "rows": 6
+        }
+      ],
+      "seconds": 0.62,
+      "findings": {
+        "merged_cell_review": 6
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "hybrid_multipage_native",
+      "passed": true,
+      "checks_passed": 28,
+      "checks": 28,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 3,
+          "rows": 8
+        }
+      ],
+      "seconds": 0.01,
+      "findings": {
+        "alignment_review": 1,
+        "duplicate_row": 4
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "tableception_native",
+      "passed": true,
+      "checks_passed": 48,
+      "checks": 48,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 9,
+          "rows": 3
+        },
+        {
+          "columns": 3,
+          "rows": 6
+        }
+      ],
+      "seconds": 0.63,
+      "findings": {
+        "merged_cell_review": 1
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "missing_values_native",
+      "passed": true,
+      "checks_passed": 17,
+      "checks": 17,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 5,
+          "rows": 41
+        }
+      ],
+      "seconds": 0.6,
+      "findings": {
+        "alignment_review": 1,
+        "empty_column": 2,
+        "sparse_row": 7,
+        "missing_value": 14,
+        "column_type": 2
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "background_lines_1_scan_180",
+      "passed": true,
+      "checks_passed": 60,
+      "checks": 60,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 8,
+          "rows": 7
+        }
+      ],
+      "seconds": 15.2,
+      "findings": {
+        "merged_cell_review": 7,
+        "alignment_review": 1,
+        "merged_total_review": 6
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "column_span_1_scan_180",
+      "passed": false,
+      "checks_passed": 379,
+      "checks": 380,
+      "failures": [
+        "headers ['SI. No.', 'Year', 'Population (in Lakh)', 'Accidental Deaths Incidence', 'Accidental Deaths Rate', 'Suicides Incidence', 'Suicides Rate', 'Percentage Population growth']"
+      ],
+      "tables": [
+        {
+          "columns": 8,
+          "rows": 47
+        }
+      ],
+      "seconds": 28.37,
+      "findings": {
+        "ocr_disagreement": 1
+      },
+      "ocr_disagreements": 1
+    },
+    {
+      "case": "row_span_2_scan_180",
+      "passed": true,
+      "checks_passed": 57,
+      "checks": 57,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 10,
+          "rows": 6
+        }
+      ],
+      "seconds": 34.12,
+      "findings": {
+        "ocr_retry_review": 2,
+        "low_ocr": 1,
+        "merged_cell_review": 4
+      },
+      "ocr_disagreements": 0
+    },
+    {
+      "case": "hybrid_multipage_scan_180",
+      "passed": true,
+      "checks_passed": 28,
+      "checks": 28,
+      "failures": [],
+      "tables": [
+        {
+          "columns": 3,
+          "rows": 8
+        }
+      ],
+      "seconds": 3.02,
+      "findings": {
+        "alignment_review": 1,
+        "duplicate_row": 4
+      },
+      "ocr_disagreements": 0
+    }
+  ],
+  "metadata_note": "Scope wording clarified without changing any expected case values or re-running extraction."
+}

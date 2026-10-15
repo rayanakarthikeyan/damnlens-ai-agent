@@ -25,6 +25,8 @@ jobs:
         run: python setup_judges.py --judge-test --offline
       - name: Independent expected cells on pinned public PDF fixtures
         run: python scripts/public_evaluation.py --fetch
+      - name: Expanded public scans, layout checkpoints and ambiguous-header review
+        run: python scripts/expanded_evaluation.py --fetch --check-review-routing
       - name: Verify Windows double-click entry point
         if: runner.os == 'Windows'
         shell: cmd
@@ -36,3 +38,4 @@ jobs:
           path: |
             reports/tests.xml
             reports/public-evaluation-final.json
+            reports/expanded-after.json

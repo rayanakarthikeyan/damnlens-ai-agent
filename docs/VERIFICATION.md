@@ -2,7 +2,7 @@
 
 Verified locally on Windows with Python 3.12.14.
 
-- **100 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
+- **115 automated tests passed**. The raw JUnit record is `reports/tests.xml`. One upstream Starlette warning advises moving its test transport to HTTPX2; it does not affect extraction or the running application.
 - **864/864 synthetic fixture data cells match ground truth**, with exact headers and exact-row recall. See `reports/benchmark.json` and `reports/ACCURACY_REPORT.md` for methodology and limitations.
 - **50-page stress test:** one joined table, 501 rows, 12 columns, all source cells preserved, 49 repeated headers removed.
 - **Borderless regression:** two-page digital fixture preserves multiword headers and all data cells, with alignment marked for review.
@@ -14,6 +14,10 @@ Verified locally on Windows with Python 3.12.14.
 - **Static checks:** Python compilation and JavaScript syntax checks pass. Python and frontend sources are formatted for readability.
 
 Windows and Linux CI results are visible under the repository's Actions tab. The workflow runs the full suite, fresh bootstrap, offline judge checks and pinned public PDF comparisons on both systems. Docker configuration is supplied but was not manually verified locally.
+
+## Expanded source checkpoints (v1.4)
+
+The new source-reviewed public cohort improved from 3/11 to 10/11 strict checkpoint cases. One header-only ambiguity is retained and flagged, with all 376 checked data cells and dimensions correct. Full scope, reference errata, first-pass provenance, partial-audit limits and reproduction are in `reports/EXPANDED_EVALUATION.md`. Fifteen new regression tests cover the repaired behavior. Both OCR models ship offline with bootstrap and checkpoint signatures. The real UI run shows the header warning despite a high mean recognition score; screenshot `24-ocr-disagreement-review.jpg` records it.
 
 ## Complex structure and recovery (v1.3)
 

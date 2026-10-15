@@ -15,12 +15,14 @@ from threading import Lock
 
 from .quality import enrich
 from .checkpoints import PageCheckpoints
+from .ocr_verify import verify_labels
 from .layout import (
     grid_records,
     prepare_fragment,
     append_continuation,
     aligned_fragments,
     native_cell_text,
+    reading_order,
 )
 
 import cv2
@@ -151,6 +153,19 @@ def record(cells, page, bbox, method, confidence=1.0):
 def native_tables(page, page_no):
     candidates = page.find_tables(strategy="lines_strict").tables
     method = "Native PDF · grid"
+    if candidates and max(t.col_count for t in candidates) <= 3:
+        collapsed = any(
+            len(re.findall(r"\b\d+(?:\.\d+)?\b", str(cell))) >= 6
+            for table in candidates
+            for row in table.extract()
+            for cell in row
+        )
+        if collapsed:
+            inferred = aligned_text_tables(page, page_no)
+            if inferred and max(
+                len(r["cells"]) for f in inferred for r in f["rows"]
+            ) > max(t.col_count for t in candidates):
+                return inferred
     if not candidates:
         inferred = aligned_text_tables(page, page_no)
         if inferred:
@@ -192,8 +207,38 @@ def native_tables(page, page_no):
             [native_cell_text(characters, box) if box else None for box in row.cells]
             for row in table.rows
         ]
-        if table.header.external:
-            header = record(table.header.names, page_no, table.header.bbox, method)
+        external = table.header.external
+        if external and raw:
+            filled = sum(bool(c) for c in raw[0])
+            external_filled = sum(bool(c) for c in table.header.names)
+            # A sparse prose line above a complete in-grid schema is not a
+            # header. This matters for child tables embedded in a text cell.
+            if (
+                external_filled <= len(raw[0]) / 3
+                and filled == len(raw[0])
+                and all(number(c) is None for c in raw[0])
+                and len(raw) > 1
+                and sum(number(c) is not None for c in raw[1]) >= len(raw[1]) / 2
+            ):
+                external = False
+        if external:
+            words = page.get_text("words")
+            names = []
+            for box, original in zip(table.header.cells, table.header.names):
+                if not box:
+                    names.append(original)
+                    continue
+                selected = [
+                    w
+                    for w in words
+                    if box[1] <= (w[1] + w[3]) / 2 < box[3]
+                    and min(w[2], box[2]) - max(w[0], box[0]) >= (w[2] - w[0]) * 0.65
+                ]
+                names.append(
+                    " ".join(w[4] for w in sorted(selected, key=lambda w: (w[1], w[0])))
+                    or original
+                )
+            header = record(names, page_no, table.header.bbox, method)
             header["_header_hint"] = True
             rows.append(header)
         rows.extend(
@@ -449,6 +494,7 @@ def scan_tables(page, page_no, dpi=220):
     # Deskew changes word positions; recognize again only when it was applied.
     if abs(angle) > 0.15:
         words = ocr_words(image)
+    words = verify_labels(image, words)
     inverse = (
         np.vstack([orientation_inverse, [0, 0, 1]])
         @ np.vstack([deskew_inverse, [0, 0, 1]])
@@ -462,6 +508,28 @@ def scan_tables(page, page_no, dpi=220):
     )
     v = cv2.morphologyEx(
         bw, cv2.MORPH_OPEN, np.ones((max(30, image.shape[0] // 30), 1), np.uint8)
+    )
+    # White rulings on colored cells disappear from an inverted dark-text mask.
+    # Top-hat retains thin bright lines while removing the uniform page.
+    bright = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, np.ones((7, 7), np.uint8))
+    bright = (bright > 10).astype(np.uint8) * 255
+    edges = cv2.Canny(gray, 15, 45)
+    bright = cv2.bitwise_or(bright, edges)
+    h = cv2.bitwise_or(
+        h,
+        cv2.morphologyEx(
+            bright,
+            cv2.MORPH_OPEN,
+            np.ones((1, max(30, image.shape[1] // 25)), np.uint8),
+        ),
+    )
+    v = cv2.bitwise_or(
+        v,
+        cv2.morphologyEx(
+            bright,
+            cv2.MORPH_OPEN,
+            np.ones((max(30, image.shape[0] // 30), 1), np.uint8),
+        ),
     )
     grid = cv2.dilate(cv2.bitwise_or(h, v), np.ones((3, 3), np.uint8))
     contours, _ = cv2.findContours(grid, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -495,27 +563,132 @@ def scan_tables(page, page_no, dpi=220):
         )
         ys = clusters(
             (
-                np.where((h[y : y + height, x : x + w] > 0).sum(axis=1) > w * 0.45)[0]
+                np.where(
+                    (h[y : y + height, x : x + w] > 0).sum(axis=1) > max(20, w * 0.12)
+                )[0]
                 + y
             ).tolist()
         )
+        ys = [
+            edge
+            for edge in ys
+            if sum(
+                bool(
+                    h[
+                        max(0, int(edge) - 2) : int(edge) + 3,
+                        max(0, int(column) - 4) : int(column) + 5,
+                    ].any()
+                )
+                for column in xs
+            )
+            >= 2
+        ]
         if len(xs) < 3 or len(ys) < 3:
             continue
+        region_words = [
+            a
+            for a in words
+            if x <= (a["bbox"][0] + a["bbox"][2]) / 2 <= x + w
+            and y <= (a["bbox"][1] + a["bbox"][3]) / 2 <= y + height
+        ]
+        if (
+            len(region_words) > 40
+            and sum(number(a["text"]) is not None for a in region_words)
+            < len(region_words) * 0.03
+            and not is_header([a["text"] for a in region_words])
+        ):
+            continue
+        vertical_spans = {}
+        for col, (left, right) in enumerate(zip(xs, xs[1:])):
+            start = 0
+            for end in range(1, len(ys)):
+                boundary = h[
+                    int(ys[end]) - 2 : int(ys[end]) + 3, int(left) + 4 : int(right) - 3
+                ]
+                separated = bool(
+                    boundary.size and (boundary > 0).any(axis=0).mean() >= 0.5
+                )
+                if not separated and end < len(ys) - 1:
+                    continue
+                if end - start > 1:
+                    support = [
+                        v[
+                            int(ys[start]) + 4 : int(ys[end]) - 3,
+                            int(edge) - 2 : int(edge) + 3,
+                        ]
+                        for edge in (left, right)
+                    ]
+                    if all(
+                        s.size and (s > 0).any(axis=1).mean() >= 0.65 for s in support
+                    ):
+                        selected = [
+                            a
+                            for a in words
+                            if left <= (a["bbox"][0] + a["bbox"][2]) / 2 < right
+                            and ys[start] <= (a["bbox"][1] + a["bbox"][3]) / 2 < ys[end]
+                        ]
+                        selected = reading_order(selected)
+                        value = clean(" ".join(a["text"] for a in selected))
+                        if value:
+                            for band in range(start, end):
+                                vertical_spans[band, col] = {
+                                    "value": value,
+                                    "start": start,
+                                    "end": end,
+                                    "bbox": original_box(
+                                        [left, ys[start], right, ys[end]]
+                                    ),
+                                    "score": min(a["score"] for a in selected),
+                                }
+                start = end
         rows = []
         for band_index, (top, bottom) in enumerate(zip(ys, ys[1:])):
             separators = [0]
+            reconstructed_edges = []
             for col, edge in enumerate(xs[1:-1], 1):
                 section = v[
                     int(top) + 5 : int(bottom) - 4, int(edge) - 2 : int(edge) + 3
                 ]
                 if section.size and (section > 0).any(axis=1).mean() > 0.45:
                     separators.append(col)
+                else:
+                    line_words = [
+                        a
+                        for a in words
+                        if top <= (a["bbox"][1] + a["bbox"][3]) / 2 < bottom
+                    ]
+                    left_words = [
+                        a
+                        for a in line_words
+                        if xs[col - 1] <= a["bbox"][0] and a["bbox"][2] <= edge
+                    ]
+                    right_words = [
+                        a
+                        for a in line_words
+                        if edge <= a["bbox"][0] and a["bbox"][2] <= xs[col + 1]
+                    ]
+                    if (
+                        left_words
+                        and right_words
+                        and any(re.search(r"\d", a["text"]) for a in right_words)
+                    ):
+                        gap = min(a["bbox"][0] for a in right_words) - max(
+                            a["bbox"][2] for a in left_words
+                        )
+                        letter_height = statistics.median(
+                            a["bbox"][3] - a["bbox"][1]
+                            for a in left_words + right_words
+                        )
+                        if gap > letter_height * 0.65:
+                            separators.append(col)
+                            reconstructed_edges.append(col)
             separators.append(len(xs) - 1)
             cells = [""] * (len(xs) - 1)
             scores = []
             cell_scores = [None] * len(cells)
             spans = []
             recognition_retries = []
+            disagreements = []
             for start_col, end_col in zip(separators, separators[1:]):
                 left, right = xs[start_col], xs[end_col]
                 selected = [
@@ -524,7 +697,59 @@ def scan_tables(page, page_no, dpi=220):
                     if left <= (a["bbox"][0] + a["bbox"][2]) / 2 < right
                     and top <= (a["bbox"][1] + a["bbox"][3]) / 2 < bottom
                 ]
-                selected.sort(key=lambda a: (round(a["bbox"][1] / 12), a["bbox"][0]))
+                selected = reading_order(selected)
+                for a in selected:
+                    if a.get("verification"):
+                        recognition_retries.append(
+                            {
+                                "column": start_col + 1,
+                                "route": "second-model two-scale agreement",
+                                **a["verification"],
+                                "bbox": original_box(a["verification"]["bbox"]),
+                            }
+                        )
+                    if a.get("disagreement"):
+                        disagreements.append(
+                            {
+                                "column": start_col + 1,
+                                **a["disagreement"],
+                                "bbox": original_box(a["disagreement"]["bbox"]),
+                            }
+                        )
+                if selected and any(
+                    a["bbox"][0] < left - 6
+                    or a["bbox"][2] > right + 6
+                    or a["bbox"][1] < top - 6
+                    or a["bbox"][3] > bottom + 6
+                    for a in selected
+                ):
+                    crop = image[
+                        int(top) + 4 : int(bottom) - 3, int(left) + 4 : int(right) - 3
+                    ]
+                    retry = (
+                        ocr_words(
+                            cv2.copyMakeBorder(
+                                crop,
+                                12,
+                                12,
+                                12,
+                                12,
+                                cv2.BORDER_CONSTANT,
+                                value=(255, 255, 255),
+                            )
+                        )
+                        if crop.size
+                        else []
+                    )
+                    if retry and min(a["score"] for a in retry) >= 0.75:
+                        selected = reading_order(retry)
+                        recognition_retries.append(
+                            {
+                                "column": start_col + 1,
+                                "route": "cell-boundary crop",
+                                "score": round(min(a["score"] for a in retry), 3),
+                            }
+                        )
                 # Retry visibly inked empty regions, including an isolated digit.
                 if not selected:
                     crop = image[
@@ -576,6 +801,34 @@ def scan_tables(page, page_no, dpi=220):
                             "value": cells[start_col],
                         }
                     )
+            inherited = []
+            for col in range(len(cells)):
+                shared = vertical_spans.get((band_index, col))
+                if shared:
+                    cells[col] = shared["value"]
+                    cell_scores[col] = round(shared["score"], 3)
+                    scores.append(shared["score"])
+                    metadata = {
+                        "column": col + 1,
+                        "value": shared["value"],
+                        "bbox": shared["bbox"],
+                    }
+                    if band_index == shared["start"]:
+                        spans.append(
+                            {
+                                **metadata,
+                                "column_span": 1,
+                                "row_span": shared["end"] - shared["start"],
+                            }
+                        )
+                    else:
+                        inherited.append(
+                            {
+                                **metadata,
+                                "from_page": page_no,
+                                "from_grid_row": shared["start"] + 1,
+                            }
+                        )
             if any(cells):
                 row = record(
                     cells,
@@ -586,10 +839,16 @@ def scan_tables(page, page_no, dpi=220):
                     statistics.mean(scores) if scores else 0,
                 )
                 row["cell_confidence"] = cell_scores
+                if reconstructed_edges:
+                    row["reconstructed_edges"] = reconstructed_edges
                 if recognition_retries:
                     row["ocr_retries"] = recognition_retries
+                if disagreements:
+                    row["ocr_disagreements"] = disagreements
                 if spans:
                     row["merged_cells"] = spans
+                if inherited:
+                    row["inherited_cells"] = inherited
                 if rows and band_index > 0:
                     for col, (left, right) in enumerate(zip(xs, xs[1:])):
                         if (
@@ -626,7 +885,14 @@ def scan_tables(page, page_no, dpi=220):
                                 }
                             )
                 rows.append(row)
-        if rows:
+        values = [c for r in rows for c in r["cells"] if c]
+        boxed_prose = (
+            values
+            and max(map(len, values)) > 200
+            and len(set(values)) < 5
+            and not any(number(c) is not None for c in values)
+        )
+        if rows and not boxed_prose:
             out.append(
                 {
                     "rows": rows,
@@ -677,6 +943,8 @@ def stitch(fragments):
             else [f"Column {i + 1}" for i in range(len(first))]
         )
         data = rows[1:] if has_header else rows
+        if not data:
+            continue
         previous = None
         compatible = []
         x = frag["bbox"][0] / frag["width"]
@@ -737,6 +1005,8 @@ def stitch(fragments):
                 "_w": (frag["bbox"][2] - frag["bbox"][0]) / frag["width"],
             }
             tables.append(target)
+            if frag.get("header_ocr_disagreements"):
+                target["header_ocr_disagreements"] = frag["header_ocr_disagreements"]
             if frag.get("context_key"):
                 target["context_key"] = frag["context_key"]
             if frag.get("header_paths"):
@@ -785,6 +1055,14 @@ def validate(tables):
         rows = t["rows"]
         headers = t["headers"]
         n = len(headers)
+        for finding in t.get("header_ocr_disagreements", []):
+            add(
+                t,
+                "ocr_disagreement",
+                f"Header OCR candidates disagree for {finding['original']!r}. Original reading retained; inspect source page {finding['page']}.",
+                col=finding["column"],
+            )
+            issues[-1]["page"] = finding["page"]
         if t.get("inferred_headers"):
             add(
                 t,
@@ -840,15 +1118,33 @@ def validate(tables):
         sum_counts = {c: 0 for c in numeric_cols}
         section_sums = {c: 0 for c in numeric_cols}
         section_counts = {c: 0 for c in numeric_cols}
+        counted_sources = set()
+        expanded_sums = {c: 0 for c in numeric_cols}
+        expanded_section_sums = {c: 0 for c in numeric_cols}
         for r in rows:
             cells = r["cells"]
             rid = r["id"]
+            if r.get("reconstructed_edges"):
+                add(
+                    t,
+                    "alignment_review",
+                    "A broken grid separator was reconstructed from a wide text gap and adjacent numeric content. Verify the affected columns.",
+                    rid,
+                )
             if r.get("ocr_retries"):
                 add(
                     t,
                     "ocr_retry_review",
-                    "A missed inked cell was recovered by recognition-only OCR with two-scale agreement. Verify against the source.",
+                    "OCR recovery or second-model verification was used. Inspect the recorded route and compare against the source.",
                     rid,
+                )
+            for finding in r.get("ocr_disagreements", []):
+                add(
+                    t,
+                    "ocr_disagreement",
+                    f"OCR candidates disagree for {finding['original']!r}. The original reading is retained; inspect the source before accepting it.",
+                    rid,
+                    finding["column"],
                 )
             if r.get("continued_across_pages"):
                 add(
@@ -913,10 +1209,22 @@ def validate(tables):
                 if total:
                     expected_sum = sums[c] if grand_total else section_sums[c]
                     expected_count = sum_counts[c] if grand_total else section_counts[c]
+                    expanded = (
+                        expanded_sums[c] if grand_total else expanded_section_sums[c]
+                    )
+                    if expected_count and expected_sum != expanded:
+                        add(
+                            t,
+                            "merged_total_review",
+                            f"{headers[c]}: unique merged source cells sum to {expected_sum:,.2f}; expanded logical rows sum to {expanded:,.2f}. Verify which interpretation applies.",
+                            rid,
+                            c + 1,
+                        )
                     if (
                         value is not None
                         and expected_count
                         and abs(value - expected_sum) > Decimal("0.005")
+                        and abs(value - expanded) > Decimal("0.005")
                     ):
                         add(
                             t,
@@ -927,6 +1235,29 @@ def validate(tables):
                             "error",
                         )
                 elif value is not None:
+                    expanded_sums[c] += value
+                    expanded_section_sums[c] += value
+                    shared = next(
+                        (
+                            s
+                            for s in r.get("inherited_cells", [])
+                            + r.get("merged_cells", [])
+                            if s["column"] == c + 1
+                            and (s.get("row_span", 1) > 1 or "from_grid_row" in s)
+                            and s.get("column_span", 1) == 1
+                        ),
+                        None,
+                    )
+                    if shared:
+                        source_key = (
+                            c,
+                            shared.get("from_page", r["page"]),
+                            tuple(round(v, 2) for v in shared["bbox"]),
+                            value,
+                        )
+                        if source_key in counted_sources:
+                            continue
+                        counted_sources.add(source_key)
                     sums[c] += value
                     sum_counts[c] += 1
                     section_sums[c] += value
@@ -940,6 +1271,7 @@ def validate(tables):
                         c + 1,
                     )
             if total:
+                expanded_section_sums = {c: 0 for c in numeric_cols}
                 section_sums = {c: 0 for c in numeric_cols}
                 section_counts = {c: 0 for c in numeric_cols}
             if not total:
@@ -1144,9 +1476,14 @@ def extract(
                             round(v, 2)
                             for v in fitz.Rect(row["bbox"]) * evidence_transform
                         ]
-                        for item in row.get("merged_cells", []) + row.get(
-                            "inherited_cells", []
+                        for item in (
+                            row.get("merged_cells", [])
+                            + row.get("inherited_cells", [])
+                            + row.get("ocr_disagreements", [])
+                            + row.get("ocr_retries", [])
                         ):
+                            if "bbox" not in item:
+                                continue
                             item["bbox"] = [
                                 round(v, 2)
                                 for v in fitz.Rect(item["bbox"]) * evidence_transform
@@ -1195,6 +1532,18 @@ def extract(
             fragments=len(fragments),
         )
         tables = stitch(fragments)
+        for metadata in pages:
+            pieces = [
+                part
+                for t in tables
+                for r in t["rows"]
+                for part in r.get("sources", [r])
+                if part["page"] == metadata["page"]
+            ]
+            if not pieces:
+                metadata.update(status="needs_review", rows=0, tables=0)
+            else:
+                metadata["rows"] = len(pieces)
         if any(
             t.get("header_paths")
             or any(
@@ -1248,7 +1597,7 @@ def extract(
                 "elapsed_seconds": round(time.perf_counter() - start, 2),
                 "row_count": sum(len(t["rows"]) for t in tables),
                 "headers_removed": sum(t["headers_removed"] for t in tables),
-                "engine": "DamnLens AI Agent 1.3 · PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+                "engine": "DamnLens AI Agent 1.4 · PyMuPDF + RapidOCR (PP-OCRv3/v5 / ONNX)",
                 "edits": [],
                 "events": events,
             }

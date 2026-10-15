@@ -38,7 +38,7 @@
       ],
       "status": "extracted",
       "rows": 11,
-      "seconds": 0.11,
+      "seconds": 0.12,
       "width": 1120.0,
       "height": 700.0
     }
@@ -882,23 +882,23 @@
   "elapsed_seconds": 0.35,
   "row_count": 31,
   "headers_removed": 2,
-  "engine": "DamnLens AI Agent 1.3 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "engine": "DamnLens AI Agent 1.4 \u00b7 PyMuPDF + RapidOCR (PP-OCRv3/v5 / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T07:48:13.877763+00:00",
+      "at": "2026-10-15T08:42:18.538856+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "01_invoice_register.pdf"
     },
     {
-      "at": "2026-10-15T07:48:13.884692+00:00",
+      "at": "2026-10-15T08:42:18.546889+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T07:48:13.994854+00:00",
+      "at": "2026-10-15T08:42:18.655971+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -906,13 +906,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T07:48:13.996854+00:00",
+      "at": "2026-10-15T08:42:18.655971+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T07:48:14.104918+00:00",
+      "at": "2026-10-15T08:42:18.766267+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -920,13 +920,13 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T07:48:14.106918+00:00",
+      "at": "2026-10-15T08:42:18.768922+00:00",
       "stage": "inspect",
       "message": "Selected native text extraction",
       "page": 3
     },
     {
-      "at": "2026-10-15T07:48:14.220641+00:00",
+      "at": "2026-10-15T08:42:18.884915+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 3,
@@ -934,19 +934,19 @@
       "method": "native"
     },
     {
-      "at": "2026-10-15T07:48:14.220641+00:00",
+      "at": "2026-10-15T08:42:18.884915+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 3
     },
     {
-      "at": "2026-10-15T07:48:14.225101+00:00",
+      "at": "2026-10-15T08:42:18.888397+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T07:48:14.230100+00:00",
+      "at": "2026-10-15T08:42:18.888397+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,

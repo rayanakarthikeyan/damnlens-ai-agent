@@ -12,7 +12,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 8.34,
+      "seconds": 8.54,
       "width": 1120.0,
       "height": 700.0
     },
@@ -25,7 +25,7 @@
       ],
       "status": "extracted",
       "rows": 10,
-      "seconds": 6.39,
+      "seconds": 6.69,
       "width": 1120.0,
       "height": 700.0
     }
@@ -68,8 +68,8 @@
           "bbox": [
             43.85,
             174.76,
-            994.58,
-            202.91
+            994.42,
+            202.75
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.995,
@@ -107,8 +107,8 @@
           "page": 1,
           "bbox": [
             43.85,
-            202.91,
-            994.58,
+            202.75,
+            994.42,
             230.73
           ],
           "method": "OCR \u00b7 grid",
@@ -148,7 +148,7 @@
           "bbox": [
             43.85,
             230.73,
-            994.58,
+            994.42,
             258.71
           ],
           "method": "OCR \u00b7 grid",
@@ -188,7 +188,7 @@
           "bbox": [
             43.85,
             258.71,
-            994.58,
+            994.42,
             286.69
           ],
           "method": "OCR \u00b7 grid",
@@ -228,7 +228,7 @@
           "bbox": [
             43.85,
             286.69,
-            994.58,
+            994.42,
             314.67
           ],
           "method": "OCR \u00b7 grid",
@@ -268,7 +268,7 @@
           "bbox": [
             43.85,
             314.67,
-            994.58,
+            994.42,
             342.65
           ],
           "method": "OCR \u00b7 grid",
@@ -308,8 +308,8 @@
           "bbox": [
             43.85,
             342.65,
-            994.58,
-            370.8
+            994.42,
+            370.64
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
@@ -347,8 +347,8 @@
           "page": 1,
           "bbox": [
             43.85,
-            370.8,
-            994.58,
+            370.64,
+            994.42,
             398.62
           ],
           "method": "OCR \u00b7 grid",
@@ -388,8 +388,8 @@
           "bbox": [
             43.85,
             398.62,
-            994.58,
-            426.6
+            994.42,
+            426.76
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.998,
@@ -427,9 +427,9 @@
           "page": 1,
           "bbox": [
             43.85,
-            426.6,
-            994.58,
-            454.58
+            426.76,
+            994.42,
+            454.75
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.99,
@@ -468,8 +468,8 @@
           "bbox": [
             43.85,
             174.76,
-            994.58,
-            202.91
+            994.42,
+            202.75
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
@@ -507,8 +507,8 @@
           "page": 2,
           "bbox": [
             43.85,
-            202.91,
-            994.58,
+            202.75,
+            994.42,
             230.73
           ],
           "method": "OCR \u00b7 grid",
@@ -548,7 +548,7 @@
           "bbox": [
             43.85,
             230.73,
-            994.58,
+            994.42,
             258.71
           ],
           "method": "OCR \u00b7 grid",
@@ -588,7 +588,7 @@
           "bbox": [
             43.85,
             258.71,
-            994.58,
+            994.42,
             286.69
           ],
           "method": "OCR \u00b7 grid",
@@ -628,7 +628,7 @@
           "bbox": [
             43.85,
             286.69,
-            994.58,
+            994.42,
             314.67
           ],
           "method": "OCR \u00b7 grid",
@@ -668,7 +668,7 @@
           "bbox": [
             43.85,
             314.67,
-            994.58,
+            994.42,
             342.65
           ],
           "method": "OCR \u00b7 grid",
@@ -708,8 +708,8 @@
           "bbox": [
             43.85,
             342.65,
-            994.58,
-            370.8
+            994.42,
+            370.64
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
@@ -747,8 +747,8 @@
           "page": 2,
           "bbox": [
             43.85,
-            370.8,
-            994.58,
+            370.64,
+            994.42,
             398.62
           ],
           "method": "OCR \u00b7 grid",
@@ -788,8 +788,8 @@
           "bbox": [
             43.85,
             398.62,
-            994.58,
-            426.6
+            994.42,
+            426.76
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.997,
@@ -827,9 +827,9 @@
           "page": 2,
           "bbox": [
             43.85,
-            426.6,
-            994.58,
-            454.58
+            426.76,
+            994.42,
+            454.75
           ],
           "method": "OCR \u00b7 grid",
           "confidence": 0.999,
@@ -859,32 +859,32 @@
     }
   ],
   "issues": [],
-  "elapsed_seconds": 14.73,
+  "elapsed_seconds": 15.24,
   "row_count": 20,
   "headers_removed": 1,
-  "engine": "DamnLens AI Agent 1.3 \u00b7 PyMuPDF + RapidOCR (PP-OCR / ONNX)",
+  "engine": "DamnLens AI Agent 1.4 \u00b7 PyMuPDF + RapidOCR (PP-OCRv3/v5 / ONNX)",
   "edits": [],
   "events": [
     {
-      "at": "2026-10-15T07:48:14.413926+00:00",
+      "at": "2026-10-15T08:42:19.057941+00:00",
       "stage": "inspect",
       "message": "Opened source document",
       "filename": "02_scanned_inventory.pdf"
     },
     {
-      "at": "2026-10-15T07:48:14.416160+00:00",
+      "at": "2026-10-15T08:42:19.059720+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 1
     },
     {
-      "at": "2026-10-15T07:48:14.416160+00:00",
+      "at": "2026-10-15T08:42:19.059720+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 1
     },
     {
-      "at": "2026-10-15T07:48:22.744569+00:00",
+      "at": "2026-10-15T08:42:27.599816+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 1,
@@ -892,19 +892,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T07:48:22.745551+00:00",
+      "at": "2026-10-15T08:42:27.601819+00:00",
       "stage": "inspect",
       "message": "Selected OCR extraction",
       "page": 2
     },
     {
-      "at": "2026-10-15T07:48:22.745551+00:00",
+      "at": "2026-10-15T08:42:27.601819+00:00",
       "stage": "extract",
       "message": "Running local OCR and layout reconstruction",
       "page": 2
     },
     {
-      "at": "2026-10-15T07:48:29.130771+00:00",
+      "at": "2026-10-15T08:42:34.283842+00:00",
       "stage": "extract",
       "message": "Extracted table fragments",
       "page": 2,
@@ -912,19 +912,19 @@
       "method": "ocr"
     },
     {
-      "at": "2026-10-15T07:48:29.131563+00:00",
+      "at": "2026-10-15T08:42:34.283842+00:00",
       "stage": "align",
       "message": "Matching table schemas and continuation pages",
       "fragments": 2
     },
     {
-      "at": "2026-10-15T07:48:29.134203+00:00",
+      "at": "2026-10-15T08:42:34.283842+00:00",
       "stage": "validate",
       "message": "Checking totals, arithmetic, balances and table integrity",
       "tables": 1
     },
     {
-      "at": "2026-10-15T07:48:29.136206+00:00",
+      "at": "2026-10-15T08:42:34.294107+00:00",
       "stage": "review",
       "message": "Extraction complete; human review is pending",
       "findings": 0,

@@ -31,6 +31,7 @@ Submission evidence:
   samples/converted/                Corresponding Excel workbooks
   reports/ACCURACY_REPORT.md        Measured sample accuracy and validation
   reports/JUDGE_EVALUATION.md       Rubric self-assessment and gaps fixed
+  reports/EXPANDED_EVALUATION.md    New public layout/scan checks and residuals
   evaluation/pdfs/                  Fifteen varied development audit PDFs
   evaluation/complex/               Sixteen complex PDF/Excel pairs and truth
   evaluation/public/                Pinned public URLs/annotations and license

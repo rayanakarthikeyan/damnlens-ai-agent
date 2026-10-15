@@ -26,7 +26,9 @@ const labels = {
   page_review: "Page needs visual review",
   row_continuation: "Row continues across pages",
   merged_cell_review: "Merged source cell",
-  ocr_retry_review: "Recovered OCR cell",
+  merged_total_review: "Merged values affect the total",
+  ocr_retry_review: "OCR recovery or verification",
+  ocr_disagreement: "OCR candidates disagree",
 };
 const suggestions = {
   total_mismatch:
@@ -48,8 +50,12 @@ const suggestions = {
     "Compare every source part before accepting the reconstructed row.",
   merged_cell_review:
     "Inspect the source span and its shared value. Covered horizontal cells remain empty when their meaning is ambiguous.",
+  merged_total_review:
+    "Check whether a shared source amount applies once to the group or separately to each logical row. Both totals are shown for review.",
   ocr_retry_review:
-    "Compare the recovered cell with the original ink. Agreement between two OCR scales is not a measured accuracy guarantee.",
+    "Compare the cell with the source and inspect its recorded OCR route. Model agreement is not measured accuracy.",
+  ocr_disagreement:
+    "Inspect the ambiguous characters in the source. The original reading was retained because the OCR candidates did not agree.",
 };
 let jobs = [],
   inbox = [],

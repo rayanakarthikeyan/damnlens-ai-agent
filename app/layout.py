@@ -19,6 +19,26 @@ def key(value):
     return re.sub(r"[^a-z0-9]", "", text(value).lower())
 
 
+def reading_order(words):
+    """Cluster baselines before sorting x; fixed y buckets reorder prose."""
+    if not words:
+        return []
+    height = statistics.median(w["bbox"][3] - w["bbox"][1] for w in words)
+    lines = []
+    for word in sorted(words, key=lambda w: (w["bbox"][1] + w["bbox"][3]) / 2):
+        center = (word["bbox"][1] + word["bbox"][3]) / 2
+        if (
+            not lines
+            or center
+            - statistics.mean((w["bbox"][1] + w["bbox"][3]) / 2 for w in lines[-1])
+            > height * 0.45
+        ):
+            lines.append([word])
+        else:
+            lines[-1].append(word)
+    return [w for line in lines for w in sorted(line, key=lambda w: w["bbox"][0])]
+
+
 def native_cell_text(characters, box):
     """Reconstruct geometric character order across separately drawn glyph runs."""
     selected = [
@@ -174,16 +194,61 @@ def prepare_fragment(fragment, is_header, numeric):
     rows = fragment["rows"]
     width = len(rows[0]["cells"])
     depth = 0
-    for index, row in enumerate(rows[:4]):
+    reference_rows = set()
+    reference_index = next(
+        (
+            i
+            for i, row in enumerate(rows[:6])
+            if i > 0
+            and all(
+                re.fullmatch(r"\(\s*" + str(c + 1) + r"\s*\)", text(value))
+                for c, value in enumerate(row["cells"])
+            )
+        ),
+        None,
+    )
+    grid_header_end = None
+    if rows[0]["method"].startswith("OCR") and not rows[0].get("_header_hint"):
+        for i, row in enumerate(rows[1:6], 1):
+            filled = [c for c in row["cells"] if text(c)]
+            if filled and sum(numeric(c) is not None for c in filled) >= max(
+                2, len(filled) * 0.4
+            ):
+                preceding = rows[:i]
+                if all(
+                    all(len(c.split()) <= 6 for c in r["cells"])
+                    and sum(numeric(c) is not None for c in r["cells"])
+                    < max(1, width * 0.4)
+                    for r in preceding
+                ):
+                    grid_header_end = i
+                break
+    for index, row in enumerate(rows[:6]):
         values = [c for c in row["cells"] if text(c)]
         fraction = sum(numeric(c) is not None for c in values) / max(1, len(values))
         spanning = any(s["column_span"] > 1 for s in row.get("merged_cells", []))
         following = index + 1 < len(rows) and is_header(rows[index + 1]["cells"])
         known = is_header(row["cells"])
         hint = row.get("_header_hint", False)
+        references = (
+            index > 0
+            and depth == index
+            and all(
+                re.fullmatch(r"\(\s*" + str(i + 1) + r"\s*\)", text(value))
+                for i, value in enumerate(row["cells"])
+            )
+        )
+        if references:
+            reference_rows.add(index)
+            depth = index + 1
+            continue
         # Years can be spanning parents. Bold numeric business values alone
         # are not sufficient to remove a data row as a header.
         plausible = known or (hint and fraction < 0.4) or (spanning and following)
+        if reference_index is not None and index < reference_index and fraction < 0.4:
+            plausible = True
+        if grid_header_end is not None and index < grid_header_end:
+            plausible = True
         if index > 0 and "_header_hint" in row and not hint:
             previous_group = any(
                 s["column_span"] > 1 for s in rows[index - 1].get("merged_cells", [])
@@ -217,6 +282,8 @@ def prepare_fragment(fragment, is_header, numeric):
     header_rows = deepcopy(rows[:depth])
     paths = [[] for _ in range(width)]
     for header_index, row in enumerate(header_rows):
+        if header_index in reference_rows:
+            continue
         expanded = list(row["cells"])
         body_shared = {
             span["column"] - 1
@@ -239,8 +306,21 @@ def prepare_fragment(fragment, is_header, numeric):
                 paths[col].append(value)
     leaves = [p[-1] if p else "" for p in paths]
     duplicates = Counter(key(v) for v in leaves if v)
+    spanning_parents = {
+        s["value"]
+        for r in header_rows
+        for s in r.get("merged_cells", [])
+        if s["column_span"] > 1
+    }
     names = [
-        " ".join(path) if duplicates[key(leaf)] > 1 else leaf
+        " ".join(path)
+        if duplicates[key(leaf)] > 1
+        or (
+            rows[0]["method"].startswith("OCR")
+            and len(path) > 1
+            and not any(p in spanning_parents for p in path[:-1])
+        )
+        else leaf
         for path, leaf in zip(paths, leaves)
     ]
     counts = Counter()
@@ -263,6 +343,11 @@ def prepare_fragment(fragment, is_header, numeric):
         "rows": [header] + rows[depth:],
         "has_header": True,
         "header_depth": depth,
+        "header_ocr_disagreements": [
+            {**item, "page": r["page"]}
+            for r in header_rows
+            for item in r.get("ocr_disagreements", [])
+        ],
     }
     if depth > 1:
         fragment["header_paths"] = paths
@@ -333,6 +418,11 @@ def aligned_fragments(
     """
     if not words:
         return []
+    words = [
+        w for w in words if not re.fullmatch(r"[.\u00b7\u2026]{3,}", w["text"].strip())
+    ]
+    if not words:
+        return []
     height = statistics.median(w["bbox"][3] - w["bbox"][1] for w in words)
     unit = height / 13.5
     tolerance = max(2, height * 0.27)
@@ -357,9 +447,14 @@ def aligned_fragments(
     def groups(line):
         result = []
         for word in line:
-            if not result or word["bbox"][0] - result[-1][-1]["bbox"][2] > max(
-                13 * unit, height * 1.05
-            ):
+            gap = word["bbox"][0] - result[-1][-1]["bbox"][2] if result else 0
+            separate_caps = (
+                bool(result)
+                and word["text"].isupper()
+                and result[-1][-1]["text"].isupper()
+                and gap > height * 0.65
+            )
+            if not result or separate_caps or gap > max(13 * unit, height * 1.05):
                 result.append([word])
             else:
                 result[-1].append(word)
@@ -378,6 +473,41 @@ def aligned_fragments(
         for i, line in enumerate(lines)
         if is_header([w["text"] for w in line]) and len(groups(line)) >= 2
     ]
+    generic = set()
+    if not indices:
+        # Unknown labels need repeated numeric body rows aligned to the same
+        # widely spaced columns; prose and a single number are insufficient.
+        for i, line in enumerate(lines):
+            anchor = groups(line)
+            if len(anchor) < 3 or any(numeric(w["text"]) is not None for w in line):
+                continue
+            starts = [g[0]["bbox"][0] for g in anchor]
+            bounds = (
+                [starts[0] - 6 * unit] + [x - 4 * unit for x in starts[1:]] + [width]
+            )
+            supported = 0
+            for j in range(i + 1, min(len(lines), i + 13)):
+                if centers[j] - centers[i] > height * 16:
+                    break
+                filled = set()
+                digits = 0
+                for word in lines[j]:
+                    col = next(
+                        (
+                            c
+                            for c in range(len(starts))
+                            if bounds[c] <= word["bbox"][0] < bounds[c + 1]
+                        ),
+                        None,
+                    )
+                    if col is not None:
+                        filled.add(col)
+                        digits += numeric(word["text"]) is not None
+                if digits and len(filled) >= max(3, len(starts) * 0.6):
+                    supported += 1
+            if supported >= 2:
+                indices.append(i)
+                generic.add(i)
     if indices and any(w.get("bold") for w in lines[indices[0]]):
         indices = [i for i in indices if any(w.get("bold") for w in lines[i])]
     used = set()
@@ -404,11 +534,16 @@ def aligned_fragments(
         if start in used:
             continue
         header_end = start + 1
-        while header_end < len(lines) and header_end - start < 3:
+        while header_end < len(lines) and header_end - start < 5:
             line = lines[header_end]
             labels = [w["text"] for w in line]
             gap = centers[header_end] - centers[header_end - 1]
             short_suffix = all(text(v).lower() in suffixes for v in labels)
+            generic_suffix = (
+                start in generic
+                and len(line) <= len(lines[start])
+                and all(len(v) <= 16 for v in labels)
+            )
             if (
                 gap
                 <= height
@@ -418,7 +553,7 @@ def aligned_fragments(
                     and len(groups(line)) > len(groups(lines[header_end - 1]))
                     else 1.5
                 )
-                and (is_header(labels) or short_suffix)
+                and (is_header(labels) or short_suffix or generic_suffix)
                 and not any(numeric(v) is not None for v in labels)
             ):
                 header_end += 1

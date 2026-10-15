@@ -27,7 +27,7 @@ JOBS = Path(
 JOBS.mkdir(parents=True, exist_ok=True)
 POOL = ThreadPoolExecutor(max_workers=1)
 LOCK = threading.RLock()
-app = FastAPI(title="DamnLens AI Agent", version="1.3.0", docs_url="/api/docs")
+app = FastAPI(title="DamnLens AI Agent", version="1.4.0", docs_url="/api/docs")
 ALLOWED = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 MAX_BYTES = 40 * 1024 * 1024
 

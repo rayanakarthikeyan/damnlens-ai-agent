@@ -15,9 +15,13 @@ class PageCheckpoints:
         root = Path(__file__).resolve().parents[1]
         digest = hashlib.sha256(source.read_bytes())
         digest.update(str(force_ocr).encode())
-        for name in ("engine.py", "layout.py", "checkpoints.py"):
+        for name in ("engine.py", "layout.py", "checkpoints.py", "ocr_verify.py"):
             digest.update((root / "app" / name).read_bytes())
-        for name in ("en_PP-OCRv3_rec_infer.onnx", "en_dict.txt"):
+        for name in (
+            "en_PP-OCRv3_rec_infer.onnx",
+            "en_dict.txt",
+            "en_PP-OCRv5_rec_mobile.onnx",
+        ):
             digest.update((root / "models" / name).read_bytes())
         for package in (
             "PyMuPDF",

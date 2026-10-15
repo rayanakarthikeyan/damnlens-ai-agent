@@ -291,6 +291,7 @@ def xlsx(result):
     log.column_dimensions["C"].width = 70
     structural = any(
         t.get("header_paths")
+        or t.get("header_ocr_disagreements")
         or any(
             r.get("merged_cells") or r.get("inherited_cells") or r.get("sources")
             for r in t["rows"]
@@ -305,12 +306,29 @@ def xlsx(result):
             ["Table", "Structure", "Row", "Column", "Source page", "Details"]
         )
         for t in result["tables"]:
+            for item in t.get("header_ocr_disagreements", []):
+                structure.append(
+                    [
+                        t["id"],
+                        "Header OCR disagreement",
+                        None,
+                        item["column"],
+                        item["page"],
+                        json.dumps(item, ensure_ascii=False),
+                    ]
+                )
             for col, path in enumerate(t.get("header_paths", []), 1):
                 structure.append(
                     [t["id"], "Header hierarchy", None, col, None, " → ".join(path)]
                 )
             for r in t["rows"]:
-                for kind in ("merged_cells", "inherited_cells", "sources"):
+                for kind in (
+                    "merged_cells",
+                    "inherited_cells",
+                    "sources",
+                    "ocr_disagreements",
+                    "ocr_retries",
+                ):
                     for item in r.get(kind, []):
                         structure.append(
                             [

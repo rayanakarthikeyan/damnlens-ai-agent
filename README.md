@@ -126,7 +126,9 @@ The bank sample deliberately contains a wrong total, an altered balance and miss
 | [Complex table audit](reports/complex-evaluation.json) | 16/16 | 962/962 |
 | [Public digital PDFs](reports/public-evaluation-final.json) | 3/3 | 261/261 |
 
-These cases were used during development; they do not establish hidden-PDF accuracy. Public comparisons use the disclosed anchor/shared-value policy in the [evaluation report](reports/JUDGE_EVALUATION.md). The [100-test suite](tests/) also covers a 50-page, 501-row, 12-column table with 49 repeated headers removed. [Windows and Ubuntu CI results](https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions) are available on GitHub.
+The [expanded public evaluation](reports/EXPANDED_EVALUATION.md) adds seven previously unevaluated aggregate/dummy PDFs and four image-only derivatives. Source-frozen checkpoint cases improved from **3/11 to 10/11** after repairs. The remaining case preserves all 376 checked data cells and the correct shape, but has an explicitly flagged `Sl.`/`SI.` header ambiguity. Some cases audit selected source columns or rows, so these checkpoint results are not whole-document cell accuracy.
+
+These cases were used during development; they do not establish hidden-PDF accuracy. Public comparisons use the disclosed anchor/shared-value policy in the [evaluation report](reports/JUDGE_EVALUATION.md). The [automated suite](tests/) also covers a 50-page, 501-row, 12-column table with 49 repeated headers removed. [Windows and Ubuntu CI results](https://github.com/rayanakarthikeyan/damnlens-ai-agent/actions) are available on GitHub.
 
 ### Excel output
 
@@ -142,10 +144,13 @@ python scripts/judge_audit.py
 python scripts/complex_evaluation.py
 # Optional: download and verify the pinned public PDF fixtures
 python scripts/public_evaluation.py --fetch
+python scripts/expanded_evaluation.py --fetch
 python -m pytest -q --junitxml=reports/tests.xml
 ```
 
 The benchmark compares cells in original row order and penalizes extra/missing cells. Exact-row precision/recall compares full-row multisets, including duplicate multiplicity. Header equality is checked separately. Source validation mistakes are not extraction mistakes when faithfully preserved. OCR scores are model recognition confidence, not accuracy measurements. Native PDF rows have blank OCR-score cells in Excel; the JSON record retains its internal non-OCR marker.
+
+The expanded evaluator returns a failure code for the remaining strict header mismatch. CI separately uses `--check-review-routing`, which permits only a sole header mismatch with a recorded OCR disagreement; unexpected data, shape or table-count failures still fail. The saved report always retains the strict 10/11 result. See its source-annotation errata and reproduction details in [EXPANDED_EVALUATION.md](reports/EXPANDED_EVALUATION.md).
 
 Tests cover native tables, OCR, borderless multiword headers, page stitching, duplicate preservation, headerless continuations, the 50/51-page boundary, encrypted/corrupt/oversized files, numeric locales, subtotals, line arithmetic, bank errors, typed XLSX, formula injection, evidence, corrections, origin/host protection and restart recovery.
 

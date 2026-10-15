@@ -6,7 +6,7 @@ DamnLens AI Agent uses the open-source libraries and pretrained models listed be
 |---|---|---|
 | PyMuPDF / MuPDF | Native PDF extraction and rendering | AGPL-3.0 / commercial dual licensing; https://github.com/pymupdf/PyMuPDF |
 | RapidOCR | OCR pipeline and detection model | Apache-2.0; https://github.com/RapidAI/RapidOCR |
-| PaddleOCR PP-OCR | Pretrained English recognition | Apache-2.0; https://github.com/PaddlePaddle/PaddleOCR |
+| PaddleOCR PP-OCRv3 / PP-OCRv5 | Primary English recognition and bounded secondary verification | Apache-2.0; https://github.com/PaddlePaddle/PaddleOCR |
 | ONNX Runtime | Local CPU inference | MIT; https://github.com/microsoft/onnxruntime |
 | OpenCV | Grid reconstruction and deskew | Apache-2.0; https://github.com/opencv/opencv |
 | FastAPI | Local API | MIT; https://github.com/fastapi/fastapi |

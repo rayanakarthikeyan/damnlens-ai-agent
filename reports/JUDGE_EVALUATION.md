@@ -1,4 +1,10 @@
-# Judge evaluation — DamnLens AI Agent v1.3
+# Judge evaluation — DamnLens AI Agent
+
+## v1.4 expanded testing
+
+The [expanded evaluation](EXPANDED_EVALUATION.md) covers seven previously unevaluated public PDFs and four rasterized scan derivatives. Source-frozen checkpoint results improved from 3/11 to **10/11 strict cases**. One scanned header retains an `Sl.`/`SI.` ambiguity with an explicit review finding; its checked data cells and dimensions match. Some checks cover selected columns/rows, not complete transcription. The original first pass, two disclosed annotation corrections and corrected baseline are preserved. These files became development cases after repairs. **This evidence does not justify a 100/100 or hidden-accuracy guarantee.**
+
+The rubric estimate below remains a subjective readiness assessment. New fixes include reference-number header rows, unknown-vocabulary borderless schemas, nested table boundaries, partial/white rulings, numeric merged-cell geometry, merged-value-aware totals and a bundled secondary recognizer that records disagreements rather than hiding them.
 
 **Provisional self-assessment: 95/100.** This is a subjective review against the supplied rubric, not an official score or a prediction of hidden-PDF performance. No organizer's hidden PDFs have been tested. The developer used these failures to repair the engine: final results are regression evidence, not a blind evaluation.
 
@@ -8,7 +14,7 @@
 | Multi-page and complex tables | 25 | 24 | 50 pages / 501 rows / 12 columns; independent table streams; multi-line/grouped headers, vertical merges, nested line items and cross-page row parts. Arbitrary layouts and changing schemas remain uncertain. |
 | Alignment and integrity | 20 | 19 | Exact ordered cells/headers, intentional blanks, ragged-value preservation, duplicate multiplicity, distinct account contexts, source geometry, decimal checks and precision-safe Excel. Borderless inference needs review. |
 | Automation and recovery | 15 | 15 | Routing, bounded OCR recovery, persistent queue, Windows lock retries, verified page checkpoints, archived runs and stale-export protection. Interrupted current pages restart; no mid-page cancellation. |
-| Code quality and usability | 10 | 9 | 100 tests, Windows/Ubuntu CI, pinned packages/model hashes, offline bootstrap, eight judge checks, readable UI and source inspection. Docker/macOS not manually verified locally. |
+| Code quality and usability | 10 | 9 | 115 tests, Windows/Ubuntu CI, pinned packages/model hashes, offline bootstrap, eight judge checks, readable UI and source inspection. Docker/macOS not manually verified locally. |
 | **Total** | **100** | **95** | **Subjective readiness estimate; actual judges may score differently.** |
 
 ## Separate measured cohorts
@@ -49,7 +55,7 @@ Other normalization changes whitespace only. Extra/missing cells, ordered positi
 ## Reproduce and inspect
 
 - `START_DAMNLENS.cmd --judge-test --offline` / `sh start.sh --judge-test --offline`: eight runtime checks after first setup: three sample workbooks, nested structure, split-row evidence, 50-page duplicates, 51-page rejection and interrupted recovery.
-- `python -m pytest -q`: 100 extraction/API/review/export/recovery tests; JUnit in `reports/tests.xml`.
+- `python -m pytest -q`: 115 extraction/API/review/export/recovery tests; JUnit in `reports/tests.xml`.
 - `python scripts/benchmark.py`: original sample workbooks, `reports/benchmark.json` and `ACCURACY_REPORT.md`.
 - `python scripts/judge_audit.py`: 15 varied cases; historical before/after JSON reports remain available.
 - `python scripts/complex_evaluation.py`: 16 bundled complex PDFs, JSON and Excel in `evaluation/complex/`; report `reports/complex-evaluation.json`; original twelve-case baseline `reports/complex-before.json`.
