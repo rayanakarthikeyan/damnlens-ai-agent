@@ -1,0 +1,12 @@
+FROM python:3.12-slim-bookworm
+WORKDIR /app
+COPY requirements-research.txt .
+RUN pip install --no-cache-dir -r requirements-research.txt
+COPY app ./app
+COPY web/research.html web/research.css web/research.js ./web/
+RUN useradd --create-home researcher && mkdir /data && chown researcher:researcher /data
+USER researcher
+ENV RESEARCH_DATA=/data PYTHONUNBUFFERED=1
+EXPOSE 8766
+HEALTHCHECK --interval=30s --timeout=5s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8766/healthz')"
+CMD ["python", "-m", "uvicorn", "app.research_api:create_app", "--factory", "--host", "0.0.0.0", "--port", "8766", "--workers", "1"]

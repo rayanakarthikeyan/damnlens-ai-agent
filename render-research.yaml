@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: damnlens-research
+    runtime: docker
+    dockerfilePath: ./Dockerfile.research
+    plan: starter
+    healthCheckPath: /healthz
+    disk:
+      name: research-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: RESEARCH_TOKEN
+        generateValue: true
+      - key: RESEARCH_DATA
+        value: /data

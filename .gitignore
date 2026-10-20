@@ -10,3 +10,5 @@ dist/
 tmp/
 submission/
 node_modules/
+.research/
+.research-models/

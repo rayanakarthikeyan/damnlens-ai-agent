@@ -1,5 +1,7 @@
 .git
 .env
+.research
+.research-models
 .env.*
 !.env.example
 .venv

@@ -1,5 +1,13 @@
 # DamnLens AI Agent
 
+## Source-grounded research extension
+
+[Implementation, local demo, evaluation scope and deployment notes](docs/RESEARCH.md).
+The optional FastAPI research entry point adds pretrained semantic embeddings, persisted
+vectors, page citations, a review gate and export. See the measured development
+results in [research-evaluation.json](reports/research-evaluation.json); no hosted
+service or new live Gemini generation run is claimed.
+
 **Two AI workflows. One source-verified spreadsheet.** A document-to-Excel agent for the INCUXAI AI Agent Development Challenge 2026: keyless local AI, plus optional Gemini assistance for difficult pages.
 
 DamnLens AI Agent reads digital PDFs and scanned documents, reconstructs tables, joins continuation pages, detects data problems and exports traceable Excel workbooks. The operational workspace shows the extraction queue, agent stages, page coverage and validation findings. Inspect original pages beside the extracted data, record corrections and complete a snapshot-bound review before labelling an export as reviewed.

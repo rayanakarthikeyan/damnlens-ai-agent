@@ -1,3 +1,22 @@
+# Current verification status - 20 October 2026
+
+The earlier dated records below are historical runs; their test counts describe
+those snapshots. The original saved `reports/tests.xml` contains 158 tests.
+The reapplication revision adds research API tests and records the new complete
+suite separately in `reports/reapplication-tests.xml`. Read that report for the
+current count rather than treating historical 115-test notes as the latest run.
+
+Dense-retrieval development measurements are in `reports/research-evaluation.json`.
+The authored cohort achieved mean recall@4 of 1.0 over 14 answerable/conflict
+queries, but abstained on only 2/6 unanswerable questions. All runs remain subject
+to review. These are small development measurements, not general factual-quality
+or production scores. New Gemini drafting was tested with mocks, not a live API.
+
+The research Docker image and paid-hosting blueprint are source deliverables;
+a hosted service is not asserted here. See `docs/RESEARCH.md` for reproduction.
+
+---
+
 # Verification record
 
 ## Submission recording — 15 October 2026
