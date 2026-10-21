@@ -1,5 +1,6 @@
 """Reproducible extraction evaluation; no self-reported model accuracy."""
 
+import argparse
 import json
 import platform
 import sys
@@ -14,11 +15,12 @@ from app.engine import clean, extract  # noqa: E402 - direct script entry point
 from app.exporter import xlsx  # noqa: E402 - direct script entry point
 
 
-def benchmark():
+def benchmark(output_dir=None):
     truth = json.loads((ROOT / "samples" / "ground_truth.json").read_text())
-    output = ROOT / "reports"
-    output.mkdir(exist_ok=True)
-    (ROOT / "samples" / "converted").mkdir(exist_ok=True)
+    output = Path(output_dir) if output_dir else ROOT / "reports"
+    output.mkdir(parents=True, exist_ok=True)
+    converted = output / "converted" if output_dir else ROOT / "samples" / "converted"
+    converted.mkdir(parents=True, exist_ok=True)
     results = []
     for filename, expected in truth.items():
         print("Extracting", filename, flush=True)
@@ -26,9 +28,7 @@ def benchmark():
             ROOT / "samples" / filename,
             lambda d, t, m: print(f"  {d}/{t} {m}", flush=True),
         )
-        (
-            ROOT / "samples" / "converted" / filename.replace(".pdf", ".xlsx")
-        ).write_bytes(xlsx(r))
+        (converted / filename.replace(".pdf", ".xlsx")).write_bytes(xlsx(r))
         (output / filename.replace(".pdf", ".json")).write_text(
             json.dumps(r, indent=2), encoding="utf-8"
         )
@@ -117,7 +117,46 @@ def benchmark():
     (output / "ACCURACY_REPORT.md").write_text(
         "\n".join(lines) + "\n", encoding="utf-8"
     )
+    return report
+
+
+def regression_failures(report):
+    """Require complete exact-fixture results, including extra-row penalties."""
+    results = report.get("results", [])
+    if not results:
+        return ["No fixture results were produced"]
+    return [
+        result.get("file", "Unnamed fixture")
+        for result in results
+        if not (
+            result.get("cell_accuracy") == 1
+            and result.get("row_recall") == 1
+            and result.get("row_precision") == 1
+            and result.get("headers_exact") is True
+        )
+    ]
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        help="Keep generated reports and exports in this folder",
+    )
+    parser.add_argument(
+        "--check", action="store_true", help="Fail on any exact-fixture regression"
+    )
+    args = parser.parse_args(argv)
+    report = benchmark(args.output_dir)
+    failures = regression_failures(report)
+    if args.check and failures:
+        print("FAIL: " + "; ".join(failures), file=sys.stderr)
+        return 1
+    if args.check:
+        print(f"PASS: {len(report['results'])} exact synthetic fixture checks")
+    return 0
 
 
 if __name__ == "__main__":
-    benchmark()
+    raise SystemExit(main())

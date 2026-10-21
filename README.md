@@ -1,5 +1,9 @@
 # DamnLens AI Agent
 
+[Engineering case study and reproducible verification](docs/ENGINEERING_CASE_STUDY.md)
+
+Portfolio focus: applied AI integration, Python/FastAPI services, document validation, recoverable processing, and source-linked review. Run `python scripts/benchmark.py --check --output-dir reports/portfolio-benchmark` for an exact-fixture regression gate.
+
 **Two AI workflows. One source-verified spreadsheet.** A document-to-Excel agent for the INCUXAI AI Agent Development Challenge 2026: keyless local AI, plus optional Gemini assistance for difficult pages.
 
 DamnLens AI Agent reads digital PDFs and scanned documents, reconstructs tables, joins continuation pages, detects data problems and exports traceable Excel workbooks. The operational workspace shows the extraction queue, agent stages, page coverage and validation findings. Inspect original pages beside the extracted data, record corrections and complete a snapshot-bound review before labelling an export as reviewed.
